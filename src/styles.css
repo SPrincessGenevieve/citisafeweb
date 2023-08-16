@@ -1,0 +1,134 @@
+/* styles.css */
+
+/* Navbar */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  height: 50px;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  background-color: transparent;
+  align-items: center;
+  text-align: center;
+}
+
+.nav-item {
+  margin-right: 0;
+  width: 170px;
+}
+
+.nav-item:last-child {
+  margin-right: 0;
+}
+
+/* Active link */
+.active a,
+.active a:active {
+  color: blue; /* Change text color to blue */
+  background-color: white;
+  font-weight: bold;
+  padding: 20px;
+  display: inline-block;
+  box-sizing: border-box;
+  text-align: center;
+  width: 170px;
+}
+
+/* Links */
+.nav-item a {
+  text-decoration: none;
+  color: rgb(179, 168, 230);
+  transition: color 0.3s;
+  padding: 20px;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 170px;
+}
+
+.nav-item a:hover {
+  color: blue; /* Change text color to blue */
+  background-color: white;
+  text-align: center;
+}
+
+/* Animation for smaller screens */
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  ul {
+    flex-direction: column;
+    animation: slideDown 0.5s ease-in-out; /* Apply animation to list */
+  }
+
+  .nav-item {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
+
+
+/* Toggle Button */
+.toggle-button {
+  display: none; /* Initially hide the toggle button */
+  cursor: pointer;
+  margin-top: 20px;
+
+}
+
+.toggle-button .bar {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 4px 0;
+  margin-left: 20px;
+  transition: 0.4s;
+}
+
+/* Show navigation links when the toggle button is clicked */
+.nav-list.show {
+  display: flex;
+  flex-direction: column;
+}
+
+.logout-link{
+  margin-left: 65rem;
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+  .toggle-button {
+    display: block; /* Show the toggle button on small screens */
+  }
+
+  .nav-list {
+    display: none; /* Initially hide navigation links on small screens */
+  }
+
+  .logout-link {
+    @media (min-width: 769px) {
+      margin-left: 60rem;
+    }
+  }
+  .logout-link{
+    margin-left: 1px;
+  }
+  
+}

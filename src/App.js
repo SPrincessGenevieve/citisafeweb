@@ -1,23 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import LoginPage from './pages/Login/LoginPage';
+import React, { useState } from 'react';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Violation from './pages/Violation/Violation';
+import Profile from './pages/Profile/Profile';
+import UserControl from './pages/UserControl/UserControl';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
+
+  const [handleDashboard, setHandleDashboard] = React.useState(true)
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+        </Routes>
+        
+
+        <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/violation" element={<Violation />} />
+            <Route path="/user" element={<UserControl />} />
+            <Route path="/profile" element={<Profile />} />      
+        </Routes>
     </div>
   );
 }
