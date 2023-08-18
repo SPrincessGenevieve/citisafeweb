@@ -1,0 +1,387 @@
+[
+    {
+        "ticketNo": "202021",
+        "name": "ENGRACIA, JAYDE MIKE",
+        "violation": "Driving without a license",
+        "date": "12/12/2023",
+        "officer": "GABRIENTO, ANNA NICOLE",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202022",
+        "name": "SMITH, JOHN",
+        "violation": "Speeding",
+        "date": "11/15/2023",
+        "officer": "WILSON, EMMA",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202023",
+        "name": "LEE, LISA",
+        "violation": "Running a red light",
+        "date": "10/25/2023",
+        "officer": "MILLER, DAVID",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202024",
+        "name": "NGUYEN, MICHAEL",
+        "violation": "Parking violation",
+        "date": "09/05/2023",
+        "officer": "JONES, SARAH",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202025",
+        "name": "MARTINEZ, MARIA",
+        "violation": "Expired registration",
+        "date": "08/14/2023",
+        "officer": "THOMAS, WILLIAM",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202026",
+        "name": "WANG, JAMES",
+        "violation": "Illegal U-turn",
+        "date": "07/23/2023",
+        "officer": "BROWN, EMILY",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202027",
+        "name": "ANDERSON, OLIVIA",
+        "violation": "Seat belt violation",
+        "date": "06/02/2023",
+        "officer": "WILSON, JACK",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202028",
+        "name": "THOMAS, CHARLES",
+        "violation": "No insurance",
+        "date": "05/12/2023",
+        "officer": "MARTINEZ, SOPHIA",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202029",
+        "name": "GARCIA, EMMA",
+        "violation": "Cell phone usage while driving",
+        "date": "04/01/2023",
+        "officer": "BROWN, ALEX",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202030",
+        "name": "HALL, WILLIAM",
+        "violation": "Failure to yield",
+        "date": "03/17/2023",
+        "officer": "GARCIA, ISABELLA",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202031",
+        "name": "BROWN, LUCAS",
+        "violation": "Speeding",
+        "date": "02/28/2023",
+        "officer": "WILLIAMS, AVA",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202032",
+        "name": "JACKSON, LILY",
+        "violation": "Running a red light",
+        "date": "01/14/2023",
+        "officer": "MILLER, ETHAN",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202033",
+        "name": "RODRIGUEZ, SOFIA",
+        "violation": "Parking violation",
+        "date": "12/05/2022",
+        "officer": "DAVIS, MATTHEW",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202034",
+        "name": "YOUNG, NOAH",
+        "violation": "Expired registration",
+        "date": "11/20/2022",
+        "officer": "HALL, EMMA",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202035",
+        "name": "MARTIN, OLIVIA",
+        "violation": "Illegal U-turn",
+        "date": "10/11/2022",
+        "officer": "ANDERSON, LIAM",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202036",
+        "name": "HERNANDEZ, EMILY",
+        "violation": "Seat belt violation",
+        "date": "09/27/2022",
+        "officer": "WHITE, NOAH",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202037",
+        "name": "GARCIA, CHARLOTTE",
+        "violation": "No insurance",
+        "date": "08/04/2022",
+        "officer": "LEE, OLIVIA",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202038",
+        "name": "WILSON, ELIJAH",
+        "violation": "Cell phone usage while driving",
+        "date": "07/18/2022",
+        "officer": "CLARK, LUCAS",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202039",
+        "name": "LEE, AVERY",
+        "violation": "Failure to yield",
+        "date": "06/05/2022",
+        "officer": "LOPEZ, HARPER",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202040",
+        "name": "HALL, EVELYN",
+        "violation": "Speeding",
+        "date": "05/22/2022",
+        "officer": "JACKSON, WILLIAM",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202041",
+        "name": "MARTINEZ, HENRY",
+        "violation": "Running a red light",
+        "date": "04/10/2022",
+        "officer": "HERNANDEZ, MIA",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202042",
+        "name": "SMITH, ARIA",
+        "violation": "Parking violation",
+        "date": "03/01/2022",
+        "officer": "THOMPSON, LEO",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202043",
+        "name": "JOHNSON, SAMUEL",
+        "violation": "Expired registration",
+        "date": "02/15/2022",
+        "officer": "WILLIAMS, ISABELLA",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202044",
+        "name": "DAVIS, SCARLETT",
+        "violation": "Illegal U-turn",
+        "date": "01/03/2022",
+        "officer": "BROWN, LUCAS",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202045",
+        "name": "RODRIGUEZ, AIDEN",
+        "violation": "Seat belt violation",
+        "date": "12/18/2021",
+        "officer": "MILLER, OLIVIA",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202046",
+        "name": "WILLIAMS, HARPER",
+        "violation": "No insurance",
+        "date": "11/05/2021",
+        "officer": "MARTIN, JAMES",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202047",
+        "name": "THOMAS, ELLIE",
+        "violation": "Cell phone usage while driving",
+        "date": "10/20/2021",
+        "officer": "GARCIA, AMELIA",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202048",
+        "name": "MARTIN, LEO",
+        "violation": "Failure to yield",
+        "date": "09/08/2021",
+        "officer": "DAVIS, WILLIAM",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202049",
+        "name": "BROWN, ADDISON",
+        "violation": "Speeding",
+        "date": "08/25/2021",
+        "officer": "THOMPSON, AVA",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202051",
+        "name": "SMITH, ELIZA",
+        "violation": "Parking violation",
+        "date": "06/30/2021",
+        "officer": "ANDERSON, ALEXANDER",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202052",
+        "name": "GARCIA, BENJAMIN",
+        "violation": "Expired registration",
+        "date": "05/18/2021",
+        "officer": "HALL, EMMA",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202053",
+        "name": "JOHNSON, LUNA",
+        "violation": "Illegal U-turn",
+        "date": "04/05/2021",
+        "officer": "WILSON, NOAH",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202054",
+        "name": "DAVIS, EMILY",
+        "violation": "Seat belt violation",
+        "date": "03/22/2021",
+        "officer": "MARTINEZ, SOPHIA",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202055",
+        "name": "THOMPSON, ELIJAH",
+        "violation": "No insurance",
+        "date": "02/08/2021",
+        "officer": "BROWN, JAMES",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202056",
+        "name": "WILLIAMS, ELLA",
+        "violation": "Cell phone usage while driving",
+        "date": "01/25/2021",
+        "officer": "MARTIN, LILY",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202057",
+        "name": "MARTIN, OWEN",
+        "violation": "Failure to yield",
+        "date": "12/12/2020",
+        "officer": "CLARK, OLIVER",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202058",
+        "name": "BROWN, ELLIOT",
+        "violation": "Speeding",
+        "date": "11/28/2020",
+        "officer": "GARCIA, SOPHIA",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202059",
+        "name": "MILLER, EVELYN",
+        "violation": "Running a red light",
+        "date": "10/15/2020",
+        "officer": "ANDERSON, NOAH",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202060",
+        "name": "CLARK, JACKSON",
+        "violation": "Parking violation",
+        "date": "09/02/2020",
+        "officer": "DAVIS, OLIVIA",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202052",
+        "name": "GARCIA, BENJAMIN",
+        "violation": "Expired registration",
+        "date": "05/18/2021",
+        "officer": "HALL, EMMA",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202053",
+        "name": "JOHNSON, LUNA",
+        "violation": "Illegal U-turn",
+        "date": "04/05/2021",
+        "officer": "WILSON, NOAH",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202054",
+        "name": "DAVIS, EMILY",
+        "violation": "Seat belt violation",
+        "date": "03/22/2021",
+        "officer": "MARTINEZ, SOPHIA",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202055",
+        "name": "THOMPSON, ELIJAH",
+        "violation": "No insurance",
+        "date": "02/08/2021",
+        "officer": "BROWN, JAMES",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202056",
+        "name": "WILLIAMS, ELLA",
+        "violation": "Cell phone usage while driving",
+        "date": "01/25/2021",
+        "officer": "MARTIN, LILY",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202057",
+        "name": "MARTIN, OWEN",
+        "violation": "Failure to yield",
+        "date": "12/12/2020",
+        "officer": "CLARK, OLIVER",
+        "status": "CLEARED"
+    },
+    {
+        "ticketNo": "202058",
+        "name": "BROWN, ELLIOT",
+        "violation": "Speeding",
+        "date": "11/28/2020",
+        "officer": "GARCIA, SOPHIA",
+        "status": "OVERDUE"
+    },
+    {
+        "ticketNo": "202059",
+        "name": "MILLER, EVELYN",
+        "violation": "Running a red light",
+        "date": "10/15/2020",
+        "officer": "ANDERSON, NOAH",
+        "status": "PENDING"
+    },
+    {
+        "ticketNo": "202060",
+        "name": "CLARK, JACKSON",
+        "violation": "Parking violation",
+        "date": "09/02/2020",
+        "officer": "DAVIS, OLIVIA",
+        "status": "OVERDUE"
+    }
+    
+]

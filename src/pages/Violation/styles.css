@@ -1,0 +1,41 @@
+.pagination{
+    margin-top: -150px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.activePage {
+    color: rgb(25, 0, 255);
+  }
+
+  .pagination{
+    display: flex;
+    position: fixed;
+    height: 3rem;
+    width: "100%";
+    bottom: 0;
+  }
+
+@media (max-width: 768px) {
+    .searchbar{
+        margin-top: 0.1rem;
+        width: 100%;
+        position: fixed;
+        background-color: #2742AA;
+    }
+    .violationContainer{
+        height: 60vh;
+        
+    }
+    .tableContainer{
+        padding-top: 5rem;
+
+    }
+    .pagination{
+        background: linear-gradient(rgba(255, 255, 255, 0.301), rgba(255, 255, 255, 0.11));
+        backdrop-filter: blur(15px);    
+        position: fixed;
+        width: 100%;
+    }
+   
+}

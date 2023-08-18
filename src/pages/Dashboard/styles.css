@@ -1,3 +1,98 @@
-.DashboardContainer{
+.whiteContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 95vh;
+    width: 98vw;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    margin-top: 7%;
+}
+
+.chartA{
+    width: 100%;
+    height: 50%;
+    margin-top: -20%;
+}
+
+.chartC{
+    width: 20%;
+    height: 50%;
+    margin-top: -2%;  
+}
+
+.titleC{
+    text-align: center;
+    margin-top: -67%;
+    font-size: 20px;
+}
+
+
+.titleC2{
+    text-align: center;
+    margin-top: 35%;
+    font-size: 10px;
+}
+
+.titleD{
+    text-align: center;
+    margin-top: 1%;
+    font-size: 10px;
+}
+
+.chartD{
+    width: 77%;
+    height: 30%px;
+}
+
+
+.chartContainer{
+    justify-content: end;
+    display: flex;
+    
+}
+
+.nav{
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .chartA{
+        width: 100%;
+        height: 40%;
+        margin-top: -70%;
+    }
+
+    .chartD{
+        width: 100%;
+        height: 50%;
+    }
+
+
+    .chartContainer{
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        margin-top: 20%;
+    }
+    
+    .whiteContainer{
+        margin-top: 15%;
+        height: 95vh;
+    }
+
+    .chartC{
+        width: 100%;
+        height: 50%;
+        margin-top: 10%;
+        margin-top: 10%;  
+    }
+
+    
+
+    .titleC{
+        margin-top: -61%;
+    }
     
 }
