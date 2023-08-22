@@ -16,6 +16,18 @@
     bottom: 0;
   }
 
+  .name{
+    font-style: normal;
+    color: white;
+    text-decoration: none;
+  }
+
+  .ticket{
+    font-style: normal;
+    color: white;
+    text-decoration: none;
+  }
+
 @media (max-width: 768px) {
     .searchbar{
         margin-top: 0.1rem;
