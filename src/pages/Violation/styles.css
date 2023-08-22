@@ -28,6 +28,10 @@
     text-decoration: none;
   }
 
+  .button{
+    box-shadow: 1px 10px 10px 1px #1d1a53ab;
+  }
+
 @media (max-width: 768px) {
     .searchbar{
         margin-top: 0.1rem;

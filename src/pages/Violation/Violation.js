@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../Navbar';
-import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import violationsData from './../../JSON/violationsData.json'; // Update the path accordingly
 import violationsSample from './../../JSON/sampleViolation.json'; // Update the path accordingly
 import InputSearch from './../../components/InputSearch'
@@ -9,6 +9,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Driver from '../driver/driver';
 import ConstButton from '../../components/ConstButton';
+import IconButton from '@mui/material/IconButton';
+import { ArrowBack, BackHandOutlined } from '@mui/icons-material';
 
 function Violation({navigation}) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -228,13 +230,14 @@ function Violation({navigation}) {
             ) : 
                 <div style={{ position: 'absolute', height: '85%', width: '95%', padding: 20 }}>
                     <div>
-                        <h1 style={{ textAlign: 'center', fontSize: 30, color: 'white' }}>JAYDE MIKE ENGRACIA DETAILS</h1>
+                        <IconButton onClick={() => setTable(!table) & setActivePerson(!activePerson)} style={{color:"white"}}><ArrowBack style={{color:"white", fontSize: 40}}></ArrowBack></IconButton>
+                        <h1 style={{ textAlign: 'center', fontSize: 30, color: 'white', marginTop: -50 }}>JAYDE MIKE ENGRACIA DETAILS</h1>
                     </div>
                     <div>
                         <div style={{ flexDirection: 'row', position: 'absolute', width: '100%' }}>
-                            <Button
+                            <Button className='button' 
                                 style={{
-                                    backgroundColor: activeTable === 'personal' ? '#333' : '#486EF5',
+                                    backgroundColor: activeTable === 'personal' ? '#486EF5' : '#2743AA',
                                     width: '20%',
                                     color: 'white',
                                     marginRight: 20,
@@ -243,20 +246,9 @@ function Violation({navigation}) {
                             >
                                 Personal Information
                             </Button>
-                            <Button
+                            <Button className='button' 
                                 style={{
-                                    backgroundColor: activeTable === 'vehicle' ? '#333' : '#486EF5',
-                                    width: '20%',
-                                    color: 'white',
-                                    marginRight: 20,
-                                }}
-                                onClick={() => handleTableClick('vehicle')}
-                            >
-                                Vehicle Information
-                            </Button>
-                            <Button
-                                style={{
-                                    backgroundColor: activeTable === 'violation' ? '#333' : '#486EF5',
+                                    backgroundColor: activeTable === 'violation' ? '#486EF5' : '#2743AA',
                                     width: '20%',
                                     color: 'white',
                                     marginRight: 20,
@@ -268,6 +260,7 @@ function Violation({navigation}) {
                         </div>
                         {activeTable === 'personal' && (
                             <div className='tableContainer'>
+                                
                                 <h2>Personal Information</h2>
                                 <TableContainer>
                                     <Table style={{ borderCollapse: "collapse", width: "100%", marginTop: 50 }}>
@@ -293,13 +286,9 @@ function Violation({navigation}) {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                            </div>
-                        )}
-                        {activeTable === 'vehicle' && (
-                            <div className='tableContainer'>
-                                <h2>Vehicle Information</h2>
+                                <h2 style={{color:"white"}}>Vehicle Information</h2>
                                 <TableContainer>
-                                    <Table style={{ borderCollapse: "collapse", width: "100%", marginTop: 50 }}>
+                                    <Table style={{ borderCollapse: "collapse", width: "100%", }}>
                                         <TableHead>
                                             <TableRow style={{ border: "1px solid white", display: "flex", justifyContent: "space-between" }}>
                                                 <TableCell style={{ flex: 1, color:"white" }}>Name</TableCell>
