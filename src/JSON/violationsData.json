@@ -178,5 +178,34 @@
                 "violation": "texting while driving"
             }
         ]
+    },
+    {
+        "ticket_no": "TCKT012",
+        "date": "2023-08-19",
+        "name": "Robert Johnson",
+        "address": "789 Maple St",
+        "driver_license_no": "DL21098",
+        "type": "Professional",
+        "date_of_birth": "1978-12-03",
+        "nationality": "USA",
+        "vehicle_plate_no": "WXY789",
+        "make": "Nissan",
+        "model": "Altima",
+        "color": "Black",
+        "class": "Sedan",
+        "body_markings": "None",
+        "registered_owner": "Robert Johnson",
+        "registered_owner_address": "789 Maple St",
+        "contact_no": "555-2109",
+        "time_of_violation": "12:00 AM",
+        "place_of_violation": "Zone 8, Cugman, Cagayan de Oro City",
+        "apprehending_officer": "Officer Green",
+        "status": "Pending",
+        "picture": "image_5.jpg",
+        "violations": [
+            {
+                "violation": "Driving while under the influence"
+            }
+        ]
     }
 ]
