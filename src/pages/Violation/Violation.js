@@ -126,7 +126,7 @@ function Violation({navigation}) {
             <Navbar></Navbar>
             {table ? (
               <>
-    <           div className='searchbar' style={{ width:"98%", height:"10%"}}>
+                <div className='searchbar' style={{ width:"98%", height:"10%"}}>
                     <InputSearch
                         className="inputSearch"
                         label="Search"

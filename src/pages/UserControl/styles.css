@@ -1,0 +1,18 @@
+.container1{
+    height: 90vh;
+    width: 97%;
+    margin-top: 70px;
+    position: fixed;
+
+}
+
+.container2{
+    height: 90vh;
+    width: 100%;
+    
+}
+
+.row{
+    flex: 1;
+    color: white;
+}
