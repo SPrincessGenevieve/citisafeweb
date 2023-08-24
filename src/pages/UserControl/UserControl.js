@@ -105,6 +105,7 @@ function UserControl(props) {
                                         <TableCell style={{ flex: 1, color:"white" }}>Gender</TableCell>
                                         <TableCell style={{ flex: 1, color:"white" }}>Position</TableCell>
                                         <TableCell style={{ flex: 1, color:"white" }}>Email</TableCell>
+                                        <TableCell style={{ flex: 1, color:"white" }}>Contact No.</TableCell>
                                         <TableCell style={{ flex: 1, color:"white" }}>Role</TableCell>
                                         <TableCell style={{ flex: 1, color:"white" }}>Username</TableCell>
                                         <TableCell style={{ flex: 1, color:"white", textAlign:"center" }}>Action</TableCell>
@@ -119,6 +120,7 @@ function UserControl(props) {
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.gender}</TableCell>
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.position}</TableCell>
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.email}</TableCell>
+                                            <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.contact_no}</TableCell>
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.role}</TableCell>
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.username}</TableCell>
                                             <TableCell className='row' style={{ flexDirection: 'row', justifyContent: 'space-between', color: 'white' }}>
@@ -126,7 +128,7 @@ function UserControl(props) {
                                                 <>
                                                 <Button
                                                     variant="contained"
-                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 40 }}
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 20 }}
                                                     onClick={() => handleSave(user.id)}
                                                 >
                                                     <Check style={{ height: 25 }} />
@@ -143,7 +145,7 @@ function UserControl(props) {
                                                 <>
                                                 <Button
                                                     variant="contained"
-                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 40 }}
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 20 }}
                                                     onClick={() => handleCheck(user.id)}
                                                 >
                                                     <Check style={{ height: 25 }} />
@@ -160,7 +162,7 @@ function UserControl(props) {
                                                 <>
                                                 <Button
                                                     variant="contained"
-                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 40 }}
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 20 }}
                                                     onClick={() => handleEdit(user.id)}
                                                 >
                                                     <Edit style={{ height: 25 }} />

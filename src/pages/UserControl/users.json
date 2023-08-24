@@ -6,6 +6,7 @@
     "gender": "Male",
     "position": "Traffic Aid",
     "email": "admin@gmail.com",
+    "contact_no": "09093777463",
     "role": "Admin",
     "username": "jaydeAdmin"
   },
@@ -16,6 +17,7 @@
     "gender": "Female",
     "position": "Position in Roads and Traffic Administration",
     "email": "engracia@example.com",
+    "contact_no": "09374663543",
     "role": "Treasurer",
     "username": "engraciaUser"
   }
