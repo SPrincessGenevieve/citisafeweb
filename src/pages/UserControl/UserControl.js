@@ -8,6 +8,11 @@ import { useState } from 'react';
 import users from './users.json'
 import UserOne from '../../components/UserOne';
 import UserCredentials from '../../components/UserCredentials';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+
+
+
 
 function UserControl(props) {
     const [filteredData, setFilteredData] = useState(users);
@@ -15,13 +20,15 @@ function UserControl(props) {
 
     const handleSearch = (query) => {
         setSearchQuery(query);
-        const filtered = users.filter(item =>
-            item.firstName.toLowerCase().includes(query.toLowerCase()) ||
-            item.lastName.toLowerCase().includes(query.toLowerCase())
+        const filtered = users.filter((item) =>
+          item.firstName.toLowerCase().includes(query.toLowerCase()) ||
+          item.lastName.toLowerCase().includes(query.toLowerCase()) ||
+          item.id.toString().includes(query)
         );
         setFilteredData(filtered);
-    };
-
+        setCurrentPage(1); // Reset to first page when searching
+      };
+      
     const [addScreen, setAddScreen] = useState(false);
     const [proceed, setProceed] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
@@ -58,6 +65,32 @@ function UserControl(props) {
     const handleCancelDelete = () => {
         setDeletingRow(null);
     };
+
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const rowsPerPage = 7;
+
+    const lastRowIndex = currentPage * rowsPerPage;
+    const firstRowIndex = lastRowIndex - rowsPerPage;
+    const currentRows = filteredData.slice(firstRowIndex, lastRowIndex);
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const offenseCountMap = {};
+    filteredData.forEach(item => {
+        if (offenseCountMap[item.name]) {
+            offenseCountMap[item.name]++;
+        } else {
+            offenseCountMap[item.name] = 1;
+        }
+    });
+
+
+
 
 
 
@@ -112,7 +145,7 @@ function UserControl(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {filteredData.map(user => (
+                                    {currentRows.map(user => (
                                         <TableRow key={user.id} style={{ display: "flex", borderLeft: "1px solid white", borderRight: "1px solid white", justifyContent: "space-between" }}>
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.id}</TableCell>
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.firstName}</TableCell>
@@ -128,7 +161,7 @@ function UserControl(props) {
                                                 <>
                                                 <Button
                                                     variant="contained"
-                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 20 }}
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 10 }}
                                                     onClick={() => handleSave(user.id)}
                                                 >
                                                     <Check style={{ height: 25 }} />
@@ -145,7 +178,7 @@ function UserControl(props) {
                                                 <>
                                                 <Button
                                                     variant="contained"
-                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 20 }}
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 10 }}
                                                     onClick={() => handleCheck(user.id)}
                                                 >
                                                     <Check style={{ height: 25 }} />
@@ -162,7 +195,7 @@ function UserControl(props) {
                                                 <>
                                                 <Button
                                                     variant="contained"
-                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 20 }}
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 10 }}
                                                     onClick={() => handleEdit(user.id)}
                                                 >
                                                     <Edit style={{ height: 25 }} />
@@ -182,6 +215,45 @@ function UserControl(props) {
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                    </div>
+                    <div className="pagination" style={{justifyContent:"center", width:"100%", flex: 1, alignItems:"center", marginBottom: 50}}>
+                        <button
+                            style={{ backgroundColor: "transparent", border: 0 }}
+                            disabled={currentPage === 1}
+                            onClick={() => handlePageChange(1)}
+                        >
+                            <ArrowBackIosIcon />
+                        </button>
+                        {Array.from({ length: totalPages }, (_, index) => {
+                            if (totalPages <= 4 || (index + 1 === 1 || index + 1 === totalPages || Math.abs(currentPage - (index + 1)) <= 1)) {
+                                return (
+                                    <button
+                                        style={{
+                                            border: 0,
+                                            backgroundColor: "transparent",
+                                            fontSize: 20,
+                                        }}
+                                        key={index}
+                                        onClick={() => handlePageChange(index + 1)}
+                                        className={currentPage === index + 1 ? 'activePage' : ''}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                );
+                            } else if (Math.abs(currentPage - (index + 1)) === 2) {
+                                return (
+                                    <span key={index}>...</span>
+                                );
+                            }
+                            return null;
+                        })}
+                        <button
+                            style={{ backgroundColor: "transparent", border: 0 }}
+                            disabled={currentPage === totalPages}
+                            onClick={() => handlePageChange(totalPages)} // Go to the last page
+                        >
+                            <ArrowForwardIosIcon />
+                        </button>
                     </div>
                 </>
             ) : null}

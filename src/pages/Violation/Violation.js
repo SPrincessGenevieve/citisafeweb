@@ -10,7 +10,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Driver from '../driver/driver';
 import ConstButton from '../../components/ConstButton';
 import IconButton from '@mui/material/IconButton';
-import { ArrowBack, BackHandOutlined } from '@mui/icons-material';
+import { AddBoxOutlined, ArrowBack, BackHandOutlined, Download } from '@mui/icons-material';
 
 function Violation({navigation}) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -126,15 +126,18 @@ function Violation({navigation}) {
             <Navbar></Navbar>
             {table ? (
               <>
-                <div className='searchbar' style={{ width:"98%", height:"10%"}}>
+                <div className='searchbar' style={{ display: "flex", alignItems: "center",  height: "10%" }}>
+                   
                     <InputSearch
                         className="inputSearch"
                         label="Search"
                         value={searchQuery}
                         onChange={(event) => handleSearch(event.target.value)}
-                        marginTop="1%"
-                        width="25.3rem"
-                    />
+                        width="25.3rem" />
+                    <Button style={{ backgroundColor: "white", marginLeft: 1300}}>
+                        DOWNLOAD DATA
+                        <Download style={{ marginLeft: 10 }} />
+                    </Button>
                 </div>
                 <div className='tableContainer' style={{ width: "98%", height: "95%", display: "flex", justifyContent: "center", marginTop: 15}}>
                     <TableContainer>
