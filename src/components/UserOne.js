@@ -41,6 +41,11 @@ function UserOne({close, proceed}) {
                     <Selection labelSelect={"Role"} json={Role} label={"Role"}></Selection>
                 </div>
             </div>
+            <div style={{width: "100%", flexDirection:"row", display:"flex", marginTop: 40}}>
+                <div style={{marginRight: 40, marginLeft: 40}}>
+                    <InputS required label="Contact No."></InputS>
+                </div>
+            </div>
             </div>
             <div style={{display:"flex", alignItems:"center", justifyContent:"center", marginTop: -200}}>
                 <div style={{width: "20%"}}>
