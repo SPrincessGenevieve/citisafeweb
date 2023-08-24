@@ -1,14 +1,13 @@
 import React from 'react';
 import Navbar from '../../Navbar';
-import { Add, AddBoxOutlined, CloseOutlined, DeleteOutline } from '@mui/icons-material';
-import { Edit } from '@mui/icons-material';
+import { Add, AddBoxOutlined, ArrowBack, CloseOutlined, DeleteOutline, Edit, Save, Close, Check } from '@mui/icons-material';
 import InputSearch from '../../components/InputSearch';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import './styles.css'
 import { useState } from 'react';
 import users from './users.json'
-import InputS from './../../components/InputS'
-import ConstButton from '../../components/ConstButton';
+import UserOne from '../../components/UserOne';
+import UserCredentials from '../../components/UserCredentials';
 
 function UserControl(props) {
     const [filteredData, setFilteredData] = useState(users);
@@ -27,83 +26,56 @@ function UserControl(props) {
     const [proceed, setProceed] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
 
+    const handleBack = () => {
+        setAddScreen(!addScreen);
+        setProceed(!proceed);
+    }
+    const [editingRow, setEditingRow] = useState(null);
+    const [deletingRow, setDeletingRow] = useState(null);
+
+    const handleEdit = (rowId) => {
+        setEditingRow(rowId);
+    };
+
+    const handleDelete = (rowId) => {
+        setDeletingRow(rowId);
+    };
+
+    const handleSave = () => {
+        // Logic to save changes here
+        setEditingRow(null);
+    };
+
+    const handleCheck = () => {
+        // Logic to confirm deletion here
+        setDeletingRow(null);
+    };
+
+    const handleCancelEdit = () => {
+        setEditingRow(null);
+    };
+
+    const handleCancelDelete = () => {
+        setDeletingRow(null);
+    };
+
+
 
     return (
         <div className='container1'>
             <Navbar />
             {proceed ? (
-                <div className='' style={{}}>
+                <div>
                     <div style={{height: "77vh", width: "70%", backgroundColor:"white", position:"absolute", zIndex: 1, borderRadius: 20, marginTop: 40, marginLeft: "15%", padding: 30, flexDirection:"column"}}>
-                        <div style={{flexDirection:"row", flex: 1, alignItems: "center", justifyContent: "space-between" }}>
-                            <Button style={{position:"absolute", right: 0, marginRight: 40}} onClick={() => setProceed(!proceed)}>
-                                <CloseOutlined style={{}}></CloseOutlined>
-                            </Button>
-                            <h1>User Information</h1>
-                        </div>
-                        
-                        <div style={{height:"80%", marginTop: 90}}>
-                            <div style={{width: "100%", flexDirection:"column", display:"flex", alignItems:"center"}}>
-                                <div style={{display:"flex"}}>
-                                    <InputS label="Username"></InputS>
-                                </div>
-                                <div style={{marginTop: 40, display:"flex"}}>
-                                    <InputS type={"password"} label="Password"></InputS>
-                                </div>
-                                <div style={{marginTop: 40, display:"flex"}}>
-                                    <InputS  type={"password"} label="Confirm Password"></InputS>
-                                </div>
-                            </div>
-                        </div>
-                        <div style={{display:"flex", alignItems:"center", justifyContent:"center", marginTop: -200}}>
-                            <div style={{width: "20%"}}>
-                                <ConstButton onClick={() => setProceed(!proceed)} height={50} title={"CREATE USER"}></ConstButton>
-                            </div>
-                        </div>
-                        
+                        <UserCredentials close={() => setProceed(!proceed)} create={() => setProceed(!proceed)} back={handleBack}></UserCredentials>
                     </div>
                     <div style={{backgroundColor:"black", height:"100vh", width: "900vh", marginTop: -10, marginLeft: -30, opacity: 0.5}}></div>
                 </div>
             ) : null}
             {addScreen ? (
-                <div className='' style={{}}>
+                <div>
                     <div style={{height: "77vh", width: "70%", backgroundColor:"white", position:"absolute", zIndex: 1, borderRadius: 20, marginTop: 40, marginLeft: "15%", padding: 30, flexDirection:"column"}}>
-                        <div style={{flexDirection:"row", flex: 1, alignItems: "center", justifyContent: "space-between" }}>
-                            <Button style={{position:"absolute", right: 0, marginRight: 40}} onClick={() => setAddScreen(!addScreen)}>
-                                <CloseOutlined style={{}}></CloseOutlined>
-                            </Button>
-                            <h1>User Information</h1>
-                        </div>
-                        
-                        <div style={{height:"80%", marginTop: 90}}>
-                            <div style={{width: "100%", flexDirection:"row", display:"flex"}}>
-                                <div style={{marginRight: 40, marginLeft: 40}}>
-                                    <InputS label="First Name"></InputS>
-                                </div>
-                                <div style={{marginRight: 40, marginLeft: 40}}>
-                                    <InputS label="Last Name"></InputS>
-                                </div>
-                                <div style={{marginRight: 40, marginLeft: 40}}>
-                                    <InputS label="Gender"></InputS>
-                                </div>
-                            </div>
-                            <div style={{width: "100%", flexDirection:"row", display:"flex", marginTop: 40}}>
-                                <div style={{marginRight: 40, marginLeft: 40}}>
-                                    <InputS label="Position"></InputS>
-                                </div>
-                                <div style={{marginRight: 40, marginLeft: 40}}>
-                                    <InputS label="Email"></InputS>
-                                </div>
-                                <div style={{marginRight: 40, marginLeft: 40}}>
-                                    <InputS label="User Role"></InputS>
-                                </div>
-                            </div>
-                        </div>
-                        <div style={{display:"flex", alignItems:"center", justifyContent:"center", marginTop: -200}}>
-                            <div style={{width: "20%"}}>
-                                <ConstButton onClick={() => setProceed(!proceed) & setAddScreen(!addScreen)} height={50} title={"PROCEED"}></ConstButton>
-                            </div>
-                        </div>
-                        
+                       <UserOne close={() => setAddScreen(!addScreen)} proceed={() => setProceed(!proceed) & setAddScreen(!addScreen)} height={50} title={"PROCEED"}></UserOne>
                     </div>
                     <div style={{backgroundColor:"black", height:"100vh", width: "900vh", marginTop: -10, marginLeft: -30, opacity: 0.5}}></div>
                 </div>
@@ -120,9 +92,7 @@ function UserControl(props) {
                             label="Search"
                             value={searchQuery}
                             onChange={(event) => handleSearch(event.target.value)}
-                            width="25.3rem"
-                        />
-                        
+                            width="25.3rem" />
                     </div>
                     <div className='container2'>
                         <TableContainer>
@@ -151,9 +121,59 @@ function UserControl(props) {
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.email}</TableCell>
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.role}</TableCell>
                                             <TableCell style={{ flex: 1, color:"white"}} className='row'>{user.username}</TableCell>
-                                            <TableCell className='row' style={{ flexDirection: "row", justifyContent: "space-between", color:"white"}}>
-                                                <Button variant="contained" style={{ backgroundColor: "transparent", boxShadow: "none", color: "white", marginLeft: 40 }}><Edit style={{ height: 25 }} /></Button>
-                                                <Button variant="contained" style={{ backgroundColor: "transparent", boxShadow: "none", color: "white"}}><DeleteOutline style={{ height: 25 }} /></Button>
+                                            <TableCell className='row' style={{ flexDirection: 'row', justifyContent: 'space-between', color: 'white' }}>
+                                            {editingRow === user.id ? (
+                                                <>
+                                                <Button
+                                                    variant="contained"
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 40 }}
+                                                    onClick={() => handleSave(user.id)}
+                                                >
+                                                    <Check style={{ height: 25 }} />
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white' }}
+                                                    onClick={handleCancelEdit}
+                                                >
+                                                    <Close style={{ height: 25 }} />
+                                                </Button>
+                                                </>
+                                            ) : deletingRow === user.id ? (
+                                                <>
+                                                <Button
+                                                    variant="contained"
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 40 }}
+                                                    onClick={() => handleCheck(user.id)}
+                                                >
+                                                    <Check style={{ height: 25 }} />
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white' }}
+                                                    onClick={handleCancelDelete}
+                                                >
+                                                    <Close style={{ height: 25 }} />
+                                                </Button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                <Button
+                                                    variant="contained"
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white', marginLeft: 40 }}
+                                                    onClick={() => handleEdit(user.id)}
+                                                >
+                                                    <Edit style={{ height: 25 }} />
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white' }}
+                                                    onClick={() => handleDelete(user.id)}
+                                                >
+                                                    <DeleteOutline style={{ height: 25 }} />
+                                                </Button>
+                                                </>
+                                            )}
                                             </TableCell>
                                         </TableRow>
                                     ))}

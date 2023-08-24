@@ -77,7 +77,7 @@ const customTheme = (outerTheme: Theme) =>
     },
   });
   
-function InputS({label, value, marginTop, width, type}) {
+function InputS({label, value, marginTop, width, type, required}) {
     const outerTheme = useTheme();
 
 
@@ -97,6 +97,7 @@ function InputS({label, value, marginTop, width, type}) {
         >
           <ThemeProvider theme={customTheme(outerTheme)}>
               <TextField
+                required={required}
                 value={value}
                 style={{ color: 'black', width: width }}
                 focused
