@@ -77,7 +77,7 @@ const customTheme = (outerTheme: Theme) =>
     },
   });
   
-function InputS({label, value, marginTop, width, type, required}) {
+function InputS({label, value, marginTop, width, type, required, marginRight}) {
     const outerTheme = useTheme();
 
 
@@ -99,7 +99,7 @@ function InputS({label, value, marginTop, width, type, required}) {
               <TextField
                 required={required}
                 value={value}
-                style={{ color: 'black', width: width }}
+                style={{ color: 'black', width: width, marginRight:marginRight }}
                 focused
                 label={label}
                 type={type}

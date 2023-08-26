@@ -11,6 +11,10 @@ import Driver from '../driver/driver';
 import ConstButton from '../../components/ConstButton';
 import IconButton from '@mui/material/IconButton';
 import { AddBoxOutlined, ArrowBack, BackHandOutlined, Download } from '@mui/icons-material';
+import * as XLSX from 'xlsx';
+
+
+
 
 function Violation({navigation}) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -119,7 +123,41 @@ function Violation({navigation}) {
 
     const [activePerson, setActivePerson] = useState(null);
 
-
+    const handleDownload = () => {
+        const headers = [
+            'Ticket No.',
+            'Name',
+            'Violation',
+            'Date',
+            'Apprehending Officer',
+            'Status',
+            'Offense',
+        ];
+    
+        const data = currentRows.map((item) => [
+            item.ticket_no,
+            item.name,
+            item.violations.map((violation) => violation.violation).join(', '),
+            item.date,
+            item.apprehending_officer,
+            item.status,
+            offenseCountMap[item.name] === 3
+                ? '3rd Offense'
+                : `${offenseCountMap[item.name]}${
+                      offenseCountMap[item.name] === 1
+                          ? 'st'
+                          : offenseCountMap[item.name] === 2
+                          ? 'nd'
+                          : 'th'
+                  } Offense`,
+        ]);
+    
+        const worksheet = XLSX.utils.json_to_sheet([headers, ...data]);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Violations');
+    
+        XLSX.writeFile(workbook, 'violations.xlsx');
+    };
 
     return (
         <div className='violationContainer' style={{ display: "flex", flexDirection: "column", alignItems: "center",  height: "90vh", width:"100%", marginTop: "4rem" }}>
@@ -134,7 +172,7 @@ function Violation({navigation}) {
                         value={searchQuery}
                         onChange={(event) => handleSearch(event.target.value)}
                         width="25.3rem" />
-                    <Button style={{ backgroundColor: "white", marginLeft: 1300}}>
+                    <Button onClick={handleDownload} style={{ backgroundColor: "white", marginLeft: 1300}}>
                         DOWNLOAD DATA
                         <Download style={{ marginLeft: 10 }} />
                     </Button>

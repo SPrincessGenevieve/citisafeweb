@@ -77,7 +77,7 @@ const customTheme = (outerTheme: Theme) =>
     },
   });
   
-function InputSearch({className, label, value, marginTop, width, marginBottom, onChange}) {
+function InputSearch({className, label, value, marginTop, width, disabled, marginRight, marginBottom, onChange, type}) {
     const outerTheme = useTheme();
 
 
@@ -100,9 +100,11 @@ function InputSearch({className, label, value, marginTop, width, marginBottom, o
               <TextField
               className={className}
                 value={value}
-                style={{ color: 'white', width: width }}
+                style={{ color: 'white', width: width, marginRight:marginRight }}
                 focused
+                disabled={disabled}
                 label={label}
+                type={type}
                 onChange={onChange}
               />
 
