@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import SortByAlpha from '@mui/icons-material/SortByAlpha';
 import Sort from '@mui/icons-material/Sort';
-import Stats from '../JSON/StatSelect.json'
-import StatusSelection from './StatusSelection';
-import { FormControlLabel, FormGroup } from '@mui/material';
+
 import CheckList from './CheckList';
 
-function Filter({sortName, sortStatus}) {
+export default function FilterComponent({ sortName, sortStatus }) {
   const [selectedButtons, setSelectedButtons] = useState([]);
 
   const handleButtonClick = (buttonName) => {
@@ -20,24 +18,25 @@ function Filter({sortName, sortStatus}) {
 
   const isButtonActive = (buttonName) => selectedButtons.includes(buttonName);
 
-
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-
       <div style={{ flexDirection: 'row', marginRight: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Button
-          onClick={() => handleButtonClick('name')}
-          style={{ backgroundColor: isButtonActive('name') ? 'white' : 'transparent', borderRadius: 50,}}
+          onClick={() => {
+            handleButtonClick('name');
+            sortName(); // Call the sortName function to trigger name sorting
+          }}
+          style={{ backgroundColor: isButtonActive('name') ? 'white' : 'transparent', borderRadius: 50 }}
         >
-            <p style={{ color: isButtonActive('name') ? '#2743AA' : 'white', marginLeft: 10 }}>Name</p>
-            <SortByAlpha style={{ color: isButtonActive('name') ? '#2743AA' : 'white'}} />
+          <p style={{ color: isButtonActive('name') ? '#2743AA' : 'white', marginLeft: 10 }}>Name</p>
+          <SortByAlpha style={{ color: isButtonActive('name') ? '#2743AA' : 'white' }} />
         </Button>
       </div>
 
-      <div style={{ flexDirection: 'row', marginRight: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>        
-        <p style={{ color: isButtonActive('status') ? '#2743AA' : 'white' , marginRight: 10 }}>Status</p>
+      <div style={{ flexDirection: 'row', marginRight: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ color: isButtonActive('status') ? '#2743AA' : 'white', marginRight: 10 }}>Status</p>
         <Sort style={{ color: isButtonActive('status') ? '#2743AA' : 'white', marginRight: 10 }} />
-        <div style={{display:"flex", flexDirection:"row"}}>
+        <div style={{ display: "flex", flexDirection: "row" }}>
           <CheckList label="PENDING"></CheckList>
           <CheckList label="OVERDUE"></CheckList>
           <CheckList label="CLEARED"></CheckList>
@@ -46,5 +45,3 @@ function Filter({sortName, sortStatus}) {
     </div>
   );
 }
-
-export default Filter;

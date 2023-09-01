@@ -14,10 +14,10 @@ import { AddBoxOutlined, ArrowBack, BackHandOutlined, Download, CloseOutlined, D
 import * as XLSX from 'xlsx';
 import StatusSelection from '../../components/StatusSelection';
 import StatSelect from './../../JSON/StatSelect.json'
-import CheckBox from '../../components/Filter';
+import CheckBox from '../../components/FilterComponent';
 import { Sort } from '@mui/icons-material';
 import { SortByAlpha } from '@mui/icons-material';
-import Filter from '../../components/Filter';
+import FilterComponent from '../../components/FilterComponent';
 
 const MenuProps = {
     PaperProps: {
@@ -206,6 +206,36 @@ function Violation({navigation}) {
         setDeletingRows((prevDeletingRows) => ({ ...prevDeletingRows, [rowId]: false }));
     };
 
+    const [nameSortOrder, setNameSortOrder] = useState('normal');
+
+
+// Add these sorting functions in your Violation component
+const sortByName = () => {
+    // Check the current sorting order
+    if (nameSortOrder === 'asc') {
+      // Sort in descending order (Z-A)
+      setFilteredData((prevData) => [...prevData.sort((a, b) => b.name.localeCompare(a.name))]);
+      setNameSortOrder('desc');
+    } else if (nameSortOrder === 'desc') {
+      // Reset to the original order
+      setFilteredData(violationsData); // Assuming violationsData contains the original data
+      setNameSortOrder('normal');
+    } else {
+      // Sort in ascending order (A-Z)
+      setFilteredData((prevData) => [...prevData.sort((a, b) => a.name.localeCompare(b.name))]);
+      setNameSortOrder('asc');
+    }
+  };
+  
+  
+  const sortByStatus = () => {
+    // Logic to sort by status
+    setFilteredData((prevData) => [...prevData.sort((a, b) => a.status.localeCompare(b.status))]);
+  };
+  
+
+
+
 
     return (
         <div className='violationContainer' style={{ display: "flex", flexDirection: "column", alignItems: "center",  height: "90vh", width:"100%", marginTop: "4rem" }}>
@@ -223,7 +253,7 @@ function Violation({navigation}) {
                    </div>
                     
                     <div style={{display:"flex"}}>
-                        <Filter></Filter>
+                    <FilterComponent sortName={sortByName} sortStatus={sortByStatus} nameSortOrder={nameSortOrder}></FilterComponent>
                     </div>
                     <div>
                         <Button onClick={handleDownload} style={{ backgroundColor: "white", width: 200}}>
@@ -285,8 +315,6 @@ function Violation({navigation}) {
                                                 <span>{item.status}</span>
                                             )}
                                         </TableCell>
-
-
 
                                         <TableCell style={{ flex: 1, color:"white" }}>
                                             {offenseCountMap[item.name] === 3 ? "3rd" : `${offenseCountMap[item.name]}${offenseCountMap[item.name] === 1 ? "st" : offenseCountMap[item.name] === 2 ? "nd" : "th"} Offense`}
@@ -353,177 +381,9 @@ function Violation({navigation}) {
                         </Table>
                     </TableContainer>
                 </div>
-                <div className="pagination">
-                    <button
-                        style={{ backgroundColor: "transparent", border: 0 }}
-                        disabled={currentPage === 1}
-                        onClick={() => handlePageChange(1)}
-                    >
-                        <ArrowBackIosIcon />
-                    </button>
-                    {Array.from({ length: totalPages }, (_, index) => {
-                        if (totalPages <= 4 || (index + 1 === 1 || index + 1 === totalPages || Math.abs(currentPage - (index + 1)) <= 1)) {
-                            return (
-                                <button
-                                    style={{
-                                        border: 0,
-                                        backgroundColor: "transparent",
-                                        fontSize: 20,
-                                    }}
-                                    key={index}
-                                    onClick={() => handlePageChange(index + 1)}
-                                    className={currentPage === index + 1 ? 'activePage' : ''}
-                                >
-                                    {index + 1}
-                                </button>
-                            );
-                        } else if (Math.abs(currentPage - (index + 1)) === 2) {
-                            return (
-                                <span key={index}>...</span>
-                            );
-                        }
-                        return null;
-                    })}
-                    <button
-                        style={{ backgroundColor: "transparent", border: 0 }}
-                        disabled={currentPage === totalPages}
-                        onClick={() => handlePageChange(totalPages)} // Go to the last page
-                    >
-                        <ArrowForwardIosIcon />
-                    </button>
-                </div>
               </>  
             ) : 
-                <div style={{ position: 'absolute', height: '85%', width: '95%', padding: 20 }}>
-                    <div>
-                        <IconButton onClick={() => setTable(!table) & setActivePerson(!activePerson)} style={{color:"white"}}><ArrowBack style={{color:"white", fontSize: 40}}></ArrowBack></IconButton>
-                        <h1 style={{ textAlign: 'center', fontSize: 30, color: 'white', marginTop: -50 }}>JAYDE MIKE ENGRACIA DETAILS</h1>
-                    </div>
-                    <div>
-                        <div style={{ flexDirection: 'row', position: 'absolute', width: '100%' }}>
-                            <Button className='button' 
-                                style={{
-                                    backgroundColor: activeTable === 'personal' ? '#486EF5' : '#2743AA',
-                                    width: '20%',
-                                    color: 'white',
-                                    marginRight: 20,
-                                }}
-                                onClick={() => handleTableClick('personal')}
-                            >
-                                Personal Information
-                            </Button>
-                            <Button className='button' 
-                                style={{
-                                    backgroundColor: activeTable === 'violation' ? '#486EF5' : '#2743AA',
-                                    width: '20%',
-                                    color: 'white',
-                                    marginRight: 20,
-                                }}
-                                onClick={() => handleTableClick('violation')}
-                            >
-                                Violation Details
-                            </Button>
-                        </div>
-                        {activeTable === 'personal' && (
-                            <div className='tableContainer'>
-                                
-                                <h2>Personal Information</h2>
-                                <TableContainer>
-                                    <Table style={{ borderCollapse: "collapse", width: "100%", marginTop: 50 }}>
-                                        <TableHead>
-                                            <TableRow style={{ border: "1px solid white", display: "flex", justifyContent: "space-between" }}>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Name</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Address</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Driver's License No.</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Type</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Date of Birth</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Nationality</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            <TableRow style={{ display: "flex", borderLeft: "1px solid white", borderRight: "1px solid white", justifyContent: "space-between" }}>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Jayde Mike Engracia</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Zone 6, Cugman, Cagayan de Oro</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>K03-12-10299</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Driver's License</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>12/12/2000</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>PHL</TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                                <h2 style={{color:"white"}}>Vehicle Information</h2>
-                                <TableContainer>
-                                    <Table style={{ borderCollapse: "collapse", width: "100%", }}>
-                                        <TableHead>
-                                            <TableRow style={{ border: "1px solid white", display: "flex", justifyContent: "space-between" }}>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Name</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Address</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Driver's License No.</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Type</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Date of Birth</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Nationality</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            <TableRow style={{ display: "flex", borderLeft: "1px solid white", borderRight: "1px solid white", justifyContent: "space-between" }}>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Jayde Mike Engracia</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Zone 6, Cugman, Cagayan de Oro</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>K03-12-10299</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>Driver's License</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>12/12/2000</TableCell>
-                                                <TableCell style={{ flex: 1, color:"white" }}>PHL</TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </div>
-                        )}
-                        {activeTable === 'violation' && activePerson !== null && (
-                        <div style={{ height: "75vh", width: "100%", flexDirection: "row", marginTop: "5%", position: "absolute", display: "flex", flexWrap: "wrap" }} className='tableContainer'>
-                            {currentRows.map((item, index) => {
-                                if (item.name === activePerson) {
-                                    return (
-                                        <div key={index} style={{ marginBottom: "1rem", width: "20%", marginRight: 20 }}>
-                                            {item.violations.map((violation, vIndex) => (
-                                                <div key={vIndex} style={{ backgroundColor: "white", padding: 10, borderRadius: 20, marginBottom: "1rem", flexDirection:"row" }}>
-                                                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style={{ textAlign: "left", fontWeight: "bolder", height: 50 }}>Violation</td>
-                                                                <td>{violation.violation}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style={{ textAlign: "left", fontWeight: "bolder", height: 50 }}>Date</td>
-                                                                <td>{item.date}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style={{ textAlign: "left", fontWeight: "bolder", height: 50 }}>Place of Violation</td>
-                                                                <td>{item.place_of_violation}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style={{ textAlign: "left", fontWeight: "bolder", height: 50 }}>Apprehending Officer</td>
-                                                                <td>{item.apprehending_officer}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style={{ textAlign: "left", fontWeight: "bolder", height: 50 }}>Status</td>
-                                                                <td>{item.status}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    );
-                                }
-                                return null;
-                            })}
-                        </div>
-)}
-
-
-                    </div>
-                </div>
+                <></>
             }
         </div>
     );
