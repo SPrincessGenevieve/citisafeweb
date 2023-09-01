@@ -209,10 +209,6 @@ function Violation({navigation}) {
         setEditingRows((prevEditingRows) => ({ ...prevEditingRows, [rowId]: false }));
     };
     
-    const handleCancelDelete = (rowId) => {
-        setDeletingRows((prevDeletingRows) => ({ ...prevDeletingRows, [rowId]: false }));
-    };
-
     const [nameSortOrder, setNameSortOrder] = useState('normal');
 
 
@@ -357,13 +353,7 @@ const sortByName = () => {
                                             >
                                                 <Check style={{ height: 25 }} />
                                             </Button>
-                                            <Button
-                                                variant="contained"
-                                                style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white' }}
-                                                onClick={() => handleCancelDelete(item.id)}
-                                            >
-                                                <Close style={{ height: 25 }} />
-                                            </Button>
+                        
                                             </>
                                         ) : (
                                             <>
@@ -374,13 +364,7 @@ const sortByName = () => {
                                             >
                                                 <Edit style={{ height: 25 }} />
                                             </Button>
-                                            <Button
-                                                variant="contained"
-                                                style={{ backgroundColor: 'transparent', boxShadow: 'none', color: 'white' }}
-                                                onClick={() => handleDelete(item.id)}
-                                            >
-                                                <DeleteOutline style={{ height: 25 }} />
-                                            </Button>
+                                      
                                             </>
                                         )}
                                     </TableCell>
