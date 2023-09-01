@@ -1,5 +1,6 @@
 [
-    {
+    {   
+        "id" : "1",
         "ticket_no": "TCKT001",
         "date": "2023-08-15",
         "name": "John Smith",
@@ -32,6 +33,7 @@
         ]
     },
     {
+        "id" : "2",
         "ticket_no": "TCKT002",
         "date": "2023-08-16",
         "name": "Jane Doe",
@@ -61,6 +63,7 @@
         ]
     },
     {
+        "id" : "3",
         "ticket_no": "TCKT003",
         "date": "2023-08-17",
         "name": "Michael Brown",
@@ -90,6 +93,7 @@
         ]
     },
     {
+        "id" : "4",
         "ticket_no": "TCKT004",
         "date": "2023-08-18",
         "name": "Emily White",
@@ -122,6 +126,40 @@
         ]
     },
     {
+        "id" : "5",
+        "ticket_no": "TCKT004",
+        "date": "2023-08-18",
+        "name": "Emily White",
+        "address": "567 Pine St",
+        "driver_license_no": "DL87654",
+        "type": "Non-Professional",
+        "date_of_birth": "1995-07-08",
+        "nationality": "USA",
+        "vehicle_plate_no": "QRS567",
+        "make": "Chevrolet",
+        "model": "Equinox",
+        "color": "Silver",
+        "class": "SUV",
+        "body_markings": "None",
+        "registered_owner": "Emily White",
+        "registered_owner_address": "567 Pine St",
+        "contact_no": "555-7654",
+        "time_of_violation": "4:30 PM",
+        "place_of_violation": "Oak St",
+        "apprehending_officer": "Officer Taylor",
+        "status": "Pending",
+        "picture": "image_4.jpg",
+        "violations": [
+            {
+                "violation": "Running Red Light"
+            },
+            {
+                "violation": "Speeding"
+            }
+        ]
+    },
+    {
+        "id" : "6",
         "ticket_no": "TCKT005",
         "date": "2023-08-19",
         "name": "Robert Johnson",
@@ -146,11 +184,12 @@
         "picture": "image_5.jpg",
         "violations": [
             {
-                "violation": "Speeding, Parking Violation"
+                "violation": "Parking Violation"
             }
         ]
     },
     {
+        "id" : "7",
         "ticket_no": "TCKT015",
         "date": "2023-08-19",
         "name": "Robert Johnson",
@@ -180,6 +219,7 @@
         ]
     },
     {
+        "id" : "8",
         "ticket_no": "TCKT012",
         "date": "2023-08-19",
         "name": "Robert Johnson",
