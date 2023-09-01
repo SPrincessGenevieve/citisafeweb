@@ -37,6 +37,7 @@ function Violation({navigation}) {
     const [user, setUser] = useState(false)
     const [table, setTable] = useState(true)
     const rowsPerPage = 10;
+    const [selectedStatus, setSelectedStatus] = useState([]);
 
     const handleSearch = (query) => {
         setSearchQuery(query);
@@ -49,9 +50,15 @@ function Violation({navigation}) {
 
     const lastRowIndex = currentPage * rowsPerPage;
     const firstRowIndex = lastRowIndex - rowsPerPage;
-    const currentRows = filteredData.slice(firstRowIndex, lastRowIndex);
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    const currentRows = selectedStatus.length === 0
+    ? filteredData.slice(firstRowIndex, lastRowIndex) // Display all rows when nothing is checked
+    : filteredData
+      .filter((item) => selectedStatus.includes(item.status))
+      .slice(firstRowIndex, lastRowIndex);
 
+  
+  
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
@@ -253,7 +260,7 @@ const sortByName = () => {
                    </div>
                     
                     <div style={{display:"flex"}}>
-                    <FilterComponent sortName={sortByName} sortStatus={sortByStatus} nameSortOrder={nameSortOrder}></FilterComponent>
+                    <FilterComponent sortName={sortByName} sortStatus={sortByStatus} selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus}></FilterComponent>
                     </div>
                     <div>
                         <Button onClick={handleDownload} style={{ backgroundColor: "white", width: 200}}>

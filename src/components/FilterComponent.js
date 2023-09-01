@@ -4,8 +4,9 @@ import SortByAlpha from '@mui/icons-material/SortByAlpha';
 import Sort from '@mui/icons-material/Sort';
 
 import CheckList from './CheckList';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
-export default function FilterComponent({ sortName, sortStatus }) {
+export default function FilterComponent({sortName, sortStatus, setSelectedStatus, selectedStatus }) {
   const [selectedButtons, setSelectedButtons] = useState([]);
 
   const handleButtonClick = (buttonName) => {
@@ -15,6 +16,15 @@ export default function FilterComponent({ sortName, sortStatus }) {
       setSelectedButtons([...selectedButtons, buttonName]);
     }
   };
+
+  const handleStatusClick = (status) => {
+    if (selectedStatus.includes(status)) {
+      setSelectedStatus(selectedStatus.filter((s) => s !== status));
+    } else {
+      setSelectedStatus([...selectedStatus, status]);
+    }
+  };
+  const isStatusActive = (status) => selectedStatus.includes(status);
 
   const isButtonActive = (buttonName) => selectedButtons.includes(buttonName);
 
@@ -33,15 +43,44 @@ export default function FilterComponent({ sortName, sortStatus }) {
         </Button>
       </div>
 
-      <div style={{ flexDirection: 'row', marginRight: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ color: isButtonActive('status') ? '#2743AA' : 'white', marginRight: 10 }}>Status</p>
-        <Sort style={{ color: isButtonActive('status') ? '#2743AA' : 'white', marginRight: 10 }} />
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <CheckList label="PENDING"></CheckList>
-          <CheckList label="OVERDUE"></CheckList>
-          <CheckList label="CLEARED"></CheckList>
-        </div>
+      <div>
+        <FormControlLabel
+        style={{color:"white"}}
+          control={
+            <Checkbox
+              style={{color:"white"}}
+              checked={isStatusActive('Pending')}
+              onChange={() => handleStatusClick('Pending')}
+              color="primary"
+            />
+          }
+          label="Pending"
+        />
+        <FormControlLabel
+        style={{color:"white"}}
+          control={
+            <Checkbox
+              style={{color:"white"}}
+              checked={isStatusActive('Overdue')}
+              onChange={() => handleStatusClick('Overdue')}
+              color="primary"
+            />
+          }
+          label="Overdue"
+        />
+        <FormControlLabel
+        style={{color:"white"}}
+          control={
+            <Checkbox
+              style={{color:"white"}}
+              checked={isStatusActive('Cleared')}
+              onChange={() => handleStatusClick('Cleared')}
+              color="primary"
+            />
+          }
+          label="Cleared"
+        />
       </div>
     </div>
   );
-}
+};
