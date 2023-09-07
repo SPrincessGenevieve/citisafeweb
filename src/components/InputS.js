@@ -77,7 +77,7 @@ const customTheme = (outerTheme: Theme) =>
     },
   });
   
-function InputS({label, value, marginTop, width, type, required, marginRight}) {
+function InputS({label, value, marginTop, width, type, required, marginRight, onChange}) {
     const outerTheme = useTheme();
 
 
@@ -103,6 +103,7 @@ function InputS({label, value, marginTop, width, type, required, marginRight}) {
                 focused
                 label={label}
                 type={type}
+                onChange={onChange}
               />
 
           </ThemeProvider>
