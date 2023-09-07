@@ -5,11 +5,15 @@ import ConstButton from '../../components/ConstButton';
 import TextBtn from '../../components/TextBtn';
 import KeyboardWrapper from '../../components/KeyboardWrapper';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLogin } from './authSlice';
 
 function LoginPage({onClick}) {
-    const navigation = useNavigate()
+    const dispatch = useDispatch();
     const handleLogin = () => {
-        navigation('/dashboard')
+        dispatch(setLogin());
+
+        console.log("what the fuck?")
     }
     return (
         <div className='containerLogin'>
