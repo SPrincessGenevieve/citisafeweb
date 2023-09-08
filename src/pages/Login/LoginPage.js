@@ -7,6 +7,7 @@ import KeyboardWrapper from '../../components/KeyboardWrapper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLogin } from './authSlice';
+import axios from '../plugins/axios'
 
 function LoginPage({onClick}) {
     const dispatch = useDispatch();
@@ -19,13 +20,13 @@ function LoginPage({onClick}) {
 
     const handleLogin = () => {
 
-        if (credentials.username == "jaydemike" && credentials.password == "123456") {
-            alert("Welcome to GEMS")
-            dispatch(setLogin());
+        axios.post("accounts/token/login", credentials).then((response) => {
+            console.log(response.data)
+        }).error((error) => {
+            console.log(error.data)
+        })
 
-        } else {
-            alert("Incorrect Credentials")
-        }
+
     }
 
 
@@ -41,11 +42,13 @@ function LoginPage({onClick}) {
                         ...credentials, username : text.target.value
                     })
                 }}></InputS>
+
                 <InputS label="Password" marginTop={4} width="100%" type="password" value={credentials.password} onChange={(text) => {
                     setCredentials({
                         ...credentials, password : text.target.value
                     })
                 }}></InputS>
+                
             </div>
             <div>
                 <ConstButton onClick={handleLogin} marginTop={4} width="350px" height={48} title="SIGN IN" />
