@@ -18,16 +18,30 @@ function LoginPage({onClick}) {
     })
 
 
-    const handleLogin = () => {
+ const handleLogin = () => {
+        axios.post("accounts/token/login", credentials).then(response => {
+            console.log(response.data.auth_token);
+            const token = response.data.auth_token;
+            const user_role = response.data.role;
 
-        axios.post("accounts/token/login", credentials).then((response) => {
-            console.log(response.data)
-        }).error((error) => {
-            console.log(error.data)
-        })
+            // Use the token to fetch user info
+            axios.get("accounts/users/me/", {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            }).then(userResponse => {
+                console.log("User Info:", userResponse.data);
 
-
-    }
+                // Dispatch user info to Redux or do something else with it
+                dispatch(setLogin(userResponse.data)); // Example dispatch action
+            }).catch(error => {
+                alert("Failed to fetch user info");
+                console.log(error);
+            });
+        }).catch(error => {
+            alert("Something Wrong, Try again later");
+            console.log(error);
+        });
 
 
 
