@@ -11,6 +11,7 @@ import axios from '../plugins/axios'
 
 function LoginPage({onClick}) {
     const dispatch = useDispatch();
+    const navigation = useNavigate()
 
     const [credentials, setCredentials] = useState({
         username: "",
@@ -32,8 +33,13 @@ function LoginPage({onClick}) {
             }).then(userResponse => {
                 console.log("User Info:", userResponse.data);
 
-                // Dispatch user info to Redux or do something else with it
-                dispatch(setLogin(userResponse.data)); // Example dispatch action
+
+                if (userResponse.data.role == "ADMIN"){
+                    dispatch(setLogin())
+                    // navigation("/dashboard")
+                }
+
+
             }).catch(error => {
                 alert("Failed to fetch user info");
                 console.log(error);
@@ -43,6 +49,7 @@ function LoginPage({onClick}) {
             console.log(error);
         });
 
+    }
 
 
     return (
