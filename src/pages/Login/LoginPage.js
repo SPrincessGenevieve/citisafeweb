@@ -6,7 +6,7 @@ import TextBtn from '../../components/TextBtn';
 import KeyboardWrapper from '../../components/KeyboardWrapper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setLogin } from './authSlice';
+import { setLogin, setToken } from './authSlice';
 import axios from '../plugins/axios'
 
 function LoginPage({onClick}) {
@@ -14,8 +14,8 @@ function LoginPage({onClick}) {
     const navigation = useNavigate()
 
     const [credentials, setCredentials] = useState({
-        username: "",
-        password: ""
+        username: "jaydemike15",
+        password: "dario100"
     })
 
 
@@ -25,6 +25,8 @@ function LoginPage({onClick}) {
             const token = response.data.auth_token;
             const user_role = response.data.role;
 
+            dispatch(setToken(token));
+
             // Use the token to fetch user info
             axios.get("accounts/users/me/", {
                 headers: {
@@ -33,8 +35,9 @@ function LoginPage({onClick}) {
             }).then(userResponse => {
                 console.log("User Info:", userResponse.data);
 
-
+                dispatch(setLogin(token))
                 if (userResponse.data.role == "ADMIN"){
+
                     dispatch(setLogin())
                     // navigation("/dashboard")
                 }
