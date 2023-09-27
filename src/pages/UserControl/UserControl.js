@@ -266,15 +266,29 @@
 import React, { useState, } from 'react';
 import Navbar from '../../Navbar';
 import './styles.css';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Modal, Box, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import axios from '../plugins/axios'
 import { useEffect } from 'react';
+
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 function UserControl(props) {
 
     const token = useSelector(state => state.auth.token)
 
+    // for storing in the info
     const [user, setUser] = useState({
         email: '',
         role: '',
@@ -286,40 +300,178 @@ function UserControl(props) {
         password: '',
     })
 
-
+    // for display on table
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
 
-        axios.get("accounts/users", {
+        axios.get("accounts/users/", {
             headers: {
                 Authorization: `token ${token}`
             }
         }).then(response => {
-            console.log(response.data)
+            setUsers(response.data)
         }).catch(error => {
             console.log(error.data)
         })
 
       }, [token]); 
 
+
+    const handleAddUser = () => {
+
+        axios.post("accounts/users/", user, {
+            headers: {
+                Authorization: `token ${token}`
+            }
+        }).then((response) => {
+            console.log(response.data)
+
+            setUser({
+                email: '',
+                role: '',
+                position: '',
+                first_name: '',
+                middle_name: '',
+                last_name: '',
+                username: '',
+                password: '',
+            })
+        }).catch((error) => {
+            console.log(error)
+            console.log(user)   
+        })
+    }
+
+    const [modal, setModal] = useState(false)
+    // create modal
+
+    const handleOpenModal = () => {
+        setModal(true)
+    }
+
+    const handleCloseModal = () => {
+        setModal(false)
+    }
+
+    // edit modal
+    const [editModal, setEditModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState({});
+    const handleEditUser = (user) => {
+        setSelectedUser(user);
+        setEditModal(true);
+     };
+     const handleUpdateUser = () => {
+        axios.patch(`accounts/users/${selectedUser.id}/`, selectedUser, {
+           headers: {
+              Authorization: `token ${token}`
+           }
+        })
+           .then((response) => {
+              // Handle success
+              console.log(response.data);
+              // Close the edit modal
+              setEditModal(false);
+           })
+           .catch((error) => {
+              // Handle error
+              console.log(error);
+           });
+     };
+     const handleCloseEditModal = () => {
+        setEditModal(false);
+     };
+          
+
     return(
         <div className='container'>
             <Navbar />
 
             <div className='create-user'>
-                <h1>Create User</h1>
-                <input placeholder='Email' />
-                {/* selection */}
-                <input placeholder='role' />
-                <input placeholder='position' />
-                {/* inputs */}
-                <input placeholder='first_name' />
-                <input placeholder='middle_name' />
-                <input placeholder='last_name' />
-                <input placeholder='username' />
-                <input placeholder='password' />
-                <button>Add User</button>
+                <Button onClick={handleOpenModal}>Open modal</Button>
+            <Modal
+                open={modal}
+                onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <TextField 
+                    placeholder='First Name'
+                    value={user.first_name}
+                    onChange={(e) => {
+                        setUser({
+                            ...user, first_name: e.target.value
+                        })
+                    }}
+                    />
+                    <TextField 
+                    placeholder='Middle Name'
+                    value={user.middle_name}
+                    onChange={(e) => {
+                        setUser({
+                            ...user, middle_name: e.target.value
+                        })
+                    }}                    
+                    />
+                    <TextField 
+                    placeholder='Last Name'
+                    value={user.last_name}
+                    onChange={(e) => {
+                        setUser({
+                            ...user, last_name: e.target.value
+                        })
+                    }}                    
+                    />
+                    <TextField 
+                    placeholder='Username'
+                    value={user.username}
+                    onChange={(e) => {
+                        setUser({
+                            ...user, username: e.target.value
+                        })
+                    }}
+                    />
+                    <TextField 
+                    placeholder='Password'
+                    value={user.password}
+                    onChange={(e) => {
+                        setUser({
+                            ...user, password: e.target.value
+                        })
+                    }}
+                    />
+                    <TextField placeholder='Email'
+                    value={user.email}
+                    onChange={(e) => {
+                        setUser({
+                            ...user, email: e.target.value
+                        })
+                    }}                    
+                    />
+                    {/* selection/choices method */}
+                    <TextField placeholder='Role'
+                    value={user.role}
+                    onChange={(e) => {
+                        setUser({
+                            ...user, role: e.target.value
+                        })
+                    }}                    
+                    />
+                    {/* selection/choices method */}                    
+                    <TextField placeholder='Position'
+                    value={user.position}
+                    onChange={(e) => {
+                        setUser({
+                            ...user, position: e.target.value
+                        })
+                    }}                    
+                    />
+                    <br />
+                    <Button onClick={handleAddUser}>Register</Button>
+
+                </Box>
+            </Modal>
             </div>
 
             <div className='table-user'>
@@ -327,35 +479,90 @@ function UserControl(props) {
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell align="right">User Name</TableCell>
-                                <TableCell align="right">First Name</TableCell>
-                                <TableCell align="right">Middle Name</TableCell>
-                                <TableCell align="right">Last Name</TableCell>
+                                <TableCell>User Name</TableCell>
+                                <TableCell>First Name</TableCell>
+                                <TableCell>Middle Name</TableCell>
+                                <TableCell>Last Name</TableCell>
                                 <TableCell>Email</TableCell>
-                                <TableCell align="right">Role</TableCell>
-                                <TableCell align="right">Position</TableCell>
-                                <TableCell align="right">Action</TableCell>
+                                <TableCell>Role</TableCell>
+                                <TableCell>Position</TableCell>
+                                <TableCell>Status</TableCell>
+
+                                <TableCell>Action</TableCell>
 
                             </TableRow>
                         </TableHead>
                      <TableBody>
               {users.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell align='right'>{user.username}</TableCell>
-                  <TableCell align='right'>{user.first_name}</TableCell>
-                  <TableCell align='right'>{user.middle_name}</TableCell>
-                  <TableCell align='right'>{user.last_name}</TableCell>
+                  <TableCell>{user.username}</TableCell>
+                  <TableCell>{user.first_name}</TableCell>
+                  <TableCell>{user.middle_name}</TableCell>
+                  <TableCell>{user.last_name}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell align='right'>{user.role}</TableCell>
-                  <TableCell align='right'>{user.position}</TableCell>
-                  <TableCell align='right'>
-                    {/* Action buttons for each user */}
+                  <TableCell>{user.role}</TableCell>
+                  <TableCell>{user.position}</TableCell>
+                  <TableCell>{user.is_active ? 'Active' : 'Inactive'}</TableCell>
+                  <TableCell>
+                    <Button
+                        title='Edit'
+                        style={{ background: 'yellow', cursor: 'pointer' }}
+                        onClick={() => handleEditUser(user)}
+                    >
+                        Edit
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}                        
                     </TableBody>
                     </Table>
                 </TableContainer>
+                    <Modal
+                        open={editModal}
+                        onClose={handleCloseEditModal}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                    <Box sx={style}>
+                    <TextField placeholder='Email'
+                    value={selectedUser.email}
+                    onChange={(e) => {
+                        setSelectedUser({
+                            ...selectedUser, email: e.target.value
+                        })
+                    }}                    
+                    />
+                    {/* selection/choices method */}
+                    <TextField placeholder='Role'
+                    value={selectedUser.role}
+                    onChange={(e) => {
+                        setSelectedUser({
+                            ...selectedUser, role: e.target.value
+                        })
+                    }}                    
+                    />
+                    {/* selection/choices method */}                    
+                    <TextField placeholder='Position'
+                    value={selectedUser.position}
+                    onChange={(e) => {
+                        setSelectedUser({
+                            ...selectedUser, position: e.target.value
+                        })
+                    }}                    
+                    />
+                    <TextField placeholder='Is Active'
+                    value={selectedUser.is_active}
+                    onChange={(e) => {
+                        setSelectedUser({
+                            ...selectedUser, is_active: e.target.value
+                        })
+                    }}                    
+                    />                                        
+                    <br />
+                    <Button onClick={handleUpdateUser}>Edit User</Button>
+                    </Box>
+                    </Modal>
+                
             </div>
 
         </div>
