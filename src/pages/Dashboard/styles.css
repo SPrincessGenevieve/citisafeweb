@@ -4,7 +4,6 @@
   justify-content: center;
   height: auto;
   width: 100%;
-  background-color: red;
   border-radius: 20px;
   margin-top: 12rem;
 }
@@ -15,7 +14,6 @@
   justify-content: center;
   height: auto;
   width: 100%;
-  background-color: red;
   border-radius: 20px;
   margin-top: 15px;
 }
@@ -83,7 +81,7 @@
   background-color: rgb(231, 231, 231);
   border-radius: 20px;
   height: 100%;
-  width: 60vh;
+  width: 69.5vh;
   align-items: center;
   justify-content: center;
   display: flex;
