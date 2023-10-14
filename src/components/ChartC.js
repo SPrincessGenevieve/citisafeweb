@@ -79,67 +79,76 @@ export default class ChartC extends PureComponent {
             alignItems: "center",
           }}
         >
-          <div style={{ width: "90%" }}>
-            <div
-              style={{
-                flexDirection: "row",
-                display: "flex",
-              }}
-            >
-              <div className="sub-category">
-                <div
-                  style={{
-                    backgroundColor: "#2B5517",
-                    width: 25,
-                    height: 12,
-                    borderRadius: 10,
-                  }}
-                ></div>
-                <p className="violation-title">
-                  Driving without Driver’s License
-                </p>
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              marginLeft: "30%",
+            }}
+          >
+            <div style={{ width: "80%" }}>
+              <div
+                style={{
+                  flexDirection: "row",
+                  display: "flex",
+                }}
+              >
+                <div className="sub-category">
+                  <div
+                    style={{
+                      backgroundColor: "#2B5517",
+                      width: 25,
+                      height: 12,
+                      borderRadius: 10,
+                    }}
+                  ></div>
+                  <p className="violation-title">
+                    Driving without Driver’s License
+                  </p>
+                </div>
+                <div className="sub-category">
+                  <div
+                    style={{
+                      backgroundColor: "#3DBC00",
+                      width: 25,
+                      height: 12,
+                      borderRadius: 10,
+                    }}
+                  ></div>
+                  <p className="violation-title">Driving with SP Only</p>
+                </div>
               </div>
-              <div className="sub-category">
-                <div
-                  style={{
-                    backgroundColor: "#3DBC00",
-                    width: 25,
-                    height: 12,
-                    borderRadius: 10,
-                  }}
-                ></div>
-                <p className="violation-title">Driving with SP Only</p>
-              </div>
-            </div>
-            <div
-              style={{
-                flexDirection: "row",
-                display: "flex",
-              }}
-            >
-              <div className="sub-category">
-                <div
-                  style={{
-                    backgroundColor: "#88FA52",
-                    width: 25,
-                    height: 12,
-                    borderRadius: 10,
-                  }}
-                ></div>
-                <p className="violation-title">
-                  Failure to carry Driver’s License
-                </p>
-              </div>
-              <div className="sub-category">
-                <div
-                  style={{
-                    backgroundColor: "#476B36",
-                    width: 25,
-                    height: 12,
-                    borderRadius: 10,
-                  }}
-                ></div>
-                <p className="violation-title">Expired Driver’s License</p>
+              <div
+                style={{
+                  flexDirection: "row",
+                  display: "flex",
+                }}
+              >
+                <div className="sub-category">
+                  <div
+                    style={{
+                      backgroundColor: "#88FA52",
+                      width: 25,
+                      height: 12,
+                      borderRadius: 10,
+                    }}
+                  ></div>
+                  <p className="violation-title">
+                    Failure to carry Driver’s License
+                  </p>
+                </div>
+                <div className="sub-category">
+                  <div
+                    style={{
+                      backgroundColor: "#476B36",
+                      width: 25,
+                      height: 12,
+                      borderRadius: 10,
+                    }}
+                  ></div>
+                  <p className="violation-title">Expired Driver’s License</p>
+                </div>
               </div>
             </div>
           </div>

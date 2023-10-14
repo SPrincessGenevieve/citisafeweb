@@ -9,6 +9,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import StatusSelection from "./StatusSelection";
+import week from "./../JSON/week.json";
 
 const data = [
   {
@@ -46,30 +48,47 @@ export default class ChartD extends PureComponent {
 
   render() {
     return (
-      <ResponsiveContainer width="100%" height="85%">
-        <BarChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
+      <div style={{ height: "100%", width: "100%" }}>
+        <div
+          style={{
+            width: 30,
+            marginLeft: 79,
+            marginTop: -2,
+            marginBottom: 10,
+            display: "flex",
           }}
-          barSize={40}
         >
-          <XAxis
-            dataKey="name"
-            scale="point"
-            padding={{ left: 30, right: 10 }}
-          />
-          <YAxis />
-          <Tooltip />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="total" fill="#3E7C1F" background={{ fill: "#eee" }} />
-        </BarChart>
-      </ResponsiveContainer>
+          <StatusSelection
+            label={"Select Week"}
+            labelSelect={"Select Week"}
+            json={week}
+          ></StatusSelection>
+        </div>
+        <ResponsiveContainer width="100%" height="85%">
+          <BarChart
+            width={500}
+            height={300}
+            data={data}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+            barSize={40}
+          >
+            <XAxis
+              dataKey="name"
+              scale="point"
+              padding={{ left: 30, right: 10 }}
+            />
+            <YAxis />
+            <Tooltip />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Bar dataKey="total" fill="#3E7C1F" background={{ fill: "#eee" }} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     );
   }
 }

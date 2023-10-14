@@ -139,21 +139,7 @@ function Dashboard(props) {
                   <p className="title-date">Weekly</p>
                 </div>
               </div>
-              <div
-                style={{
-                  width: 30,
-                  marginLeft: 79,
-                  marginTop: -2,
-                  marginBottom: 10,
-                  display: "flex",
-                }}
-              >
-                <StatusSelection
-                  label={"Select Week"}
-                  labelSelect={"Select Week"}
-                  json={week}
-                ></StatusSelection>
-              </div>
+
               <div
                 style={{
                   width: "100%",
