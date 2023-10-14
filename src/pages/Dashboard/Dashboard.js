@@ -5,11 +5,61 @@ import ChartA from "../../components/ChartA";
 import ChartC from "../../components/ChartC";
 import ChartD from "../../components/ChartD";
 import sun from "./../../assets/sun.png";
+import moon from "./../../assets/moon.png";
 import { Button, Modal } from "@mui/material";
 import StatusSelection from "../../components/StatusSelection";
 import week from "./../../JSON/week.json";
+import { useState, useEffect } from "react";
 
 function Dashboard(props) {
+  const [greeting, setGreeting] = useState("");
+  const [currentTime, setCurrentTime] = useState("");
+  const [image, setImage] = useState("");
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    // Function to update the time and greeting based on the time of day
+    function updateTimeAndGreeting() {
+      const now = new Date();
+      const hours = now.getHours();
+      const dayOfWeek = now.toLocaleDateString("en-US", { weekday: "long" });
+      const date = now.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      // Update the greeting based on the time of day
+      if (hours >= 0 && hours < 12) {
+        setGreeting("Good morning");
+        setImage(sun);
+      } else if (hours >= 12 && hours < 18) {
+        setGreeting("Good afternoon");
+        setImage(sun);
+      } else {
+        setGreeting("Good evening");
+        setImage(moon);
+      }
+
+      // Format the current time
+      const formattedTime = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      setCurrentTime(formattedTime);
+      setCurrentDate(`${dayOfWeek}, ${date}`);
+    }
+
+    // Update time, greeting, and date initially
+    updateTimeAndGreeting();
+
+    // Update the time and greeting every minute
+    const interval = setInterval(updateTimeAndGreeting, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div>
       <Navbar className="nav"></Navbar>
@@ -19,7 +69,8 @@ function Dashboard(props) {
             <div>
               <img
                 style={{ height: 100, width: 100, borderRadius: 100 }}
-                src={sun}
+                src={image}
+                alt="Sun/Moon"
               ></img>
             </div>
             <p
@@ -29,14 +80,12 @@ function Dashboard(props) {
                 fontWeight: "bold",
               }}
             >
-              Good morning!
+              {greeting}!
             </p>
             <h1 style={{ textAlign: "center", fontSize: 50, color: "black" }}>
-              10:29
+              {currentTime}
             </h1>
-            <p style={{ textAlign: "center", color: "black" }}>
-              Wednesday, October 11, 2023
-            </p>
+            <p style={{ textAlign: "center", color: "black" }}>{currentDate}</p>
           </div>
           <div className="chartA-container">
             <div className="chartA">
