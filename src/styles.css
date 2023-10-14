@@ -3,6 +3,8 @@
   top: 0;
   left: 0;
   width: 100%;
+  margin-top: 5%;
+  margin-left: 10%;
 }
 
 .nav ul {
@@ -12,52 +14,58 @@
   padding: 0;
   display: flex;
   flex-direction: row;
-  background: linear-gradient(rgba(35, 41, 133, 0.7), rgba(216, 207, 255, 0.3));
-  backdrop-filter: blur(10px);
   align-items: center;
   text-align: center;
 }
 
 .nav-item {
-  margin-right: 0;
-  width: 170px;
+  margin-right: 5;
+  width: 150px;
+  border-radius: 50px;
+  border: 2px solid #3e7c1f;
+  margin-top: 3%;
+}
+
+.image-logo {
+  margin-right: 7%;
 }
 
 .nav-item:last-child {
   margin-right: 0;
+  border: 0;
+  background-color: transparent;
 }
-
 
 .active a,
 .active a:active {
-  color: blue;
-  background-color: white;
+  border: 0;
+  background-color: #3e7c1f;
+  border-radius: 50px;
   font-weight: bold;
-  padding: 20px;
   display: inline-block;
   box-sizing: border-box;
   text-align: center;
-  width: 170px;
+  width: 150px;
+  color: white;
 }
-
 
 .nav-item a {
   text-decoration: none;
-  color: rgb(148, 144, 194);
   transition: color 0.3s;
-  padding: 20px;
+  padding: 10px;
   display: inline-block;
   box-sizing: border-box;
-  width: 170px;
-  font-size: 20px;
+  width: 150px;
+  font-size: 17px;
 }
 
 .nav-item a:hover {
-  color: rgb(37, 37, 133);
-  background-color: white;
+  color: BLACK;
+  border-radius: 50px;
+  background-color: #3e7c1f;
+  color: white;
   text-align: center;
 }
-
 
 @keyframes slideDown {
   0% {
@@ -82,17 +90,15 @@
     margin-bottom: 1rem;
   }
 
-  .nav-item a{
-    color: rgb(87, 87, 148);
+  .nav-item a {
+    color: green;
   }
 }
 
-
 .toggle-button {
-  display: none; 
+  display: none;
   cursor: pointer;
   margin-top: 20px;
-
 }
 
 .toggle-button .bar {
@@ -107,18 +113,19 @@
 .nav-list.show {
   display: flex;
   flex-direction: column;
-  
 }
 
-.logout-link{
-  margin-left: 65rem;
+.logout-link {
+  background-color: white;
+  border-radius: 50px;
+  border: 2px solid #3e7c1f;
+  margin-left: 100%;
 }
-
 
 @media (max-width: 768px) {
   .toggle-button {
-    display: block; 
-    position: fixed; 
+    display: block;
+    position: fixed;
     top: -10px;
     left: -10px;
     z-index: 99999;
@@ -126,12 +133,12 @@
 
   .nav-list {
     display: none;
-    background: linear-gradient(rgba(35, 41, 133, 0.7), rgba(216, 207, 255, 0.3));
-    backdrop-filter: blur(15px);    position: fixed;
+    background: linear-gradient(rgba(35, 41, 133, 0.7), rgba(0, 0, 0, 0.3));
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 130%;
+    height: 100%;
     padding: 1rem;
     box-sizing: border-box;
     z-index: 4;

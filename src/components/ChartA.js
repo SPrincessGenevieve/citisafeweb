@@ -110,7 +110,7 @@ export default class Example extends PureComponent {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Area type="monotone" dataKey="total" stroke="#2743aa" fill="#2743aa" />
+          <Area type="monotone" dataKey="total" stroke="#3E7C1F" fill="#3E7C1F" />
         </AreaChart>
       </ResponsiveContainer>
     );
