@@ -1,39 +1,48 @@
-import React, { PureComponent } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { PureComponent } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const data = [
   {
-    name: 'MON',
-    total: 2400,
+    name: "MON",
+    total: 24,
   },
   {
-    name: 'TUE',
-    total: 1398,
+    name: "TUE",
+    total: 13,
   },
   {
-    name: 'WED',
-    total: 9800,
+    name: "WED",
+    total: 9,
   },
   {
-    name: 'THU',
-    total: 3908,
+    name: "THU",
+    total: 39,
   },
   {
-    name: 'FRI',
-    total: 4800,
+    name: "FRI",
+    total: 48,
   },
   {
-    name: 'SAT',
-    total: 3800,
+    name: "SAT",
+    total: 38,
   },
   {
-    name: 'SUN',
-    total: 4300,
+    name: "SUN",
+    total: 43,
   },
 ];
 
 export default class ChartD extends PureComponent {
-  static demoUrl = 'https://codesandbox.io/s/bar-chart-has-no-padding-jphoc';
+  static demoUrl = "https://codesandbox.io/s/bar-chart-has-no-padding-jphoc";
 
   render() {
     return (
@@ -48,13 +57,17 @@ export default class ChartD extends PureComponent {
             left: 20,
             bottom: 5,
           }}
-          barSize={20}
+          barSize={40}
         >
-          <XAxis dataKey="name" scale="point" padding={{ left: 10, right: 10 }} />
+          <XAxis
+            dataKey="name"
+            scale="point"
+            padding={{ left: 30, right: 10 }}
+          />
           <YAxis />
           <Tooltip />
           <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="total" fill="#7D8ECC" background={{ fill: '#eee' }} />
+          <Bar dataKey="total" fill="#3E7C1F" background={{ fill: "#eee" }} />
         </BarChart>
       </ResponsiveContainer>
     );

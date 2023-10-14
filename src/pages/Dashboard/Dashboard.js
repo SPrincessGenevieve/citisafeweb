@@ -6,6 +6,8 @@ import ChartC from "../../components/ChartC";
 import ChartD from "../../components/ChartD";
 import sun from "./../../assets/sun.png";
 import { Button, Modal } from "@mui/material";
+import StatusSelection from "../../components/StatusSelection";
+import week from "./../../JSON/week.json";
 
 function Dashboard(props) {
   return (
@@ -95,7 +97,7 @@ function Dashboard(props) {
                   flexDirection: "row",
                   display: "flex",
                   justifyContent: "center",
-                  marginTop: -30,
+                  marginTop: -40,
                 }}
               >
                 <p
@@ -120,6 +122,7 @@ function Dashboard(props) {
                   flexDirection: "row",
                   display: "flex",
                   justifyContent: "space-between",
+                  marginTop: -40,
                 }}
               >
                 <p
@@ -133,10 +136,41 @@ function Dashboard(props) {
                   Total number of violations
                 </p>
                 <div className="title-container">
-                  <p className="title-date">Monthly</p>
+                  <p className="title-date">Weekly</p>
                 </div>
               </div>
-              <ChartC></ChartC>
+              <div
+                style={{
+                  width: 30,
+                  marginLeft: 79,
+                  marginTop: -2,
+                  marginBottom: 10,
+                  display: "flex",
+                }}
+              >
+                <StatusSelection
+                  label={"Select Week"}
+                  labelSelect={"Select Week"}
+                  json={week}
+                ></StatusSelection>
+              </div>
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    width: "90%",
+                    height: "100%",
+                  }}
+                >
+                  <ChartD></ChartD>
+                </div>
+              </div>
             </div>
           </div>
         </div>

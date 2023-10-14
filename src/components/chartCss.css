@@ -1,0 +1,12 @@
+.sub-category {
+  width: 50%;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+}
+
+.violation-title {
+  font-size: 12px;
+  line-height: 0;
+  margin-left: 10px;
+}

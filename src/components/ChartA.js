@@ -1,74 +1,71 @@
-import React, { PureComponent } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import React, { PureComponent } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const data = [
   {
-    name: 'JAN',
+    name: "JAN",
     total: 42,
-
   },
   {
-    name: 'FEB',
+    name: "FEB",
     total: 15,
-
   },
   {
-    name: 'MAR',
+    name: "MAR",
     total: 32,
-
   },
   {
-    name: 'APR',
+    name: "APR",
     total: 40,
-
   },
   {
-    name: 'MAY',
+    name: "MAY",
     total: 34,
-
   },
   {
-    name: 'JUN',
+    name: "JUN",
     total: 23,
-
   },
   {
-    name: 'JUL',
+    name: "JUL",
     total: 34,
-
   },
   {
-    name: 'AUG',
+    name: "AUG",
     total: 25,
-
   },
   {
-    name: 'SEP',
+    name: "SEP",
     total: 45,
-
   },
   {
-    name: 'OCT',
+    name: "OCT",
     total: 25,
-
   },
   {
-    name: 'NOV',
+    name: "NOV",
     total: 34,
-
   },
   {
-    name: 'DEC',
+    name: "DEC",
     total: 37,
   },
 ];
 
 export default class Example extends PureComponent {
-  static demoUrl = 'https://codesandbox.io/s/simple-area-chart-4ujxw';
+  static demoUrl = "https://codesandbox.io/s/simple-area-chart-4ujxw";
 
   state = {
     opacity: {
-      total: 1
+      total: 1,
     },
   };
 
@@ -77,7 +74,7 @@ export default class Example extends PureComponent {
     const { opacity } = this.state;
 
     this.setState({
-      opacity: { ...opacity, [dataKey]: 0.5 },
+      opacity: { ...opacity, [dataKey]: 1 }, // Set opacity to 1
     });
   };
 
@@ -86,7 +83,7 @@ export default class Example extends PureComponent {
     const { opacity } = this.state;
 
     this.setState({
-      opacity: { ...opacity, [dataKey]: 1 },
+      opacity: { ...opacity, [dataKey]: 1 }, // Set opacity to 1
     });
   };
 
@@ -110,7 +107,15 @@ export default class Example extends PureComponent {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Area type="monotone" dataKey="total" stroke="#3E7C1F" fill="#3E7C1F" />
+          <Area
+            type="monotone"
+            dataKey="total"
+            stroke="#3E7C1F"
+            fill="#3E7C1F"
+            fillOpacity={opacity.total} // Use the opacity value from the state
+            onMouseEnter={this.handleMouseEnter}
+            onMouseLeave={this.handleMouseLeave}
+          />
         </AreaChart>
       </ResponsiveContainer>
     );
