@@ -22,6 +22,7 @@
     "place_of_violation": "Main St",
     "apprehending_officer": "Officer Smith",
     "status": "Pending",
+    "penalty": "₱1,000",
     "picture": "image_1.jpg",
     "violations": [
       {
@@ -56,6 +57,7 @@
     "apprehending_officer": "Officer Johnson",
     "status": "Cleared",
     "picture": "image_2.jpg",
+    "penalty": "₱1,000",
     "violations": [
       {
         "violation": "Parking Violation"
@@ -86,6 +88,7 @@
     "apprehending_officer": "Officer Williams",
     "status": "Overdue",
     "picture": "image_3.jpg",
+    "penalty": "₱1,000",
     "violations": [
       {
         "violation": "Speeding"
@@ -116,6 +119,7 @@
     "apprehending_officer": "Officer Taylor",
     "status": "Pending",
     "picture": "image_4.jpg",
+    "penalty": "₱1,000",
     "violations": [
       {
         "violation": "Running Red Light"
@@ -149,6 +153,7 @@
     "apprehending_officer": "Officer Taylor",
     "status": "Pending",
     "picture": "image_4.jpg",
+    "penalty": "₱1,000",
     "violations": [
       {
         "violation": "Running Red Light"
@@ -182,6 +187,7 @@
     "apprehending_officer": "Officer Yellow",
     "status": "Pending",
     "picture": "image_5.jpg",
+    "penalty": "₱1,000",
     "violations": [
       {
         "violation": "Parking Violation"
@@ -212,6 +218,7 @@
     "apprehending_officer": "Officer Brown",
     "status": "Pending",
     "picture": "image_5.jpg",
+    "penalty": "₱1,000",
     "violations": [
       {
         "violation": "texting while driving"

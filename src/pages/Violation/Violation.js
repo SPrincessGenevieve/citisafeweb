@@ -19,7 +19,7 @@ import {
 const cellStylesHeader = {
   cell: {
     color: "black",
-    width: 177,
+    width: 150,
     height: 30,
     textAlign: "center",
     fontWeight: "bold",
@@ -31,7 +31,7 @@ const cellStylesBody = {
     color: "black",
     height: "auto",
     textAlign: "left",
-    width: 177,
+    width: 150,
     height: 40,
     textAlign: "center",
   },
@@ -230,6 +230,7 @@ function Violation({ navigation }) {
                   <TableCell style={cellStylesHeader.cell}>
                     Apprehending Officer
                   </TableCell>
+                  <TableCell style={cellStylesHeader.cell}>Penalty</TableCell>
                   <TableCell style={cellStylesHeader.cell}>Status</TableCell>
                   <TableCell style={cellStylesHeader.cell}>Action</TableCell>
                 </TableRow>
@@ -291,6 +292,9 @@ function Violation({ navigation }) {
                     </TableCell>
                     <TableCell style={cellStylesBody.cell}>
                       {item.apprehending_officer}
+                    </TableCell>
+                    <TableCell style={cellStylesBody.cell}>
+                      {item.penalty}
                     </TableCell>
                     <TableCell style={cellStylesBody.cell}>
                       <div className="status-container">
