@@ -1,57 +1,39 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../Navbar";
+import "./styles.css";
+import { Edit, Close, Check, Search } from "@mui/icons-material";
+import StatusSelection from "../../components/StatusSelection";
+import StatSelect from "./../../JSON/StatSelect.json";
+import violationsData from "./../../JSON/violationsData.json"; // Update the path accordingly
+import violationsSample from "./../../JSON/sampleViolation.json"; // Update the path accordingly
 import {
   Button,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
 } from "@mui/material";
-import violationsData from "./../../JSON/violationsData.json"; // Update the path accordingly
-import violationsSample from "./../../JSON/sampleViolation.json"; // Update the path accordingly
-import InputSearch from "./../../components/InputSearch";
-import "./styles.css";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import Driver from "../driver/driver";
-import ConstButton from "../../components/ConstButton";
-import IconButton from "@mui/material/IconButton";
-import {
-  AddBoxOutlined,
-  ArrowBack,
-  BackHandOutlined,
-  Download,
-  CloseOutlined,
-  DeleteOutline,
-  Edit,
-  Save,
-  Close,
-  Check,
-  Add,
-} from "@mui/icons-material";
-import * as XLSX from "xlsx";
-import StatusSelection from "../../components/StatusSelection";
-import StatSelect from "./../../JSON/StatSelect.json";
-import CheckBox from "../../components/FilterComponent";
-import { Sort } from "@mui/icons-material";
-import { SortByAlpha } from "@mui/icons-material";
-import FilterComponent from "../../components/FilterComponent";
 
-const MenuProps = {
-  PaperProps: {
-    style: {
-      width: 250,
-      backgroundColor: "white",
-    },
+const cellStylesHeader = {
+  cell: {
+    color: "black",
+    width: 177,
+    height: 30,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+};
+
+const cellStylesBody = {
+  cell: {
+    color: "black",
+    height: "auto",
+    textAlign: "left",
+    width: 177,
+    height: 40,
+    textAlign: "center",
   },
 };
 
@@ -163,56 +145,14 @@ function Violation({ navigation }) {
       clearInterval(interval);
     };
   }, []);
-
+  const [editingRows, setEditingRows] = useState({});
+  const [deletingRows, setDeletingRows] = useState({});
+  const [activePerson, setActivePerson] = useState(null);
   const [activeTable, setActiveTable] = useState("personal");
 
   const handleTableClick = (table) => {
     setActiveTable(table);
   };
-
-  const [activePerson, setActivePerson] = useState(null);
-
-  const handleDownload = () => {
-    const headers = [
-      "id",
-      "Ticket No.",
-      "Name",
-      "Violation",
-      "Date",
-      "Apprehending Officer",
-      "Status",
-      "Offense",
-    ];
-
-    const data = currentRows.map((item) => [
-      item.id,
-      item.ticket_no,
-      item.name,
-      item.violations.map((violation) => violation.violation).join(", "),
-      item.date,
-      item.apprehending_officer,
-      item.status,
-      offenseCountMap[item.name] === 3
-        ? "3rd Offense"
-        : `${offenseCountMap[item.name]}${
-            offenseCountMap[item.name] === 1
-              ? "st"
-              : offenseCountMap[item.name] === 2
-              ? "nd"
-              : "th"
-          } Offense`,
-    ]);
-
-    const worksheet = XLSX.utils.json_to_sheet([headers, ...data]);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Violations");
-
-    XLSX.writeFile(workbook, "violations.xlsx");
-  };
-
-  const [editingRows, setEditingRows] = useState({}); // Use an object to store editing state for each row
-  const [deletingRows, setDeletingRows] = useState({}); // Use an object to store deleting state for each row
-  const [editedStatus, setEditedStatus] = useState({});
 
   const handleEdit = (rowId) => {
     setEditingRows((prevEditingRows) => ({
@@ -251,651 +191,223 @@ function Violation({ navigation }) {
     }));
   };
 
-  const [nameSortOrder, setNameSortOrder] = useState("normal");
-
-  // Add these sorting functions in your Violation component
-  const sortByName = () => {
-    // Check the current sorting order
-    if (nameSortOrder === "asc") {
-      // Sort in descending order (Z-A)
-      setFilteredData((prevData) => [
-        ...prevData.sort((a, b) => b.name.localeCompare(a.name)),
-      ]);
-      setNameSortOrder("desc");
-    } else if (nameSortOrder === "desc") {
-      // Reset to the original order
-      setFilteredData(violationsData); // Assuming violationsData contains the original data
-      setNameSortOrder("normal");
-    } else {
-      // Sort in ascending order (A-Z)
-      setFilteredData((prevData) => [
-        ...prevData.sort((a, b) => a.name.localeCompare(b.name)),
-      ]);
-      setNameSortOrder("asc");
-    }
-  };
-
-  const sortByStatus = () => {
-    // Logic to sort by status
-    setFilteredData((prevData) => [
-      ...prevData.sort((a, b) => a.status.localeCompare(b.status)),
-    ]);
-  };
-
   return (
-    <div
-      className="violationContainer"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "90vh",
-        width: "100%",
-        marginTop: "4rem",
-      }}
-    >
-      <Navbar></Navbar>
-      {table ? (
-        <>
-          <div
-            className="searchbar"
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              height: "10%",
-              justifyContent: "space-between",
-              width: "98%",
-              alignItems: "center",
-            }}
-          >
-            <div style={{}}>
-              <InputSearch
-                className="inputSearch"
-                label="Search"
-                value={searchQuery}
-                onChange={(event) => handleSearch(event.target.value)}
-                width="25.3rem"
-              />
-            </div>
+    <div className="violation-container">
+      <div className="navbar-container">
+        <Navbar></Navbar>
+      </div>
 
-            <div style={{ display: "flex" }}>
-              <FilterComponent
-                sortName={sortByName}
-                sortStatus={sortByStatus}
-                selectedStatus={selectedStatus}
-                setSelectedStatus={setSelectedStatus}
-              ></FilterComponent>
-            </div>
-            <div>
-              <Button
-                onClick={handleDownload}
-                style={{ backgroundColor: "white", width: 200 }}
-              >
-                DOWNLOAD DATA
-                <Download style={{ marginLeft: 10 }} />
-              </Button>
-            </div>
+      <div>
+        <div className="violation-subcontainer">
+          <div className="search-container">
+            <Search
+              style={{ position: "absolute", marginLeft: 10, marginTop: 10 }}
+            ></Search>
+            <input className="search-box"></input>
           </div>
-
-          <div
-            className="tableContainer"
-            style={{
-              width: "98%",
-              height: "95%",
-              display: "flex",
-              justifyContent: "center",
-              marginTop: 15,
-            }}
-          >
-            <TableContainer>
-              <Table style={{ borderCollapse: "collapse", width: "100%" }}>
-                <TableHead>
-                  <TableRow
-                    style={{
-                      border: "1px solid white",
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      ID
-                    </TableCell>
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      Ticket No.
-                    </TableCell>
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      Name
-                    </TableCell>
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      Violation
-                    </TableCell>
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      Date
-                    </TableCell>
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      Apprehending Officer
-                    </TableCell>
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      Status
-                    </TableCell>
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      Offense
-                    </TableCell>
-                    <TableCell style={{ flex: 1, color: "white" }}>
-                      Action
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {currentRows.map((item, index) => (
-                    <TableRow
-                      key={index}
-                      style={{
-                        display: "flex",
-                        borderLeft: "1px solid white",
-                        borderRight: "1px solid white",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <TableCell style={{ flex: 1, color: "white" }}>
-                        <a className="ticket" href="#">
-                          {item.id}
-                        </a>
-                      </TableCell>
-                      <TableCell style={{ flex: 1, color: "white" }}>
-                        <a className="ticket" href="#">
-                          {item.ticket_no}
-                        </a>
-                      </TableCell>
-                      <TableCell style={{ flex: 1, color: "white" }}>
-                        <a
-                          className="name"
-                          onClick={() =>
-                            setTable(!table) & setActivePerson(item.name)
-                          }
-                          href="#"
-                        >
-                          {item.name}
-                        </a>
-                      </TableCell>
-                      <TableCell style={{ flex: 1, color: "white" }}>
-                        {item.violations.map((violation, index) => (
-                          <span key={index}>
-                            {violation.violation}
-                            {index !== item.violations.length - 1 ? ", " : ""}
-                          </span>
-                        ))}
-                      </TableCell>{" "}
-                      <TableCell style={{ flex: 1, color: "white" }}>
-                        {item.date}
-                      </TableCell>
-                      <TableCell style={{ flex: 1, color: "white" }}>
-                        {item.apprehending_officer}
-                      </TableCell>
-                      <TableCell
-                        style={{
-                          flex: 1,
-                          color:
-                            item.status === "Overdue"
-                              ? "red"
-                              : item.status === "Cleared"
-                              ? "white"
-                              : "#00D05E",
-                        }}
-                      >
-                        {editingRows[item.id] ? (
-                          <StatusSelection
-                            label={"Select Status"}
-                            labelSelect={"Select Status"}
-                            json={StatSelect}
-                          ></StatusSelection>
-                        ) : item.status === "Overdue" ? (
-                          `Overdue -${formatRemainingTime(
-                            item.date,
-                            item.status
-                          )}`
-                        ) : (
-                          <span>{item.status}</span>
-                        )}
-                      </TableCell>
-                      <TableCell style={{ flex: 1, color: "white" }}>
-                        {offenseCountMap[item.name] === 3
-                          ? "3rd"
-                          : `${offenseCountMap[item.name]}${
-                              offenseCountMap[item.name] === 1
-                                ? "st"
-                                : offenseCountMap[item.name] === 2
-                                ? "nd"
-                                : "th"
-                            } Offense`}
-                      </TableCell>
-                      <TableCell
-                        className="row"
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          color: "white",
-                        }}
-                      >
-                        {editingRows[item.id] ? (
-                          <>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "white",
-                                marginLeft: 10,
-                              }}
-                              onClick={() => handleSave(item.id)}
-                            >
-                              <Check style={{ height: 25 }} />
-                            </Button>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "white",
-                              }}
-                              onClick={() => handleCancelEdit(item.id)}
-                            >
-                              <Close style={{ height: 25 }} />
-                            </Button>
-                          </>
-                        ) : deletingRows[item.id] ? (
-                          <>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "white",
-                                marginLeft: 10,
-                              }}
-                              onClick={() => handleCheck(item.id)}
-                            >
-                              <Check style={{ height: 25 }} />
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "white",
-                                marginLeft: 10,
-                              }}
-                              onClick={() => handleEdit(item.id)}
-                            >
-                              <Edit style={{ height: 25 }} />
-                            </Button>
-                          </>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-          <div className="pagination">
-            <button
-              style={{ backgroundColor: "transparent", border: 0 }}
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(1)}
-            >
-              <ArrowBackIosIcon />
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => {
-              if (
-                totalPages <= 4 ||
-                index + 1 === 1 ||
-                index + 1 === totalPages ||
-                Math.abs(currentPage - (index + 1)) <= 1
-              ) {
-                return (
-                  <button
-                    style={{
-                      border: 0,
-                      backgroundColor: "transparent",
-                      fontSize: 20,
-                    }}
-                    key={index}
-                    onClick={() => handlePageChange(index + 1)}
-                    className={currentPage === index + 1 ? "activePage" : ""}
-                  >
-                    {index + 1}
-                  </button>
-                );
-              } else if (Math.abs(currentPage - (index + 1)) === 2) {
-                return <span key={index}>...</span>;
-              }
-              return null;
-            })}
-            <button
-              style={{ backgroundColor: "transparent", border: 0 }}
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(totalPages)} // Go to the last page
-            >
-              <ArrowForwardIosIcon />
-            </button>
-          </div>
-        </>
-      ) : (
-        <div
-          style={{
-            position: "absolute",
-            height: "85%",
-            width: "95%",
-            padding: 20,
-          }}
-        >
-          <div>
-            <IconButton
-              onClick={() => setTable(!table) & setActivePerson(!activePerson)}
-              style={{ color: "white" }}
-            >
-              <ArrowBack style={{ color: "white", fontSize: 40 }}></ArrowBack>
-            </IconButton>
-            <h1
+          <TableContainer>
+            <Table
               style={{
-                textAlign: "center",
-                fontSize: 30,
-                color: "white",
-                marginTop: -50,
-              }}
-            >
-              JAYDE MIKE ENGRACIA DETAILS
-            </h1>
-          </div>
-          <div>
-            <div
-              style={{
-                flexDirection: "row",
-                position: "absolute",
+                borderCollapse: "collapse",
                 width: "100%",
               }}
             >
-              <Button
-                className="button"
-                style={{
-                  backgroundColor:
-                    activeTable === "personal" ? "#486EF5" : "#2743AA",
-                  width: "20%",
-                  color: "white",
-                  marginRight: 20,
-                }}
-                onClick={() => handleTableClick("personal")}
-              >
-                Personal Information
-              </Button>
-              <Button
-                className="button"
-                style={{
-                  backgroundColor:
-                    activeTable === "violation" ? "#486EF5" : "#2743AA",
-                  width: "20%",
-                  color: "white",
-                  marginRight: 20,
-                }}
-                onClick={() => handleTableClick("violation")}
-              >
-                Violation Details
-              </Button>
-            </div>
-            {activeTable === "personal" && (
-              <div className="tableContainer">
-                <h2>Personal Information</h2>
-                <TableContainer>
-                  <Table
+              <TableHead>
+                <TableRow
+                  style={{
+                    display: "flex",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <TableCell style={cellStylesHeader.cell}>ID</TableCell>
+                  <TableCell style={cellStylesHeader.cell}>
+                    Tracking #
+                  </TableCell>
+                  <TableCell style={cellStylesHeader.cell}>Name</TableCell>
+                  <TableCell style={cellStylesHeader.cell}>Violation</TableCell>
+                  <TableCell style={cellStylesHeader.cell}>Date</TableCell>
+                  <TableCell style={cellStylesHeader.cell}>Offense</TableCell>
+                  <TableCell style={cellStylesHeader.cell}>
+                    Apprehending Officer
+                  </TableCell>
+                  <TableCell style={cellStylesHeader.cell}>Status</TableCell>
+                  <TableCell style={cellStylesHeader.cell}>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody style={{ backgroundColor: "pink" }}>
+                {currentRows.map((item, index) => (
+                  <TableRow
+                    className={index % 2 === 0 ? "even-row" : "odd-row"}
+                    key={index}
                     style={{
-                      borderCollapse: "collapse",
-                      width: "100%",
-                      marginTop: 50,
+                      display: "flex",
+                      borderLeft: "1px solid black",
+                      borderRight: "1px solid black",
                     }}
                   >
-                    <TableHead>
-                      <TableRow
-                        style={{
-                          border: "1px solid white",
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
+                    <TableCell style={cellStylesBody.cell}>
+                      <a className="ticket" href="#">
+                        {item.id}
+                      </a>
+                    </TableCell>
+                    <TableCell style={cellStylesBody.cell}>
+                      <a className="ticket" href="#">
+                        {item.ticket_no}
+                      </a>
+                    </TableCell>
+                    <TableCell style={cellStylesBody.cell}>
+                      <a
+                        className="ticket"
+                        onClick={() =>
+                          setTable(!table) & setActivePerson(item.name)
+                        }
+                        href="#"
                       >
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Name
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Address
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Driver's License No.
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Type
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Date of Birth
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Nationality
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      <TableRow
-                        style={{
-                          display: "flex",
-                          borderLeft: "1px solid white",
-                          borderRight: "1px solid white",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Jayde Mike Engracia
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Zone 6, Cugman, Cagayan de Oro
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          K03-12-10299
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Driver's License
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          12/12/2000
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          PHL
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <h2 style={{ color: "white" }}>Vehicle Information</h2>
-                <TableContainer>
-                  <Table style={{ borderCollapse: "collapse", width: "100%" }}>
-                    <TableHead>
-                      <TableRow
-                        style={{
-                          border: "1px solid white",
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Name
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Address
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Driver's License No.
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Type
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Date of Birth
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Nationality
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      <TableRow
-                        style={{
-                          display: "flex",
-                          borderLeft: "1px solid white",
-                          borderRight: "1px solid white",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Jayde Mike Engracia
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Zone 6, Cugman, Cagayan de Oro
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          K03-12-10299
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          Driver's License
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          12/12/2000
-                        </TableCell>
-                        <TableCell style={{ flex: 1, color: "white" }}>
-                          PHL
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </div>
-            )}
-            {activeTable === "violation" && activePerson !== null && (
-              <div
-                style={{
-                  height: "75vh",
-                  width: "100%",
-                  flexDirection: "row",
-                  marginTop: "5%",
-                  position: "absolute",
-                  display: "flex",
-                  flexWrap: "wrap",
-                }}
-                className="tableContainer"
-              >
-                {currentRows.map((item, index) => {
-                  if (item.name === activePerson) {
-                    return (
-                      <div
-                        key={index}
-                        style={{
-                          marginBottom: "1rem",
-                          width: "20%",
-                          marginRight: 20,
-                        }}
-                      >
-                        {item.violations.map((violation, vIndex) => (
-                          <div
-                            key={vIndex}
-                            style={{
-                              backgroundColor: "white",
-                              padding: 10,
-                              borderRadius: 20,
-                              marginBottom: "1rem",
-                              flexDirection: "row",
-                            }}
-                          >
-                            <table
+                        {item.name}
+                      </a>
+                    </TableCell>
+                    <TableCell style={cellStylesBody.cell}>
+                      {item.violations.map((violation, index) => (
+                        <span key={index}>
+                          {violation.violation}
+                          {index !== item.violations.length - 1 ? ", " : ""}
+                        </span>
+                      ))}
+                    </TableCell>
+                    <TableCell style={cellStylesBody.cell}>
+                      {item.date}
+                    </TableCell>
+
+                    <TableCell style={cellStylesBody.cell}>
+                      {offenseCountMap[item.name] === 3
+                        ? "3rd"
+                        : `${offenseCountMap[item.name]}${
+                            offenseCountMap[item.name] === 1
+                              ? "st"
+                              : offenseCountMap[item.name] === 2
+                              ? "nd"
+                              : "th"
+                          } Offense`}
+                    </TableCell>
+                    <TableCell style={cellStylesBody.cell}>
+                      {item.apprehending_officer}
+                    </TableCell>
+                    <TableCell style={cellStylesBody.cell}>
+                      <div className="status-container">
+                        <p
+                          style={{
+                            flex: 1,
+                            backgroundColor:
+                              item.status === "Overdue"
+                                ? "#FBE7E8"
+                                : item.status === "Cleared"
+                                ? "#FEF2E5"
+                                : "#EBF9F1",
+                            color:
+                              item.status === "Overdue"
+                                ? "#A30D11"
+                                : item.status === "Cleared"
+                                ? "#CD6200"
+                                : "#1F9254",
+                            width: 100,
+                            height: 15,
+                            padding: 10,
+                            textAlign: "center",
+                            borderRadius: 20,
+                          }}
+                        >
+                          {editingRows[item.id] ? (
+                            <div
+                              className={
+                                index % 2 === 0 ? "even-row" : "odd-row"
+                              }
                               style={{
-                                width: "100%",
-                                borderCollapse: "collapse",
+                                marginTop: -15,
+                                width: 200,
+                                marginLeft: -10,
                               }}
                             >
-                              <tbody>
-                                <tr>
-                                  <td
-                                    style={{
-                                      textAlign: "left",
-                                      fontWeight: "bolder",
-                                      height: 50,
-                                    }}
-                                  >
-                                    Violation
-                                  </td>
-                                  <td>{violation.violation}</td>
-                                </tr>
-                                <tr>
-                                  <td
-                                    style={{
-                                      textAlign: "left",
-                                      fontWeight: "bolder",
-                                      height: 50,
-                                    }}
-                                  >
-                                    Date
-                                  </td>
-                                  <td>{item.date}</td>
-                                </tr>
-                                <tr>
-                                  <td
-                                    style={{
-                                      textAlign: "left",
-                                      fontWeight: "bolder",
-                                      height: 50,
-                                    }}
-                                  >
-                                    Place of Violation
-                                  </td>
-                                  <td>{item.place_of_violation}</td>
-                                </tr>
-                                <tr>
-                                  <td
-                                    style={{
-                                      textAlign: "left",
-                                      fontWeight: "bolder",
-                                      height: 50,
-                                    }}
-                                  >
-                                    Apprehending Officer
-                                  </td>
-                                  <td>{item.apprehending_officer}</td>
-                                </tr>
-                                <tr>
-                                  <td
-                                    style={{
-                                      textAlign: "left",
-                                      fontWeight: "bolder",
-                                      height: 50,
-                                    }}
-                                  >
-                                    Status
-                                  </td>
-                                  <td>{item.status}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        ))}
+                              <StatusSelection
+                                label={"Select Status"}
+                                labelSelect={"Select Status"}
+                                json={StatSelect}
+                              ></StatusSelection>
+                            </div>
+                          ) : item.status === "Overdue" ? (
+                            `Overdue`
+                          ) : (
+                            <span>{item.status}</span>
+                          )}
+                        </p>
                       </div>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
-            )}
-          </div>
+                    </TableCell>
+
+                    <TableCell className="row" style={cellStylesBody.cell}>
+                      {editingRows[item.id] ? (
+                        <>
+                          <Button
+                            variant="contained"
+                            style={{
+                              backgroundColor: "transparent",
+                              boxShadow: "none",
+                              color: "black",
+                              marginLeft: 10,
+                            }}
+                            onClick={() => handleSave(item.id)}
+                          >
+                            <Check style={{ height: 25 }} />
+                          </Button>
+                          <Button
+                            variant="contained"
+                            style={{
+                              backgroundColor: "transparent",
+                              boxShadow: "none",
+                              color: "black",
+                            }}
+                            onClick={() => handleCancelEdit(item.id)}
+                          >
+                            <Close style={{ height: 25 }} />
+                          </Button>
+                        </>
+                      ) : deletingRows[item.id] ? (
+                        <>
+                          <Button
+                            variant="contained"
+                            style={{
+                              backgroundColor: "transparent",
+                              boxShadow: "none",
+                              color: "black",
+                              marginLeft: 10,
+                            }}
+                            onClick={() => handleCheck(item.id)}
+                          >
+                            <Check style={{ height: 25 }} />
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            variant="contained"
+                            style={{
+                              backgroundColor: "transparent",
+                              boxShadow: "none",
+                              color: "black",
+                              marginLeft: 10,
+                            }}
+                            onClick={() => handleEdit(item.id)}
+                          >
+                            <Edit style={{ height: 25 }} />
+                          </Button>
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
-      )}
+      </div>
     </div>
   );
 }
