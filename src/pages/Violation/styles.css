@@ -52,3 +52,19 @@
 .search-container {
   margin-left: 5%;
 }
+
+.pagination {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Define a class for active page */
+.activePage {
+  background-color: #3e7c1f;
+}
+
+/* Define a class for inactive pages */
+.inactivePage {
+  background-color: #e0e0e0;
+}

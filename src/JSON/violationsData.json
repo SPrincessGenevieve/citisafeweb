@@ -224,5 +224,141 @@
         "violation": "texting while driving"
       }
     ]
+  },
+  {
+    "id": "8",
+    "ticket_no": "TCKT001",
+    "date": "2023-08-15",
+    "name": "John Smith",
+    "address": "123 Main St",
+    "driver_license_no": "DL12345",
+    "type": "Professional",
+    "date_of_birth": "1990-05-10",
+    "nationality": "USA",
+    "vehicle_plate_no": "ABC123",
+    "make": "Toyota",
+    "model": "Camry",
+    "color": "Blue",
+    "class": "Sedan",
+    "body_markings": "None",
+    "registered_owner": "John Doe",
+    "registered_owner_address": "456 Elm St",
+    "contact_no": "555-1234",
+    "time_of_violation": "10:30 AM",
+    "place_of_violation": "Main St",
+    "apprehending_officer": "Officer Smith",
+    "status": "Pending",
+    "penalty": "₱1,000",
+    "picture": "image_1.jpg",
+    "violations": [
+      {
+        "violation": "Speeding"
+      },
+      {
+        "violation": "Running Red Light"
+      }
+    ]
+  },
+  {
+    "id": "9",
+    "ticket_no": "TCKT001",
+    "date": "2023-08-15",
+    "name": "John Smith",
+    "address": "123 Main St",
+    "driver_license_no": "DL12345",
+    "type": "Professional",
+    "date_of_birth": "1990-05-10",
+    "nationality": "USA",
+    "vehicle_plate_no": "ABC123",
+    "make": "Toyota",
+    "model": "Camry",
+    "color": "Blue",
+    "class": "Sedan",
+    "body_markings": "None",
+    "registered_owner": "John Doe",
+    "registered_owner_address": "456 Elm St",
+    "contact_no": "555-1234",
+    "time_of_violation": "10:30 AM",
+    "place_of_violation": "Main St",
+    "apprehending_officer": "Officer Smith",
+    "status": "Pending",
+    "penalty": "₱1,000",
+    "picture": "image_1.jpg",
+    "violations": [
+      {
+        "violation": "Speeding"
+      },
+      {
+        "violation": "Running Red Light"
+      }
+    ]
+  },
+  {
+    "id": "10",
+    "ticket_no": "TCKT001",
+    "date": "2023-08-15",
+    "name": "John Smith",
+    "address": "123 Main St",
+    "driver_license_no": "DL12345",
+    "type": "Professional",
+    "date_of_birth": "1990-05-10",
+    "nationality": "USA",
+    "vehicle_plate_no": "ABC123",
+    "make": "Toyota",
+    "model": "Camry",
+    "color": "Blue",
+    "class": "Sedan",
+    "body_markings": "None",
+    "registered_owner": "John Doe",
+    "registered_owner_address": "456 Elm St",
+    "contact_no": "555-1234",
+    "time_of_violation": "10:30 AM",
+    "place_of_violation": "Main St",
+    "apprehending_officer": "Officer Smith",
+    "status": "Pending",
+    "penalty": "₱1,000",
+    "picture": "image_1.jpg",
+    "violations": [
+      {
+        "violation": "Speeding"
+      },
+      {
+        "violation": "Running Red Light"
+      }
+    ]
+  },
+  {
+    "id": "11",
+    "ticket_no": "TCKT001",
+    "date": "2023-08-15",
+    "name": "John Smith",
+    "address": "123 Main St",
+    "driver_license_no": "DL12345",
+    "type": "Professional",
+    "date_of_birth": "1990-05-10",
+    "nationality": "USA",
+    "vehicle_plate_no": "ABC123",
+    "make": "Toyota",
+    "model": "Camry",
+    "color": "Blue",
+    "class": "Sedan",
+    "body_markings": "None",
+    "registered_owner": "John Doe",
+    "registered_owner_address": "456 Elm St",
+    "contact_no": "555-1234",
+    "time_of_violation": "10:30 AM",
+    "place_of_violation": "Main St",
+    "apprehending_officer": "Officer Smith",
+    "status": "Pending",
+    "penalty": "₱1,000",
+    "picture": "image_1.jpg",
+    "violations": [
+      {
+        "violation": "Speeding"
+      },
+      {
+        "violation": "Running Red Light"
+      }
+    ]
   }
 ]

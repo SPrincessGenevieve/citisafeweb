@@ -44,7 +44,7 @@ function Violation({ navigation }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [user, setUser] = useState(false);
   const [table, setTable] = useState(true);
-  const rowsPerPage = 10;
+  const rowsPerPage = 7;
   const [selectedStatus, setSelectedStatus] = useState([]);
 
   const handleSearch = (query) => {
@@ -410,6 +410,56 @@ function Violation({ navigation }) {
               </TableBody>
             </Table>
           </TableContainer>
+        </div>
+        <div className="pagination">
+          <button
+            style={{ backgroundColor: "transparent", border: 0 }}
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(1)}
+          >
+            <p>Previous</p>
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => {
+            if (
+              totalPages <= 4 ||
+              index + 1 === 1 ||
+              index + 1 === totalPages ||
+              Math.abs(currentPage - (index + 1)) <= 1
+            ) {
+              return (
+                <button
+                  style={{
+                    border: 0,
+                    marginRight: 10,
+                    height: 40,
+                    width: 40,
+                    color: currentPage === index + 1 ? "white" : "black",
+                    borderRadius: 10,
+                    backgroundColor:
+                      currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0", // Apply green for active, yellow for inactive
+                    fontSize: 20,
+                  }}
+                  key={index}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={
+                    currentPage === index + 1 ? "activePage" : "inactivePage"
+                  } // Apply activePage class for active, inactivePage class for inactive
+                >
+                  {index + 1}
+                </button>
+              );
+            } else if (Math.abs(currentPage - (index + 1)) === 2) {
+              return <span key={index}>...</span>;
+            }
+            return null;
+          })}
+          <button
+            style={{ backgroundColor: "transparent", border: 0 }}
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(totalPages)}
+          >
+            <p>Next</p>
+          </button>
         </div>
       </div>
     </div>
