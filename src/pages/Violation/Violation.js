@@ -203,7 +203,11 @@ function Violation({ navigation }) {
             <Search
               style={{ position: "absolute", marginLeft: 10, marginTop: 10 }}
             ></Search>
-            <input className="search-box"></input>
+            <input
+              value={searchQuery}
+              onChange={(event) => handleSearch(event.target.value)}
+              className="search-box"
+            ></input>
           </div>
           <TableContainer>
             <Table
