@@ -27,7 +27,6 @@ export default function Navbar() {
         <CustomLink to="/violation">Records</CustomLink>
         <CustomLink to="/user">Users</CustomLink>
         <CustomLink to="/violationList">Violation</CustomLink>
-        <CustomLink to="/profile">Profile</CustomLink>
         <li className={`nav-item logout-item ${showNav ? "show" : ""}`}>
           <CustomLink className="logout-link" to="/">
             Logout
