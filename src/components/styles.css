@@ -1,3 +1,29 @@
-.Select{
-    flex-direction: column;
+.Select {
+  flex-direction: column;
+}
+
+.title-form {
+  line-height: 0;
+  font-size: 15px;
+  margin-left: 2%;
+}
+
+.styles-input {
+  outline: none;
+  border: 0;
+  border-radius: 20px;
+  background-color: #e7e9ee;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.select-css {
+  background-color: #e7e9ee;
+  border: 0;
+  outline: 0;
+
+  border-radius: 20px;
+  padding-left: 10px;
+  font-size: 20px;
+  padding-right: 10px;
 }

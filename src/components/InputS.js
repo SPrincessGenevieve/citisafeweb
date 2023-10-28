@@ -1,8 +1,13 @@
-import React from 'react';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
-import Box from '@mui/material/Box';
-import { createTheme, ThemeProvider, Theme, useTheme } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
+import React from "react";
+import { outlinedInputClasses } from "@mui/material/OutlinedInput";
+import Box from "@mui/material/Box";
+import {
+  createTheme,
+  ThemeProvider,
+  Theme,
+  useTheme,
+} from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
 
 const customTheme = (outerTheme: Theme) =>
   createTheme({
@@ -13,33 +18,33 @@ const customTheme = (outerTheme: Theme) =>
       MuiTextField: {
         styleOverrides: {
           root: {
-            '--TextField-brandBorderColor': '#486EF5',
-            '--TextField-brandBorderHoverColor': '#486EF5',
-            '--TextField-brandBorderFocusedColor': '#486EF5',
-            '& label.Mui-focused': {
-              color: 'var(--TextField-brandBorderFocusedColor)',
+            "--TextField-brandBorderColor": "#3E7C1F",
+            "--TextField-brandBorderHoverColor": "#3E7C1F",
+            "--TextField-brandBorderFocusedColor": "#3E7C1F",
+            "& label.Mui-focused": {
+              color: "var(--TextField-brandBorderFocusedColor)",
             },
           },
         },
       },
-      MuiInputBase: { 
+      MuiInputBase: {
         styleOverrides: {
           input: {
-            color: 'black', 
+            color: "black",
           },
         },
       },
       MuiOutlinedInput: {
         styleOverrides: {
           notchedOutline: {
-            borderColor: 'var(--TextField-brandBorderColor)',
+            borderColor: "var(--TextField-brandBorderColor)",
           },
           root: {
             [`&:hover .${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: 'var(--TextField-brandBorderHoverColor)',
+              borderColor: "var(--TextField-brandBorderHoverColor)",
             },
             [`&.Mui-focused .${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: 'var(--TextField-brandBorderFocusedColor)',
+              borderColor: "var(--TextField-brandBorderFocusedColor)",
             },
           },
         },
@@ -47,14 +52,15 @@ const customTheme = (outerTheme: Theme) =>
       MuiFilledInput: {
         styleOverrides: {
           root: {
-            '&:before, &:after': {
-              borderBottom: '2px solid var(--TextField-brandBorderColor)',
+            "&:before, &:after": {
+              borderBottom: "2px solid var(--TextField-brandBorderColor)",
             },
-            '&:hover:not(.Mui-disabled, .Mui-error):before': {
-              borderBottom: '2px solid var(--TextField-brandBorderHoverColor)',
+            "&:hover:not(.Mui-disabled, .Mui-error):before": {
+              borderBottom: "2px solid var(--TextField-brandBorderHoverColor)",
             },
-            '&.Mui-focused:after': {
-              borderBottom: '2px solid var(--TextField-brandBorderFocusedColor)',
+            "&.Mui-focused:after": {
+              borderBottom:
+                "2px solid var(--TextField-brandBorderFocusedColor)",
             },
           },
         },
@@ -62,51 +68,57 @@ const customTheme = (outerTheme: Theme) =>
       MuiInput: {
         styleOverrides: {
           root: {
-            '&:before': {
-              borderBottom: '2px solid var(--TextField-brandBorderColor)',
+            "&:before": {
+              borderBottom: "2px solid var(--TextField-brandBorderColor)",
             },
-            '&:hover:not(.Mui-disabled, .Mui-error):before': {
-              borderBottom: '2px solid var(--TextField-brandBorderHoverColor)',
+            "&:hover:not(.Mui-disabled, .Mui-error):before": {
+              borderBottom: "2px solid var(--TextField-brandBorderHoverColor)",
             },
-            '&.Mui-focused:after': {
-              borderBottom: '2px solid var(--TextField-brandBorderFocusedColor)',
+            "&.Mui-focused:after": {
+              borderBottom:
+                "2px solid var(--TextField-brandBorderFocusedColor)",
             },
           },
         },
       },
     },
   });
-  
-function InputS({label, value, marginTop, width, type, required, marginRight}) {
-    const outerTheme = useTheme();
 
+function InputS({
+  label,
+  value,
+  marginTop,
+  width,
+  type,
+  required,
+  marginRight,
+}) {
+  const outerTheme = useTheme();
 
-
-    return (
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: '1fr', // Single column by default
-            gap: 2,
-            marginTop: marginTop,
-            '@media (min-width: 600px)': {
-              // Adjust the breakpoint as needed
-              gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', // Responsive grid with minimum 200px column width
-            },
-          }}
-        >
-          <ThemeProvider theme={customTheme(outerTheme)}>
-              <TextField
-                required={required}
-                value={value}
-                style={{ color: 'black', width: width, marginRight:marginRight }}
-                focused
-                label={label}
-                type={type}
-              />
-
-          </ThemeProvider>
-        </Box>
-    );
-  }
+  return (
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "1fr", // Single column by default
+        gap: 2,
+        marginTop: marginTop,
+        "@media (min-width: 600px)": {
+          // Adjust the breakpoint as needed
+          gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", // Responsive grid with minimum 200px column width
+        },
+      }}
+    >
+      <ThemeProvider theme={customTheme(outerTheme)}>
+        <TextField
+          required={required}
+          value={value}
+          style={{ color: "black", width: width, marginRight: marginRight }}
+          focused
+          label={label}
+          type={type}
+        />
+      </ThemeProvider>
+    </Box>
+  );
+}
 export default InputS;

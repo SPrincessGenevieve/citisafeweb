@@ -34,6 +34,9 @@ import UserOne from "../../components/UserOne";
 import UserCredentials from "../../components/UserCredentials";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ConstButton from "../../components/ConstButton";
+import InputRound from "../../components/InputRound";
+import SelectRound from "../../components/SelectRound";
 
 const cellStylesHeader = {
   cell: {
@@ -135,74 +138,95 @@ function UserControl(props) {
     <div className="container1">
       <Navbar />
       {proceed ? (
-        <div>
+        <div
+          style={{
+            backgroundColor: "white",
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            display: "flex",
+            marginTop: "7%",
+            zIndex: 2,
+            justifyContent: "center",
+          }}
+        >
           <div
             style={{
-              height: "77vh",
-              width: "70%",
-              backgroundColor: "white",
-              position: "absolute",
               zIndex: 1,
               borderRadius: 20,
-              marginTop: 40,
-              marginLeft: "15%",
-              padding: 30,
-              flexDirection: "column",
+              height: "80%",
             }}
           >
             <UserCredentials
               close={() => setProceed(!proceed)}
-              create={() => setProceed(!proceed)}
               back={handleBack}
             ></UserCredentials>
           </div>
-          <div
-            style={{
-              backgroundColor: "black",
-              height: "100vh",
-              width: "900vh",
-              marginTop: -10,
-              marginLeft: -30,
-              opacity: 0.5,
-            }}
-          ></div>
         </div>
       ) : null}
       {addScreen ? (
-        <div>
-          <div
-            style={{
-              height: "77vh",
-              width: "70%",
-              backgroundColor: "white",
-              position: "absolute",
-              zIndex: 1,
-              borderRadius: 20,
-              marginTop: 40,
-              marginLeft: "15%",
-              padding: 30,
-              flexDirection: "column",
-            }}
-          >
-            <UserOne
-              close={() => setAddScreen(!addScreen)}
-              proceed={() => setProceed(!proceed) & setAddScreen(!addScreen)}
-              height={50}
-              title={"PROCEED"}
-            ></UserOne>
+        <div
+          style={{
+            backgroundColor: "white",
+            width: "100%",
+            height: "85%",
+            position: "absolute",
+            display: "flex",
+            marginTop: "7%",
+            zIndex: 2,
+            justifyContent: "center",
+            alignItems: "center",
+            bottom: 0,
+          }}
+        >
+          <div style={{ marginRight: 10 }}>
+            <InputRound
+              title={"First Name"}
+              width={"40vh"}
+              height={"3vh"}
+            ></InputRound>
+            <InputRound
+              title={"Middle Name"}
+              width={"40vh"}
+              height={"3vh"}
+            ></InputRound>
+            <SelectRound
+              width={"42vh"}
+              height={"5vh"}
+              title={"Position"}
+            ></SelectRound>
+            <InputRound
+              title={"Middle Name"}
+              width={"40vh"}
+              height={"3vh"}
+            ></InputRound>
           </div>
-          <div
-            style={{
-              backgroundColor: "black",
-              height: "100vh",
-              width: "900vh",
-              marginTop: -10,
-              marginLeft: -30,
-              opacity: 0.5,
-            }}
-          ></div>
+          <div>
+            <InputRound
+              title={"Last Name"}
+              width={"40vh"}
+              height={"3vh"}
+            ></InputRound>
+            <SelectRound
+              width={"42vh"}
+              height={"5vh"}
+              title={"Gender"}
+            ></SelectRound>
+            <InputRound
+              title={"Email"}
+              width={"40vh"}
+              height={"3vh"}
+              type={"email"}
+            ></InputRound>
+            <InputRound
+              title={"Middle Name"}
+              width={"40vh"}
+              height={"3vh"}
+            ></InputRound>
+          </div>
         </div>
       ) : null}
+
       {isVisible ? (
         <div style={{ marginTop: "8%" }}>
           <div
