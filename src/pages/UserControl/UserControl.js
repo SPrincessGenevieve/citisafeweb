@@ -140,34 +140,6 @@ function UserControl(props) {
       <div className="first-layer-control">
         {details ? (
           <div className="form-user">
-            {proceed ? (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  position: "absolute",
-                  display: "flex",
-                  zIndex: 2,
-                  justifyContent: "center",
-                }}
-              >
-                <div
-                  style={{
-                    zIndex: 1,
-                    borderRadius: 20,
-                    height: "80%",
-                  }}
-                >
-                  <UserCredentials
-                    close={() => setProceed(!proceed) & setTable(!table)}
-                    back={handleBack}
-                    onClickProceed={() =>
-                      setAddScreen(!addScreen) & setProceed(!proceed)
-                    }
-                  ></UserCredentials>
-                </div>
-              </div>
-            ) : null}
             {addScreen ? (
               <div className="add-container">
                 <div
@@ -191,9 +163,7 @@ function UserControl(props) {
                   </Button>
                   <Button
                     style={{ position: "absolute", left: 0, marginRight: 40 }}
-                    onClick={() =>
-                      setAddScreen(!addScreen) & setProceed(!proceed)
-                    }
+                    onClick={() => setAddScreen(!addScreen) & setTable(!table)}
                   >
                     <ArrowBack style={{}}></ArrowBack> BACK
                   </Button>
@@ -269,7 +239,7 @@ function UserControl(props) {
                 className="search-box-user"
               ></input>
               <Button
-                onClick={() => setProceed(!proceed) & setTable(!table)}
+                onClick={() => setAddScreen(!addScreen) & setTable(!table)}
                 className="add-user-btn"
                 style={{
                   backgroundColor: "#3E7C1F",
