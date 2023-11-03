@@ -48,15 +48,19 @@ function StatusSelection({
         gap: 2,
         marginTop: marginTop,
         "@media (min-width: 50px)": {
-          gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", // Responsive grid with minimum 200px column width
+          gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
         },
       }}
     >
-      <FormControl required>
+      <FormControl required sx={{ width: 120 }}>
         <ThemeProvider theme={customTheme}>
-          <InputLabel>{label}</InputLabel>
+          <InputLabel sx={{ width: 120 }}>{label}</InputLabel>
           <Select
-            style={{ color: "black", fontSize: 12 }}
+            style={{
+              color: "black",
+              fontSize: 12,
+              width: 120,
+            }}
             labelId={`${label.toLowerCase()}-label`}
             id={label.toLowerCase()}
             value={selectedValue}

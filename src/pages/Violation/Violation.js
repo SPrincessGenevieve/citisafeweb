@@ -37,6 +37,11 @@ const cellStylesBody = {
   },
 };
 
+if (window.innerWidth <= 600) {
+  cellStylesHeader.cell.width = 100;
+  cellStylesBody.cell.width = 100;
+}
+
 function Violation({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(violationsData);
@@ -44,7 +49,7 @@ function Violation({ navigation }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [user, setUser] = useState(false);
   const [table, setTable] = useState(true);
-  const rowsPerPage = 7;
+  const rowsPerPage = 6;
   const [selectedStatus, setSelectedStatus] = useState([]);
 
   const handleSearch = (query) => {
@@ -197,223 +202,215 @@ function Violation({ navigation }) {
         <Navbar></Navbar>
       </div>
 
-      <div>
-        <div className="violation-subcontainer">
-          <div className="search-container">
-            <Search
-              style={{ position: "absolute", marginLeft: 10, marginTop: 10 }}
-            ></Search>
-            <input
-              value={searchQuery}
-              onChange={(event) => handleSearch(event.target.value)}
-              className="search-box"
-            ></input>
-          </div>
-          <TableContainer>
-            <Table
-              style={{
-                borderCollapse: "collapse",
-                width: "100%",
-              }}
-            >
-              <TableHead>
-                <TableRow
-                  style={{
-                    display: "flex",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <TableCell style={cellStylesHeader.cell}>ID</TableCell>
-                  <TableCell style={cellStylesHeader.cell}>
-                    Tracking #
-                  </TableCell>
-                  <TableCell style={cellStylesHeader.cell}>Name</TableCell>
-                  <TableCell style={cellStylesHeader.cell}>Violation</TableCell>
-                  <TableCell style={cellStylesHeader.cell}>Date</TableCell>
-                  <TableCell style={cellStylesHeader.cell}>Offense</TableCell>
-                  <TableCell style={cellStylesHeader.cell}>
-                    Apprehending Officer
-                  </TableCell>
-                  <TableCell style={cellStylesHeader.cell}>Penalty</TableCell>
-                  <TableCell style={cellStylesHeader.cell}>Status</TableCell>
-                  <TableCell style={cellStylesHeader.cell}>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody style={{ backgroundColor: "pink" }}>
-                {currentRows.map((item, index) => (
-                  <TableRow
-                    className={index % 2 === 0 ? "even-row" : "odd-row"}
-                    key={index}
-                    style={{
-                      display: "flex",
-                      borderLeft: "1px solid black",
-                      borderRight: "1px solid black",
-                    }}
-                  >
-                    <TableCell style={cellStylesBody.cell}>
-                      <a className="ticket" href="#">
-                        {item.id}
-                      </a>
+      <div className="first-layer-violation">
+        <div className="search-container-violation">
+          <Search
+            className="search-icon"
+            style={{ position: "absolute", left: "3.5%", marginTop: 10 }}
+          ></Search>
+          <input
+            value={searchQuery}
+            onChange={(event) => handleSearch(event.target.value)}
+            className="search-box"
+          ></input>
+        </div>
+        <div className="table-conatiner-violation">
+          <div className="tab-con-2">
+            <TableContainer>
+              <Table className="table">
+                <TableHead>
+                  <TableRow className="table-row">
+                    <TableCell style={cellStylesHeader.cell}>ID</TableCell>
+                    <TableCell style={cellStylesHeader.cell}>
+                      Tracking #
                     </TableCell>
-                    <TableCell style={cellStylesBody.cell}>
-                      <a className="ticket" href="#">
-                        {item.ticket_no}
-                      </a>
+                    <TableCell style={cellStylesHeader.cell}>Name</TableCell>
+                    <TableCell style={cellStylesHeader.cell}>
+                      Violation
                     </TableCell>
-                    <TableCell style={cellStylesBody.cell}>
-                      <a
-                        className="ticket"
-                        onClick={() =>
-                          setTable(!table) & setActivePerson(item.name)
-                        }
-                        href="#"
-                      >
-                        {item.name}
-                      </a>
+                    <TableCell style={cellStylesHeader.cell}>Date</TableCell>
+                    <TableCell style={cellStylesHeader.cell}>Offense</TableCell>
+                    <TableCell style={cellStylesHeader.cell}>
+                      Apprehending Officer
                     </TableCell>
-                    <TableCell style={cellStylesBody.cell}>
-                      {item.violations.map((violation, index) => (
-                        <span key={index}>
-                          {violation.violation}
-                          {index !== item.violations.length - 1 ? ", " : ""}
-                        </span>
-                      ))}
-                    </TableCell>
-                    <TableCell style={cellStylesBody.cell}>
-                      {item.date}
-                    </TableCell>
-
-                    <TableCell style={cellStylesBody.cell}>
-                      {offenseCountMap[item.name] === 3
-                        ? "3rd"
-                        : `${offenseCountMap[item.name]}${
-                            offenseCountMap[item.name] === 1
-                              ? "st"
-                              : offenseCountMap[item.name] === 2
-                              ? "nd"
-                              : "th"
-                          } Offense`}
-                    </TableCell>
-                    <TableCell style={cellStylesBody.cell}>
-                      {item.apprehending_officer}
-                    </TableCell>
-                    <TableCell style={cellStylesBody.cell}>
-                      {item.penalty}
-                    </TableCell>
-                    <TableCell style={cellStylesBody.cell}>
-                      <div className="status-container">
-                        <p
-                          style={{
-                            flex: 1,
-                            backgroundColor:
-                              item.status === "Overdue"
-                                ? "#FBE7E8"
-                                : item.status === "Cleared"
-                                ? "#FEF2E5"
-                                : "#EBF9F1",
-                            color:
-                              item.status === "Overdue"
-                                ? "#A30D11"
-                                : item.status === "Cleared"
-                                ? "#CD6200"
-                                : "#1F9254",
-                            width: 100,
-                            height: 15,
-                            padding: 10,
-                            textAlign: "center",
-                            borderRadius: 20,
-                          }}
-                        >
-                          {editingRows[item.id] ? (
-                            <div
-                              className={
-                                index % 2 === 0 ? "even-row" : "odd-row"
-                              }
-                              style={{
-                                marginTop: -15,
-                                width: 200,
-                                marginLeft: -10,
-                              }}
-                            >
-                              <StatusSelection
-                                label={"Select Status"}
-                                labelSelect={"Select Status"}
-                                json={StatSelect}
-                              ></StatusSelection>
-                            </div>
-                          ) : item.status === "Overdue" ? (
-                            `Overdue`
-                          ) : (
-                            <span>{item.status}</span>
-                          )}
-                        </p>
-                      </div>
-                    </TableCell>
-
-                    <TableCell className="row" style={cellStylesBody.cell}>
-                      {editingRows[item.id] ? (
-                        <>
-                          <Button
-                            variant="contained"
-                            style={{
-                              backgroundColor: "transparent",
-                              boxShadow: "none",
-                              color: "black",
-                              marginLeft: 10,
-                            }}
-                            onClick={() => handleSave(item.id)}
-                          >
-                            <Check style={{ height: 25 }} />
-                          </Button>
-                          <Button
-                            variant="contained"
-                            style={{
-                              backgroundColor: "transparent",
-                              boxShadow: "none",
-                              color: "black",
-                            }}
-                            onClick={() => handleCancelEdit(item.id)}
-                          >
-                            <Close style={{ height: 25 }} />
-                          </Button>
-                        </>
-                      ) : deletingRows[item.id] ? (
-                        <>
-                          <Button
-                            variant="contained"
-                            style={{
-                              backgroundColor: "transparent",
-                              boxShadow: "none",
-                              color: "black",
-                              marginLeft: 10,
-                            }}
-                            onClick={() => handleCheck(item.id)}
-                          >
-                            <Check style={{ height: 25 }} />
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            variant="contained"
-                            style={{
-                              backgroundColor: "transparent",
-                              boxShadow: "none",
-                              color: "black",
-                              marginLeft: 10,
-                            }}
-                            onClick={() => handleEdit(item.id)}
-                          >
-                            <Edit style={{ height: 25 }} />
-                          </Button>
-                        </>
-                      )}
-                    </TableCell>
+                    <TableCell style={cellStylesHeader.cell}>Penalty</TableCell>
+                    <TableCell style={cellStylesHeader.cell}>Status</TableCell>
+                    <TableCell style={cellStylesHeader.cell}>Action</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {currentRows.map((item, index) => (
+                    <TableRow
+                      className={`table-body-row ${
+                        index % 2 === 0 ? "even-row" : "odd-row"
+                      }`}
+                      key={index}
+                    >
+                      <TableCell style={cellStylesBody.cell}>
+                        <a className="ticket" href="#">
+                          {item.id}
+                        </a>
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
+                        <a className="ticket" href="#">
+                          {item.ticket_no}
+                        </a>
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
+                        <a
+                          className="ticket"
+                          onClick={() =>
+                            setTable(!table) & setActivePerson(item.name)
+                          }
+                          href="#"
+                        >
+                          {item.name}
+                        </a>
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
+                        {item.violations.map((violation, index) => (
+                          <span key={index}>
+                            {violation.violation}
+                            {index !== item.violations.length - 1 ? ", " : ""}
+                          </span>
+                        ))}
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
+                        {item.date}
+                      </TableCell>
+
+                      <TableCell style={cellStylesBody.cell}>
+                        {offenseCountMap[item.name] === 3
+                          ? "3rd"
+                          : `${offenseCountMap[item.name]}${
+                              offenseCountMap[item.name] === 1
+                                ? "st"
+                                : offenseCountMap[item.name] === 2
+                                ? "nd"
+                                : "th"
+                            } Offense`}
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
+                        {item.apprehending_officer}
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
+                        {item.penalty}
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
+                        <div className="status-container">
+                          <p
+                            style={{
+                              flex: 1,
+                              backgroundColor:
+                                item.status === "Overdue"
+                                  ? "#FBE7E8"
+                                  : item.status === "Cleared"
+                                  ? "#FEF2E5"
+                                  : "#EBF9F1",
+                              color:
+                                item.status === "Overdue"
+                                  ? "#A30D11"
+                                  : item.status === "Cleared"
+                                  ? "#CD6200"
+                                  : "#1F9254",
+                              width: 100,
+                              height: 15,
+                              padding: 10,
+                              textAlign: "center",
+                              borderRadius: 20,
+                            }}
+                          >
+                            {editingRows[item.id] ? (
+                              <div
+                                className={
+                                  index % 2 === 0 ? "even-row" : "odd-row"
+                                }
+                                style={{
+                                  marginTop: -15,
+                                  width: 200,
+                                  marginLeft: -10,
+                                }}
+                              >
+                                <StatusSelection
+                                  label={"Select Status"}
+                                  labelSelect={"Select Status"}
+                                  json={StatSelect}
+                                ></StatusSelection>
+                              </div>
+                            ) : item.status === "Overdue" ? (
+                              `Overdue`
+                            ) : (
+                              <span>{item.status}</span>
+                            )}
+                          </p>
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="row" style={cellStylesBody.cell}>
+                        {editingRows[item.id] ? (
+                          <div className="check-close">
+                            <Button
+                              variant="contained"
+                              style={{
+                                backgroundColor: "transparent",
+                                boxShadow: "none",
+                                color: "black",
+                                marginLeft: 0,
+                              }}
+                              onClick={() => handleSave(item.id)}
+                            >
+                              <Check style={{ height: 25 }} />
+                            </Button>
+                            <Button
+                              variant="contained"
+                              style={{
+                                backgroundColor: "transparent",
+                                boxShadow: "none",
+                                color: "black",
+                              }}
+                              onClick={() => handleCancelEdit(item.id)}
+                            >
+                              <Close style={{ height: 25 }} />
+                            </Button>
+                          </div>
+                        ) : deletingRows[item.id] ? (
+                          <>
+                            <Button
+                              variant="contained"
+                              style={{
+                                backgroundColor: "transparent",
+                                boxShadow: "none",
+                                color: "black",
+                                marginLeft: 10,
+                              }}
+                              onClick={() => handleCheck(item.id)}
+                            >
+                              <Check style={{ height: 25 }} />
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              variant="contained"
+                              style={{
+                                backgroundColor: "transparent",
+                                boxShadow: "none",
+                                color: "black",
+                                marginLeft: 10,
+                              }}
+                              onClick={() => handleEdit(item.id)}
+                            >
+                              <Edit style={{ height: 25 }} />
+                            </Button>
+                          </>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
         </div>
         <div className="pagination">
           <button

@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { ArrowBack, CloseOutlined } from "@mui/icons-material";
 import ConstButton from "./ConstButton";
 
-function UserCredentials({ back, create, close }) {
+function UserCredentials({ back, create, close, onClickProceed }) {
   return (
     <>
       <div
@@ -19,7 +19,6 @@ function UserCredentials({ back, create, close }) {
           style={{
             position: "absolute",
             right: 0,
-            marginRight: 40,
             color: "red",
           }}
           onClick={close}
@@ -78,7 +77,7 @@ function UserCredentials({ back, create, close }) {
               width: "70%",
             }}
           >
-            <ConstButton title={"CREATE USER"} height={50}></ConstButton>
+            <ConstButton onClick={onClickProceed} title={"CREATE USER"} height={50}></ConstButton>
           </div>
         </dv>
       </div>

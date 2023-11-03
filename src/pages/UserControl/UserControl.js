@@ -62,7 +62,11 @@ const cellStylesBody = {
 function UserControl(props) {
   const [filteredData, setFilteredData] = useState(users);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [table, setTable] = useState(true);
+  const [details, setDetails] = useState(true);
+  const [addScreen, setAddScreen] = useState(false);
+  const [proceed, setProceed] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const handleSearch = (query) => {
     setSearchQuery(query);
     const filtered = users.filter(
@@ -75,12 +79,8 @@ function UserControl(props) {
     setCurrentPage(1); // Reset to first page when searching
   };
 
-  const [addScreen, setAddScreen] = useState(false);
-  const [proceed, setProceed] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-
   const handleBack = () => {
-    setAddScreen(!addScreen);
+    setTable(!table);
     setProceed(!proceed);
   };
   const [editingRow, setEditingRow] = useState(null);
@@ -137,368 +137,388 @@ function UserControl(props) {
   return (
     <div className="container1">
       <Navbar />
-      {proceed ? (
-        <div
-          style={{
-            backgroundColor: "white",
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            display: "flex",
-            marginTop: "7%",
-            zIndex: 2,
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              zIndex: 1,
-              borderRadius: 20,
-              height: "80%",
-            }}
-          >
-            <UserCredentials
-              close={() => setProceed(!proceed)}
-              back={handleBack}
-            ></UserCredentials>
-          </div>
-        </div>
-      ) : null}
-      {addScreen ? (
-        <div
-          style={{
-            backgroundColor: "white",
-            width: "100%",
-            height: "85%",
-            position: "absolute",
-            display: "flex",
-            marginTop: "7%",
-            zIndex: 2,
-            justifyContent: "center",
-            alignItems: "center",
-            bottom: 0,
-          }}
-        >
-          <div style={{ marginRight: 10 }}>
-            <InputRound
-              title={"First Name"}
-              width={"40vh"}
-              height={"3vh"}
-            ></InputRound>
-            <InputRound
-              title={"Middle Name"}
-              width={"40vh"}
-              height={"3vh"}
-            ></InputRound>
-            <SelectRound
-              width={"42vh"}
-              height={"5vh"}
-              title={"Position"}
-            ></SelectRound>
-            <InputRound
-              title={"Middle Name"}
-              width={"40vh"}
-              height={"3vh"}
-            ></InputRound>
-          </div>
-          <div>
-            <InputRound
-              title={"Last Name"}
-              width={"40vh"}
-              height={"3vh"}
-            ></InputRound>
-            <SelectRound
-              width={"42vh"}
-              height={"5vh"}
-              title={"Gender"}
-            ></SelectRound>
-            <InputRound
-              title={"Email"}
-              width={"40vh"}
-              height={"3vh"}
-              type={"email"}
-            ></InputRound>
-            <InputRound
-              title={"Middle Name"}
-              width={"40vh"}
-              height={"3vh"}
-            ></InputRound>
-          </div>
-        </div>
-      ) : null}
-
-      {isVisible ? (
-        <div style={{ marginTop: "8%" }}>
-          <div
-            className="searchbar"
-            style={{
-              display: "flex",
-              height: "5%",
-              alignItems: "center",
-            }}
-          >
-            <Search
-              style={{
-                position: "absolute",
-                marginLeft: 10,
-              }}
-            ></Search>
-            <input
-              style={{
-                borderRadius: 40,
-                height: 40,
-                width: "20%",
-                marginRight: "1%",
-                outline: "none",
-                fontSize: 20,
-                paddingLeft: 40,
-                paddingRight: 20,
-                border: 0,
-                backgroundColor: "#E7E9EE",
-              }}
-              value={searchQuery}
-              onChange={(event) => handleSearch(event.target.value)}
-            ></input>
-            <Button
-              onClick={() => setAddScreen(!addScreen)}
-              style={{
-                backgroundColor: "#3E7C1F",
-                borderRadius: 40,
-                color: "white",
-                paddingRight: 10,
-                paddingLeft: 10,
-              }}
-            >
-              <Add style={{}} />
-              ADD USER
-            </Button>
-          </div>
-          <div className="container2">
-            <TableContainer>
-              <Table style={{ borderCollapse: "collapse", width: "100%" }}>
-                <TableHead>
-                  <TableRow
+      <div className="first-layer-control">
+        {details ? (
+          <div className="form-user">
+            {proceed ? (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  position: "absolute",
+                  display: "flex",
+                  zIndex: 2,
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    zIndex: 1,
+                    borderRadius: 20,
+                    height: "80%",
+                  }}
+                >
+                  <UserCredentials
+                    close={() => setProceed(!proceed) & setTable(!table)}
+                    back={handleBack}
+                    onClickProceed={() =>
+                      setAddScreen(!addScreen) & setProceed(!proceed)
+                    }
+                  ></UserCredentials>
+                </div>
+              </div>
+            ) : null}
+            {addScreen ? (
+              <div className="add-container">
+                <div
+                  style={{
+                    flexDirection: "row",
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                  className="button-next-back"
+                >
+                  <Button
                     style={{
-                      border: "1px solid white",
-                      display: "flex",
-                      justifyContent: "space-between",
+                      position: "absolute",
+                      right: 0,
+                      color: "red",
                     }}
+                    onClick={() => setAddScreen(!addScreen) & setTable(!table)}
                   >
-                    <TableCell style={cellStylesHeader.cell}>ID</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>
-                      First name
-                    </TableCell>
-                    <TableCell style={cellStylesHeader.cell}>
-                      Last name
-                    </TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Gender</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>
-                      Position
-                    </TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Email</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>
-                      Contact No.
-                    </TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Role</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>
-                      Username
-                    </TableCell>
-                    <TableCell
-                      style={{ flex: 1, color: "white", textAlign: "center" }}
-                    >
-                      Action
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {currentRows.map((user) => (
-                    <TableRow
-                      key={user.id}
-                      style={{
-                        display: "flex",
-                        borderLeft: "1px solid white",
-                        borderRight: "1px solid white",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.id}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.firstName}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.lastName}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.gender}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.position}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.email}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.contact_no}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.role}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell} className="row">
-                        {user.username}
-                      </TableCell>
-                      <TableCell className="row" style={cellStylesBody.cell}>
-                        {editingRow === user.id ? (
-                          <>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                                marginLeft: 10,
-                              }}
-                              onClick={() => handleSave(user.id)}
-                            >
-                              <Check style={{ height: 25 }} />
-                            </Button>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                              }}
-                              onClick={handleCancelEdit}
-                            >
-                              <Close style={{ height: 25 }} />
-                            </Button>
-                          </>
-                        ) : deletingRow === user.id ? (
-                          <>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                                marginLeft: 10,
-                              }}
-                              onClick={() => handleCheck(user.id)}
-                            >
-                              <Check style={{ height: 25 }} />
-                            </Button>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                              }}
-                              onClick={handleCancelDelete}
-                            >
-                              <Close style={{ height: 25 }} />
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                                marginLeft: 10,
-                              }}
-                              onClick={() => handleEdit(user.id)}
-                            >
-                              <Edit style={{ height: 25 }} />
-                            </Button>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                              }}
-                              onClick={() => handleDelete(user.id)}
-                            >
-                              <VoiceOverOff style={{ height: 25 }} />
-                            </Button>
-                          </>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                position: "fixed",
-                justifyContent: "center",
-                bottom: 20,
-              }}
-            >
-              <div className="pagination">
-                <button
-                  style={{ backgroundColor: "transparent", border: 0 }}
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(1)}
-                >
-                  <p>Previous</p>
-                </button>
-                {Array.from({ length: totalPages }, (_, index) => {
-                  if (
-                    totalPages <= 4 ||
-                    index + 1 === 1 ||
-                    index + 1 === totalPages ||
-                    Math.abs(currentPage - (index + 1)) <= 1
-                  ) {
-                    return (
-                      <button
-                        style={{
-                          border: 0,
-                          marginRight: 10,
-                          height: 40,
-                          width: 40,
-                          color: currentPage === index + 1 ? "white" : "black",
-                          borderRadius: 10,
-                          backgroundColor:
-                            currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0", // Apply green for active, yellow for inactive
-                          fontSize: 20,
-                        }}
-                        key={index}
-                        onClick={() => handlePageChange(index + 1)}
-                        className={
-                          currentPage === index + 1
-                            ? "activePage"
-                            : "inactivePage"
-                        } // Apply activePage class for active, inactivePage class for inactive
-                      >
-                        {index + 1}
-                      </button>
-                    );
-                  } else if (Math.abs(currentPage - (index + 1)) === 2) {
-                    return <span key={index}>...</span>;
-                  }
-                  return null;
-                })}
-                <button
-                  style={{ backgroundColor: "transparent", border: 0 }}
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(totalPages)}
-                >
-                  <p>Next</p>
-                </button>
+                    <CloseOutlined style={{}}></CloseOutlined>CLOSE
+                  </Button>
+                  <Button
+                    style={{ position: "absolute", left: 0, marginRight: 40 }}
+                    onClick={() =>
+                      setAddScreen(!addScreen) & setProceed(!proceed)
+                    }
+                  >
+                    <ArrowBack style={{}}></ArrowBack> BACK
+                  </Button>
+                </div>
+                <div className="form-container">
+                  <div style={{ marginRight: 10 }}>
+                    <InputRound
+                      title={"First Name"}
+                      width={"40vh"}
+                      height={"3vh"}
+                    ></InputRound>
+                    <InputRound
+                      title={"Last Name"}
+                      width={"40vh"}
+                      height={"3vh"}
+                    ></InputRound>
+                    <InputRound
+                      title={"Middle Name"}
+                      width={"40vh"}
+                      height={"3vh"}
+                    ></InputRound>
+
+                    <SelectRound
+                      width={"42vh"}
+                      height={"5vh"}
+                      title={"Role"}
+                    ></SelectRound>
+                  </div>
+                  <div>
+                    <InputRound
+                      title={"Position"}
+                      width={"40vh"}
+                      height={"3vh"}
+                    ></InputRound>
+                    <InputRound
+                      title={"Email"}
+                      width={"40vh"}
+                      height={"3vh"}
+                      type={"email"}
+                    ></InputRound>
+                    <InputRound
+                      title={"Username"}
+                      width={"40vh"}
+                      height={"3vh"}
+                    ></InputRound>
+                  </div>
+                </div>
+                <div className="next-user-container">
+                  <div className="next-user-btn">
+                    <ConstButton
+                      onClick={() =>
+                        setAddScreen(!addScreen) & setTable(!table)
+                      }
+                      width={10}
+                      title={"NEXT"}
+                    ></ConstButton>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+        {table ? (
+          <>
+            <div className="search-container-user">
+              <Search
+                className="search-icon-user"
+                style={{ position: "absolute", left: "2%", marginTop: 10 }}
+              ></Search>
+              <input
+                value={searchQuery}
+                onChange={(event) => handleSearch(event.target.value)}
+                className="search-box-user"
+              ></input>
+              <Button
+                onClick={() => setProceed(!proceed) & setTable(!table)}
+                className="add-user-btn"
+                style={{
+                  backgroundColor: "#3E7C1F",
+                  borderRadius: 40,
+                  color: "white",
+                  paddingRight: 10,
+                  paddingLeft: 10,
+                  height: 40,
+                  marginLeft: 10,
+                }}
+              >
+                <Add style={{}} />
+                {window.innerWidth <= 600 ? null : "ADD USER"}
+              </Button>
+            </div>
+            <div className="table-conatiner-user">
+              <div className="tab-con-2-user">
+                <TableContainer>
+                  <Table className="table">
+                    <TableHead>
+                      <TableRow className="table-row">
+                        <TableCell style={cellStylesHeader.cell}>ID</TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          First Name
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Last Name
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Middle Name
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Role
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Position
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Email
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Username
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Action
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {currentRows.map((user, index) => (
+                        <TableRow
+                          className={`table-body-row ${
+                            index % 2 === 0 ? "even-row" : "odd-row"
+                          }`}
+                          key={index}
+                        >
+                          <TableCell style={cellStylesBody.cell}>
+                            <a className="ticket" href="#">
+                              {user.id}
+                            </a>
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.firstName}
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.lastName}
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.position}
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.email}
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.contact_no}
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.role}
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.username}
+                          </TableCell>
+                          <TableCell
+                            className="row"
+                            style={cellStylesBody.cell}
+                          >
+                            {editingRow === user.id ? (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => handleSave(user.id)}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={handleCancelEdit}
+                                >
+                                  <Close style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            ) : deletingRow === user.id ? (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => handleCheck(user.id)}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={handleCancelDelete}
+                                >
+                                  <Close style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => handleEdit(user.id)}
+                                >
+                                  <Edit style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={() => handleDelete(user.id)}
+                                >
+                                  <VoiceOverOff style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </div>
             </div>
-          </div>
-        </div>
-      ) : null}
+            <div className="pagination">
+              <button
+                style={{ backgroundColor: "transparent", border: 0 }}
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(1)}
+              >
+                <p>Previous</p>
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => {
+                if (
+                  totalPages <= 4 ||
+                  index + 1 === 1 ||
+                  index + 1 === totalPages ||
+                  Math.abs(currentPage - (index + 1)) <= 1
+                ) {
+                  return (
+                    <button
+                      style={{
+                        border: 0,
+                        marginRight: 10,
+                        height: 40,
+                        width: 40,
+                        color: currentPage === index + 1 ? "white" : "black",
+                        borderRadius: 10,
+                        backgroundColor:
+                          currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0", // Apply green for active, yellow for inactive
+                        fontSize: 20,
+                      }}
+                      key={index}
+                      onClick={() => handlePageChange(index + 1)}
+                      className={
+                        currentPage === index + 1
+                          ? "activePage"
+                          : "inactivePage"
+                      } // Apply activePage class for active, inactivePage class for inactive
+                    >
+                      {index + 1}
+                    </button>
+                  );
+                } else if (Math.abs(currentPage - (index + 1)) === 2) {
+                  return <span key={index}>...</span>;
+                }
+                return null;
+              })}
+              <button
+                style={{ backgroundColor: "transparent", border: 0 }}
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(totalPages)}
+              >
+                <p>Next</p>
+              </button>
+            </div>
+          </>
+        ) : null}
+      </div>
     </div>
   );
 }
