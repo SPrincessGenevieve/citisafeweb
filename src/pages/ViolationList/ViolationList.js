@@ -22,7 +22,14 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Modal,
+  Fade,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
+
 import ViolationTable from "./../../JSON/ViolationTable.json";
 import StatusSelection from "../../components/StatusSelection";
 import stats from "./../../JSON/Stats.json";
@@ -59,6 +66,9 @@ export default function ViolationList(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [penaltyPage, setPenaltyPage] = useState(1);
   const [penalty, setPenalty] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [violationDescription, setViolationDescription] = useState("");
+  const [selectedPenalty, setSelectedPenalty] = useState("");
 
   const rowsPerPage = 7;
 
@@ -78,6 +88,17 @@ export default function ViolationList(props) {
   const [editingRow, setEditingRow] = useState(null);
   const [deletingRow, setDeletingRow] = useState(null);
 
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleSubmit = () => {
+    handleCloseModal();
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -415,6 +436,84 @@ export default function ViolationList(props) {
           </>
         ) : (
           <>
+            <Modal
+              open={openModal}
+              onClose={handleCloseModal}
+              closeAfterTransition
+            >
+              <Fade in={openModal}>
+                <div className="modal-paper">
+                  <div className="modal-paper-2">
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                      }}
+                    >
+                      <Button
+                        onClick={handleCloseModal}
+                        style={{ display: "flex" }}
+                      >
+                        <Close style={{ color: "red" }}></Close>
+                      </Button>
+                    </div>
+                    <h2>Add Violation</h2>
+
+                    <div
+                      style={{
+                        width: "50%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        marginTop: 20,
+                      }}
+                    >
+                      <TextField
+                        label="Violation Description"
+                        variant="outlined"
+                        fullWidth
+                        value={violationDescription}
+                        onChange={(e) =>
+                          setViolationDescription(e.target.value)
+                        }
+                        style={{ marginBottom: 20 }}
+                      />
+                      <FormControl
+                        style={{ marginBottom: 20 }}
+                        variant="outlined"
+                        fullWidth
+                      >
+                        <InputLabel id="penalty-label">
+                          Select Penalty
+                        </InputLabel>
+                        <Select
+                          labelId="penalty-label"
+                          id="penalty"
+                          value={selectedPenalty}
+                          onChange={(e) => setSelectedPenalty(e.target.value)}
+                          label="Select Penalty"
+                        >
+                          {/* Create menu items based on your penalty options */}
+                          <MenuItem value="Penalty1">Penalty 1</MenuItem>
+                          <MenuItem value="Penalty2">Penalty 2</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <Button
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#3E7C1F",
+                          color: "white",
+                          height: 50,
+                        }}
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Fade>
+            </Modal>
             <div className="search-list-con">
               <div className="search-container-user">
                 <Search
@@ -424,6 +523,7 @@ export default function ViolationList(props) {
                 <input value={searchQuery} className="search-box-user"></input>
                 <Button
                   className="add-user-btn"
+                  onClick={handleOpenModal}
                   style={{
                     backgroundColor: "#3E7C1F",
                     borderRadius: 40,

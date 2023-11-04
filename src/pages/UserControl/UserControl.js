@@ -239,6 +239,7 @@ function UserControl(props) {
                 className="search-box-user"
               ></input>
               <Button
+                onClick={() => setAddScreen(!addScreen) & setTable(!table)}
                 className="add-user-btn"
                 style={{
                   backgroundColor: "#3E7C1F",
