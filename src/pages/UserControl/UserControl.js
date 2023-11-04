@@ -154,18 +154,12 @@ function UserControl(props) {
                   <Button
                     style={{
                       position: "absolute",
-                      right: 0,
+                      left: 0,
                       color: "red",
                     }}
                     onClick={() => setAddScreen(!addScreen) & setTable(!table)}
                   >
-                    <CloseOutlined style={{}}></CloseOutlined>CLOSE
-                  </Button>
-                  <Button
-                    style={{ position: "absolute", left: 0, marginRight: 40 }}
-                    onClick={() => setAddScreen(!addScreen) & setTable(!table)}
-                  >
-                    <ArrowBack style={{}}></ArrowBack> BACK
+                    <CloseOutlined style={{}}></CloseOutlined>CANCEL
                   </Button>
                 </div>
                 <div className="form-container">
@@ -190,14 +184,16 @@ function UserControl(props) {
                       width={"42vh"}
                       height={"5vh"}
                       title={"Role"}
+                      selection={"role"}
                     ></SelectRound>
                   </div>
                   <div>
-                    <InputRound
+                    <SelectRound
+                      width={"42vh"}
+                      height={"5vh"}
                       title={"Position"}
-                      width={"40vh"}
-                      height={"3vh"}
-                    ></InputRound>
+                      selection={"position"}
+                    ></SelectRound>
                     <InputRound
                       title={"Email"}
                       width={"40vh"}
