@@ -52,14 +52,14 @@ function StatusSelection({
         },
       }}
     >
-      <FormControl required sx={{ width: 120 }}>
+      <FormControl required sx={{ width: width }}>
         <ThemeProvider theme={customTheme}>
-          <InputLabel sx={{ width: 120 }}>{label}</InputLabel>
+          <InputLabel sx={{ width: width }}>{label}</InputLabel>
           <Select
             style={{
               color: "black",
               fontSize: 12,
-              width: 120,
+              width: width,
             }}
             labelId={`${label.toLowerCase()}-label`}
             id={label.toLowerCase()}

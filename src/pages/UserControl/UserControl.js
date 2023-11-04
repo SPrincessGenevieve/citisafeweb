@@ -12,7 +12,9 @@ import {
   Check,
   MicExternalOnOutlined,
   VoiceOverOff,
+  RecordVoiceOver,
   AddBoxRounded,
+  Download,
   Search,
 } from "@mui/icons-material";
 import InputSearch from "../../components/InputSearch";
@@ -37,6 +39,8 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ConstButton from "../../components/ConstButton";
 import InputRound from "../../components/InputRound";
 import SelectRound from "../../components/SelectRound";
+import StatusSelection from "../../components/StatusSelection";
+import stats from "./../../JSON/Stats.json";
 
 const cellStylesHeader = {
   cell: {
@@ -235,7 +239,6 @@ function UserControl(props) {
                 className="search-box-user"
               ></input>
               <Button
-                onClick={() => setAddScreen(!addScreen) & setTable(!table)}
                 className="add-user-btn"
                 style={{
                   backgroundColor: "#3E7C1F",
@@ -250,7 +253,23 @@ function UserControl(props) {
                 <Add style={{}} />
                 {window.innerWidth <= 600 ? null : "ADD USER"}
               </Button>
+              <Button
+                className="add-user-btn"
+                style={{
+                  backgroundColor: "#3E7C1F",
+                  borderRadius: 40,
+                  color: "white",
+                  paddingRight: 10,
+                  paddingLeft: 10,
+                  height: 40,
+                  marginLeft: 10,
+                }}
+              >
+                <Download style={{}} />
+                {window.innerWidth <= 600 ? null : "DOWNLOAD"}
+              </Button>
             </div>
+
             <div className="table-conatiner-user">
               <div className="tab-con-2-user">
                 <TableContainer>
@@ -262,10 +281,10 @@ function UserControl(props) {
                           First Name
                         </TableCell>
                         <TableCell style={cellStylesHeader.cell}>
-                          Last Name
+                          Middle Name
                         </TableCell>
                         <TableCell style={cellStylesHeader.cell}>
-                          Middle Name
+                          Last Name
                         </TableCell>
                         <TableCell style={cellStylesHeader.cell}>
                           Role
@@ -278,6 +297,9 @@ function UserControl(props) {
                         </TableCell>
                         <TableCell style={cellStylesHeader.cell}>
                           Username
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Status
                         </TableCell>
                         <TableCell style={cellStylesHeader.cell}>
                           Action
@@ -340,6 +362,59 @@ function UserControl(props) {
                             {user.username}
                           </TableCell>
                           <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            <div className="status-container">
+                              <p
+                                style={{
+                                  flex: 1,
+                                  backgroundColor:
+                                    user.status === "Active"
+                                      ? "#E2F0D9"
+                                      : user.status === "Deactivated"
+                                      ? "#FFD1D1"
+                                      : "#EBF9F1",
+                                  color:
+                                    user.status === "Active"
+                                      ? "#649F3F"
+                                      : user.status === "Deactivated"
+                                      ? "#D00000"
+                                      : "#1F9254",
+                                  width: 100,
+                                  height: 15,
+                                  padding: 10,
+                                  textAlign: "center",
+                                  borderRadius: 20,
+                                }}
+                              >
+                                {editingRow === user.id ? (
+                                  <div
+                                    className={
+                                      index % 2 === 0 ? "even-row" : "odd-row"
+                                    }
+                                    style={{
+                                      marginTop: -15,
+                                      width: 200,
+                                      marginLeft: -10,
+                                    }}
+                                  >
+                                    <StatusSelection
+                                      label={"Select Status"}
+                                      labelSelect={"Select Status"}
+                                      json={stats}
+                                      width={150}
+                                    ></StatusSelection>
+                                  </div>
+                                ) : user.status === "Active" ? (
+                                  `Active`
+                                ) : (
+                                  <span>{user.status}</span>
+                                )}
+                              </p>
+                            </div>
+                          </TableCell>
+                          <TableCell
                             className="row"
                             style={cellStylesBody.cell}
                           >
@@ -397,29 +472,33 @@ function UserControl(props) {
                               </>
                             ) : (
                               <>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                    marginLeft: 10,
-                                  }}
-                                  onClick={() => handleEdit(user.id)}
-                                >
-                                  <Edit style={{ height: 25 }} />
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                  }}
-                                  onClick={() => handleDelete(user.id)}
-                                >
-                                  <VoiceOverOff style={{ height: 25 }} />
-                                </Button>
+                                {user.status === "Active" ? (
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "green",
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => handleEdit(user.id)}
+                                  >
+                                    <RecordVoiceOver style={{ height: 25 }} />
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "red",
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => handleEdit(user.id)}
+                                  >
+                                    <VoiceOverOff style={{ height: 25 }} />
+                                  </Button>
+                                )}
                               </>
                             )}
                           </TableCell>

@@ -8,7 +8,8 @@
     "email": "admin@gmail.com",
     "contact_no": "09093777463",
     "role": "Admin",
-    "username": "jaydeAdmin"
+    "username": "jaydeAdmin",
+    "status": "Active"
   },
   {
     "id": 2,
@@ -19,7 +20,8 @@
     "email": "engracia@example.com",
     "contact_no": "09374663543",
     "role": "Treasurer",
-    "username": "engraciaUser"
+    "username": "engraciaUser",
+    "status": "Active"
   },
   {
     "id": 3,
@@ -30,7 +32,8 @@
     "email": "john@example.com",
     "contact_no": "1234567890",
     "role": "User",
-    "username": "johnDoe"
+    "username": "johnDoe",
+    "status": "Deactivated"
   },
   {
     "id": 4,
@@ -41,7 +44,8 @@
     "email": "jane@example.com",
     "contact_no": "9876543210",
     "role": "User",
-    "username": "janeSmith"
+    "username": "janeSmith",
+    "status": "Active"
   },
   {
     "id": 5,
@@ -52,7 +56,8 @@
     "email": "alex@example.com",
     "contact_no": "5551234567",
     "role": "Manager",
-    "username": "alexManager"
+    "username": "alexManager",
+    "status": "Active"
   },
   {
     "id": 6,
@@ -63,7 +68,8 @@
     "email": "emily@example.com",
     "contact_no": "5559876543",
     "role": "Supervisor",
-    "username": "emilySupervisor"
+    "username": "emilySupervisor",
+    "status": "Deactivated"
   },
   {
     "id": 7,
@@ -74,7 +80,8 @@
     "email": "michael@example.com",
     "contact_no": "5554567890",
     "role": "User",
-    "username": "michaelDeveloper"
+    "username": "michaelDeveloper",
+    "status": "Active"
   },
   {
     "id": 8,
@@ -85,7 +92,8 @@
     "email": "olivia@example.com",
     "contact_no": "5555678901",
     "role": "User",
-    "username": "oliviaAnalyst"
+    "username": "oliviaAnalyst",
+    "status": "Deactivated"
   },
   {
     "id": 9,
@@ -96,7 +104,8 @@
     "email": "william@example.com",
     "contact_no": "5556789012",
     "role": "User",
-    "username": "williamAccountant"
+    "username": "williamAccountant",
+    "status": "Active"
   },
   {
     "id": 10,
@@ -107,7 +116,8 @@
     "email": "sophia@example.com",
     "contact_no": "5557890123",
     "role": "Manager",
-    "username": "sophiaHRManager"
+    "username": "sophiaHRManager",
+    "status": "Active"
   },
   {
     "id": 11,
@@ -118,7 +128,8 @@
     "email": "james@example.com",
     "contact_no": "5558901234",
     "role": "Supervisor",
-    "username": "jamesSupervisor"
+    "username": "jamesSupervisor",
+    "status": "Deactivated"
   },
   {
     "id": 12,
@@ -129,7 +140,8 @@
     "email": "isabella@example.com",
     "contact_no": "5559012345",
     "role": "User",
-    "username": "isabellaDesigner"
+    "username": "isabellaDesigner",
+    "status": "Active"
   },
   {
     "id": 13,
@@ -140,7 +152,8 @@
     "email": "benjamin@example.com",
     "contact_no": "5550123456",
     "role": "User",
-    "username": "benjaminDeveloper"
+    "username": "benjaminDeveloper",
+    "status": "Active"
   },
   {
     "id": 14,
@@ -151,7 +164,8 @@
     "email": "emma@example.com",
     "contact_no": "5551234567",
     "role": "User",
-    "username": "emmaAnalyst"
+    "username": "emmaAnalyst",
+    "status": "Deactivated"
   },
   {
     "id": 15,
@@ -162,7 +176,8 @@
     "email": "liam@example.com",
     "contact_no": "5552345678",
     "role": "User",
-    "username": "liamAccountant"
+    "username": "liamAccountant",
+    "status": "Active"
   },
   {
     "id": 16,
@@ -173,7 +188,8 @@
     "email": "ava@example.com",
     "contact_no": "5553456789",
     "role": "Manager",
-    "username": "avaManager"
+    "username": "avaManager",
+    "status": "Active"
   },
   {
     "id": 17,
@@ -184,7 +200,8 @@
     "email": "noah@example.com",
     "contact_no": "5554567890",
     "role": "Supervisor",
-    "username": "noahSupervisor"
+    "username": "noahSupervisor",
+    "status": "Deactivated"
   },
   {
     "id": 18,
@@ -195,7 +212,8 @@
     "email": "mia@example.com",
     "contact_no": "5555678901",
     "role": "User",
-    "username": "miaDesigner"
+    "username": "miaDesigner",
+    "status": "Deactivated"
   },
   {
     "id": 19,
@@ -206,7 +224,8 @@
     "email": "ethan@example.com",
     "contact_no": "5556789012",
     "role": "User",
-    "username": "ethanDeveloper"
+    "username": "ethanDeveloper",
+    "status": "Active"
   },
   {
     "id": 20,
@@ -217,6 +236,7 @@
     "email": "charlotte@example.com",
     "contact_no": "5557890123",
     "role": "User",
-    "username": "charlotteAnalyst"
+    "username": "charlotteAnalyst",
+    "status": "Deactivated"
   }
 ]

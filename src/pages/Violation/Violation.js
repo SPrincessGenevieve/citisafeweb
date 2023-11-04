@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../Navbar";
 import "./styles.css";
-import { Edit, Close, Check, Search } from "@mui/icons-material";
+import { Edit, Close, Check, Search, Download } from "@mui/icons-material";
 import StatusSelection from "../../components/StatusSelection";
 import StatSelect from "./../../JSON/StatSelect.json";
 import violationsData from "./../../JSON/violationsData.json"; // Update the path accordingly
@@ -213,6 +213,21 @@ function Violation({ navigation }) {
             onChange={(event) => handleSearch(event.target.value)}
             className="search-box"
           ></input>
+          <Button
+            className="add-user-btn"
+            style={{
+              backgroundColor: "#3E7C1F",
+              borderRadius: 40,
+              color: "white",
+              paddingRight: 10,
+              paddingLeft: 10,
+              height: 40,
+              marginLeft: 10,
+            }}
+          >
+            <Download style={{}} />
+            {window.innerWidth <= 600 ? null : "DOWNLOAD"}
+          </Button>
         </div>
         <div className="table-conatiner-violation">
           <div className="tab-con-2">
@@ -335,6 +350,7 @@ function Violation({ navigation }) {
                                   label={"Select Status"}
                                   labelSelect={"Select Status"}
                                   json={StatSelect}
+                                  width={150}
                                 ></StatusSelection>
                               </div>
                             ) : item.status === "Overdue" ? (
