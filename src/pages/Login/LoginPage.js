@@ -1,12 +1,6 @@
 import React from "react";
 import "./login.css";
-import InputS from "./../../components/InputS";
-import ConstButton from "../../components/ConstButton";
-import TextBtn from "../../components/TextBtn";
-import KeyboardWrapper from "../../components/KeyboardWrapper";
 import enforcer from "./../../assets/enforcer.png";
-import logo from "./../../assets/logo.png";
-import BG from "./../../assets/bg.png";
 import { useNavigate } from "react-router-dom";
 import InputCss from "../../components/InputCss";
 import { Button } from "@mui/material";
@@ -19,14 +13,22 @@ function LoginPage({ onClick }) {
   };
   return (
     <div className="containerLogin">
-      <div className="subcontainer-login">
-        <div className="white-container">
-          <div className="image-container">
-            <img className="image-css" src={enforcer}></img>
-          </div>
-          <div className="input-container">
-            <div className="input-subcontainer">
+      <div className="white-container">
+        <div className="input-container">
+          <div
+            style={{
+              display: "flex",
+              flex: 1,
+              flexDirection: "column",
+              width: "70%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div>
               <InputCss title={"username"}></InputCss>
+            </div>
+            <div>
               <InputCssPassword
                 type={"password"}
                 title={"password"}
@@ -34,13 +36,12 @@ function LoginPage({ onClick }) {
             </div>
             <div
               style={{
-                width: 220,
-                textAlign: "center",
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
               <Button style={{ color: "white" }}>Forgot Password?</Button>
-            </div>
-            <div>
               <Button
                 onClick={handleLogin}
                 style={{
@@ -49,12 +50,16 @@ function LoginPage({ onClick }) {
                   width: "17rem",
                   borderRadius: 20,
                   marginTop: 20,
+                  border: "0.5px solid white",
                 }}
               >
                 Login
               </Button>
             </div>
           </div>
+        </div>
+        <div className="image-container">
+          <img className="image-css" src={enforcer}></img>
         </div>
       </div>
     </div>
