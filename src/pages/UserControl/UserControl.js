@@ -118,7 +118,7 @@ function UserControl(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const rowsPerPage = 7;
+  const rowsPerPage = 5;
 
   const lastRowIndex = currentPage * rowsPerPage;
   const firstRowIndex = lastRowIndex - rowsPerPage;

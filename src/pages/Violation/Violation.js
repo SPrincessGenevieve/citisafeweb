@@ -14,7 +14,30 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Modal,
+  Fade,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  withStyles,
 } from "@mui/material";
+
+const styles = (theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Set the overlay to a transparent black color
+  },
+  modalPaper: {
+    outline: "none",
+    background: "white", // Set the modal content background color
+    borderRadius: 10,
+    padding: theme.spacing(3),
+  },
+});
 
 const cellStylesHeader = {
   cell: {
@@ -51,6 +74,19 @@ function Violation({ navigation }) {
   const [table, setTable] = useState(true);
   const rowsPerPage = 6;
   const [selectedStatus, setSelectedStatus] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleSubmit = () => {
+    handleCloseModal();
+  };
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -230,6 +266,64 @@ function Violation({ navigation }) {
           </Button>
         </div>
         <div className="table-conatiner-violation">
+          {currentRows.map((item, index) => (
+            <Modal
+              open={openModal}
+              onClose={handleCloseModal}
+              closeAfterTransition
+              style={{ backgroundColor: "white" }}
+            >
+              <Fade in={openModal}>
+                <div className="modal-paper">
+                  <div className="modal-paper-violation">
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                      }}
+                    >
+                      <Button
+                        onClick={handleCloseModal}
+                        style={{ display: "flex" }}
+                      >
+                        <Close style={{ color: "red" }}></Close>
+                      </Button>
+                    </div>
+                    <h2>Add Violation</h2>
+                    <div
+                      style={{
+                        width: "50%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        marginTop: 20,
+                      }}
+                    >
+                      <label>{item.name}</label>
+                      <label>{item.name}</label>
+                      <label>{item.name}</label>
+                      <label>{item.name}</label>
+                      <label>{item.id}</label>
+                      <label>{item.id}</label>
+                      <label>{item.id}</label>
+                      <label>{item.id}</label>
+                      <Button
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#3E7C1F",
+                          color: "white",
+                          height: 50,
+                        }}
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Fade>
+            </Modal>
+          ))}
           <div className="tab-con-2">
             <TableContainer>
               <Table className="table">
@@ -262,7 +356,11 @@ function Violation({ navigation }) {
                       key={index}
                     >
                       <TableCell style={cellStylesBody.cell}>
-                        <a className="ticket" href="#">
+                        <a
+                          className="ticket"
+                          href="#"
+                          onClick={handleOpenModal}
+                        >
                           {item.id}
                         </a>
                       </TableCell>

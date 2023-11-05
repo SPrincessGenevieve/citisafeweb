@@ -132,6 +132,14 @@
   width: 250px;
   margin-left: -10px;
 }
+.modal-paper-violation {
+  width: 100%;
+  background-color: white;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
 @media (max-width: 600px) {
   .first-layer-violation {
     margin-top: -10vh;
