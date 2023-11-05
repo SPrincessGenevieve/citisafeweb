@@ -16,13 +16,14 @@ import {
   TableRow,
   Modal,
   Fade,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TextField,
   withStyles,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
+import DetailsFormat from "../../components/DetailsFormat";
 
 const styles = (theme) => ({
   modal: {
@@ -74,14 +75,15 @@ function Violation({ navigation }) {
   const [table, setTable] = useState(true);
   const rowsPerPage = 6;
   const [selectedStatus, setSelectedStatus] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(null);
+  const [selectedTicket, setSelectedTicket] = useState(null);
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
+  const handleOpenModal = (ticketNo) => {
+    setSelectedTicket(ticketNo);
   };
 
   const handleCloseModal = () => {
-    setOpenModal(false);
+    setSelectedTicket(null);
   };
 
   const handleSubmit = () => {
@@ -267,63 +269,138 @@ function Violation({ navigation }) {
         </div>
         <div className="table-conatiner-violation">
           {currentRows.map((item, index) => (
-            <Modal
-              open={openModal}
+            <Dialog
+              key={item.ticket_no}
+              open={selectedTicket === item.ticket_no}
               onClose={handleCloseModal}
-              closeAfterTransition
-              style={{ backgroundColor: "white" }}
+              sx={{
+                "& .MuiDialog-paper": {
+                  minWidth: "60%",
+                  minHeight: "40%",
+                },
+              }}
             >
-              <Fade in={openModal}>
-                <div className="modal-paper">
-                  <div className="modal-paper-violation">
-                    <div
-                      style={{
-                        display: "flex",
-                        width: "100%",
-                      }}
-                    >
-                      <Button
-                        onClick={handleCloseModal}
-                        style={{ display: "flex" }}
-                      >
-                        <Close style={{ color: "red" }}></Close>
-                      </Button>
-                    </div>
-                    <h2>Add Violation</h2>
-                    <div
-                      style={{
-                        width: "50%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        marginTop: 20,
-                      }}
-                    >
-                      <label>{item.name}</label>
-                      <label>{item.name}</label>
-                      <label>{item.name}</label>
-                      <label>{item.name}</label>
-                      <label>{item.id}</label>
-                      <label>{item.id}</label>
-                      <label>{item.id}</label>
-                      <label>{item.id}</label>
-                      <Button
-                        variant="contained"
-                        style={{
-                          backgroundColor: "#3E7C1F",
-                          color: "white",
-                          height: 50,
-                        }}
-                        onClick={handleSubmit}
-                      >
-                        Submit
-                      </Button>
-                    </div>
-                  </div>
+              <DialogTitle>{item.ticket_no}</DialogTitle>
+              <DialogContent>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <table>
+                    <tr>
+                      <td className="row-details">Name</td>
+                      <td className="row-details-value">{item.name}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Date</td>
+                      <td className="row-details-value">{item.date}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Address</td>
+                      <td className="row-details-value">{item.address}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">License No.</td>
+                      <td className="row-details-value">
+                        {item.driver_license_no}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Type</td>
+                      <td className="row-details-value">{item.type}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Date of Birth</td>
+                      <td className="row-details-value">
+                        {item.date_of_birth}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Nationality</td>
+                      <td className="row-details-value">{item.nationality}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Plate No.</td>
+                      <td className="row-details-value">
+                        {item.vehicle_plate_no}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Make</td>
+                      <td className="row-details-value">{item.make}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Model</td>
+                      <td className="row-details-value">{item.model}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Color</td>
+                      <td className="row-details-value">{item.color}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Class</td>
+                      <td className="row-details-value">{item.class}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Body Markings</td>
+                      <td className="row-details-value">
+                        {item.body_markings}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Registered Owner</td>
+                      <td className="row-details-value">
+                        {item.registered_owner}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Registered Owner Address</td>
+                      <td className="row-details-value">
+                        {item.registered_owner_address}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Contact No.</td>
+                      <td className="row-details-value">{item.contact_no}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Time of Violation</td>
+                      <td className="row-details-value">
+                        {item.time_of_violation}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Contact No.</td>
+                      <td className="row-details-value">
+                        {item.place_of_violation}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Apprehending Officer</td>
+                      <td className="row-details-value">
+                        {item.apprehending_officer}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Place of Violation</td>
+                      <td className="row-details-value">{item.status}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Penalty</td>
+                      <td className="row-details-value">{item.penalty}</td>
+                    </tr>
+                    <tr>
+                      <td className="row-details">Violation</td>
+                      <td className="row-details-value">{item.violations}</td>
+                    </tr>
+                  </table>
                 </div>
-              </Fade>
-            </Modal>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseModal} color="warning">
+                  CLOSE
+                </Button>
+              </DialogActions>
+            </Dialog>
           ))}
+
           <div className="tab-con-2">
             <TableContainer>
               <Table className="table">
@@ -356,16 +433,14 @@ function Violation({ navigation }) {
                       key={index}
                     >
                       <TableCell style={cellStylesBody.cell}>
+                        {item.id}
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
                         <a
                           className="ticket"
                           href="#"
-                          onClick={handleOpenModal}
+                          onClick={() => handleOpenModal(item.ticket_no)}
                         >
-                          {item.id}
-                        </a>
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
-                        <a className="ticket" href="#">
                           {item.ticket_no}
                         </a>
                       </TableCell>
@@ -381,12 +456,7 @@ function Violation({ navigation }) {
                         </a>
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
-                        {item.violations.map((violation, index) => (
-                          <span key={index}>
-                            {violation.violation}
-                            {index !== item.violations.length - 1 ? ", " : ""}
-                          </span>
-                        ))}
+                        {item.violations}
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
                         {item.date}

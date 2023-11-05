@@ -6,6 +6,17 @@
   flex: 1;
 }
 
+.row-details {
+  background-color: #ebebeb;
+  width: 200px;
+  padding-left: 10px;
+}
+
+.row-details-value {
+  padding-left: 10px;
+  border: 0.3px solid #ebebeb;
+}
+
 .search-container-violation {
   display: flex;
   width: 90%;

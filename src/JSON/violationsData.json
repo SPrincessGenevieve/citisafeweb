@@ -24,14 +24,7 @@
     "status": "Pending",
     "penalty": "₱1,000",
     "picture": "image_1.jpg",
-    "violations": [
-      {
-        "violation": "Speeding"
-      },
-      {
-        "violation": "Running Red Light"
-      }
-    ]
+    "violations": "A"
   },
   {
     "id": "2",
@@ -58,11 +51,7 @@
     "status": "Cleared",
     "picture": "image_2.jpg",
     "penalty": "₱1,000",
-    "violations": [
-      {
-        "violation": "Parking Violation"
-      }
-    ]
+    "violations": "B"
   },
   {
     "id": "3",
@@ -89,11 +78,7 @@
     "status": "Overdue",
     "picture": "image_3.jpg",
     "penalty": "₱1,000",
-    "violations": [
-      {
-        "violation": "Speeding"
-      }
-    ]
+    "violations": "C"
   },
   {
     "id": "4",
@@ -120,18 +105,11 @@
     "status": "Pending",
     "picture": "image_4.jpg",
     "penalty": "₱1,000",
-    "violations": [
-      {
-        "violation": "Running Red Light"
-      },
-      {
-        "violation": "Speeding"
-      }
-    ]
+    "violations": "D"
   },
   {
     "id": "5",
-    "ticket_no": "TCKT004",
+    "ticket_no": "TCKT005",
     "date": "2023-08-18",
     "name": "Emily White",
     "address": "567 Pine St",
@@ -154,18 +132,11 @@
     "status": "Pending",
     "picture": "image_4.jpg",
     "penalty": "₱1,000",
-    "violations": [
-      {
-        "violation": "Running Red Light"
-      },
-      {
-        "violation": "Speeding"
-      }
-    ]
+    "violations": "E"
   },
   {
     "id": "6",
-    "ticket_no": "TCKT005",
+    "ticket_no": "TCKT006",
     "date": "2023-08-19",
     "name": "Robert Johnson",
     "address": "789 Maple St",
@@ -188,11 +159,7 @@
     "status": "Pending",
     "picture": "image_5.jpg",
     "penalty": "₱1,000",
-    "violations": [
-      {
-        "violation": "Parking Violation"
-      }
-    ]
+    "violations": "F"
   },
   {
     "id": "7",
@@ -219,10 +186,6 @@
     "status": "Pending",
     "picture": "image_5.jpg",
     "penalty": "₱1,000",
-    "violations": [
-      {
-        "violation": "texting while driving"
-      }
-    ]
+    "violations": "G"
   }
 ]
