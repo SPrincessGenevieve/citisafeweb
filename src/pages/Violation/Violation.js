@@ -4,8 +4,8 @@ import "./styles.css";
 import { Edit, Close, Check, Search, Download } from "@mui/icons-material";
 import StatusSelection from "../../components/StatusSelection";
 import StatSelect from "./../../JSON/StatSelect.json";
-import violationsData from "./../../JSON/violationsData.json"; // Update the path accordingly
-import violationsSample from "./../../JSON/sampleViolation.json"; // Update the path accordingly
+import violationsData from "./../../JSON/violationsData.json";
+import violationsSample from "./../../JSON/sampleViolation.json";
 import {
   Button,
   Table,
@@ -14,27 +14,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Modal,
-  Fade,
-  withStyles,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import DetailsFormat from "../../components/DetailsFormat";
 
 const styles = (theme) => ({
   modal: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Set the overlay to a transparent black color
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalPaper: {
     outline: "none",
-    background: "white", // Set the modal content background color
+    background: "white",
     borderRadius: 10,
     padding: theme.spacing(3),
   },
@@ -147,7 +142,9 @@ function Violation({ navigation }) {
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   };*/
   }
-{/* */}
+  {
+    /* */
+  }
   const calculateRemainingTime = (date, status) => {
     if (status === "Cleared") {
       return 0;
@@ -155,7 +152,7 @@ function Violation({ navigation }) {
 
     const currentTime = new Date().getTime();
     const targetTime =
-      new Date(Date.parse(date)).getTime() + 72 * 60 * 60 * 1000; // Adding 72 hours
+      new Date(Date.parse(date)).getTime() + 72 * 60 * 60 * 1000;
     let remainingTime = targetTime - currentTime;
 
     if (remainingTime < 0) {
@@ -626,14 +623,14 @@ function Violation({ navigation }) {
                     color: currentPage === index + 1 ? "white" : "black",
                     borderRadius: 10,
                     backgroundColor:
-                      currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0", // Apply green for active, yellow for inactive
+                      currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
                     fontSize: 20,
                   }}
                   key={index}
                   onClick={() => handlePageChange(index + 1)}
                   className={
                     currentPage === index + 1 ? "activePage" : "inactivePage"
-                  } // Apply activePage class for active, inactivePage class for inactive
+                  }
                 >
                   {index + 1}
                 </button>
