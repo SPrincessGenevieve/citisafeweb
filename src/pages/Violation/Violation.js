@@ -77,6 +77,20 @@ function Violation({ navigation }) {
   const [selectedStatus, setSelectedStatus] = useState([]);
   const [openModal, setOpenModal] = useState(null);
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [editingRows, setEditingRows] = useState({});
+  const [deletingRows, setDeletingRows] = useState({});
+  const [activePerson, setActivePerson] = useState(null);
+  const [activeTable, setActiveTable] = useState("personal");
+  const lastRowIndex = currentPage * rowsPerPage;
+  const firstRowIndex = lastRowIndex - rowsPerPage;
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const currentRows =
+    selectedStatus.length === 0
+      ? filteredData.slice(firstRowIndex, lastRowIndex)
+      : filteredData
+          .filter((item) => selectedStatus.includes(item.status))
+          .slice(firstRowIndex, lastRowIndex);
 
   const handleOpenModal = (ticketNo) => {
     setSelectedTicket(ticketNo);
@@ -98,18 +112,8 @@ function Violation({ navigation }) {
         item.name.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredData(filtered);
-    setCurrentPage(1); // Reset to first page when searching
+    setCurrentPage(1);
   };
-
-  const lastRowIndex = currentPage * rowsPerPage;
-  const firstRowIndex = lastRowIndex - rowsPerPage;
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const currentRows =
-    selectedStatus.length === 0
-      ? filteredData.slice(firstRowIndex, lastRowIndex) // Display all rows when nothing is checked
-      : filteredData
-          .filter((item) => selectedStatus.includes(item.status))
-          .slice(firstRowIndex, lastRowIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -124,7 +128,8 @@ function Violation({ navigation }) {
     }
   });
 
-  const formatRemainingTime = (remainingTime) => {
+  {
+    /*const formatRemainingTime = (remainingTime) => {
     if (remainingTime <= 0) {
       return "00:00:00";
     }
@@ -140,11 +145,12 @@ function Violation({ navigation }) {
     const formattedSeconds = seconds.toString().padStart(2, "0");
 
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-  };
-
+  };*/
+  }
+{/* */}
   const calculateRemainingTime = (date, status) => {
     if (status === "Cleared") {
-      return 0; // Stop the countdown
+      return 0;
     }
 
     const currentTime = new Date().getTime();
@@ -188,10 +194,6 @@ function Violation({ navigation }) {
       clearInterval(interval);
     };
   }, []);
-  const [editingRows, setEditingRows] = useState({});
-  const [deletingRows, setDeletingRows] = useState({});
-  const [activePerson, setActivePerson] = useState(null);
-  const [activeTable, setActiveTable] = useState("personal");
 
   const handleDownload = () => {
     window.alert("Downloaded successfully");
@@ -216,7 +218,6 @@ function Violation({ navigation }) {
   };
 
   const handleSave = (rowId) => {
-    // Logic to save changes here
     setEditingRows((prevEditingRows) => ({
       ...prevEditingRows,
       [rowId]: false,
@@ -224,7 +225,6 @@ function Violation({ navigation }) {
   };
 
   const handleCheck = (rowId) => {
-    // Logic to confirm deletion here
     setDeletingRows((prevDeletingRows) => ({
       ...prevDeletingRows,
       [rowId]: false,
