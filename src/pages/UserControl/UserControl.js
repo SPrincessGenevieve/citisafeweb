@@ -103,6 +103,16 @@ function UserControl(props) {
     setEditingRow(null);
   };
 
+  const handleSubmit = () => {
+    window.alert("User created successfully");
+    setAddScreen(!addScreen);
+    setTable(!table);
+  };
+
+  const handleDownload = () => {
+    window.alert("Downloaded successfully");
+  };
+
   const handleCheck = () => {
     // Logic to confirm deletion here
     setDeletingRow(null);
@@ -214,9 +224,7 @@ function UserControl(props) {
                 <div className="next-user-container">
                   <div className="next-user-btn">
                     <ConstButton
-                      onClick={() =>
-                        setAddScreen(!addScreen) & setTable(!table)
-                      }
+                      onClick={handleSubmit}
                       width={10}
                       title={"NEXT"}
                     ></ConstButton>
@@ -265,6 +273,7 @@ function UserControl(props) {
                   height: 40,
                   marginLeft: 10,
                 }}
+                onClick={handleDownload}
               >
                 <Download style={{}} />
                 {window.innerWidth <= 600 ? null : "DOWNLOAD"}

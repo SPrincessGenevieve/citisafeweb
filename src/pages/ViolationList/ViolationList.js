@@ -98,6 +98,7 @@ export default function ViolationList(props) {
 
   const handleSubmit = () => {
     handleCloseModal();
+    window.alert("Violation added successfully!");
   };
 
   const handlePageChange = (page) => {
@@ -132,6 +133,10 @@ export default function ViolationList(props) {
 
   const handleCancelDelete = () => {
     setDeletingRow(null);
+  };
+
+  const handleDownload = () => {
+    window.alert("Downloaded successfully");
   };
 
   return (
@@ -170,6 +175,7 @@ export default function ViolationList(props) {
                 <input value={searchQuery} className="search-box-user"></input>
                 <Button
                   className="add-user-btn"
+                  onClick={handleDownload}
                   style={{
                     backgroundColor: "#3E7C1F",
                     borderRadius: 40,
@@ -539,6 +545,7 @@ export default function ViolationList(props) {
                 </Button>
                 <Button
                   className="add-user-btn"
+                  onClick={handleDownload}
                   style={{
                     backgroundColor: "#3E7C1F",
                     borderRadius: 40,

@@ -193,6 +193,10 @@ function Violation({ navigation }) {
   const [activePerson, setActivePerson] = useState(null);
   const [activeTable, setActiveTable] = useState("personal");
 
+  const handleDownload = () => {
+    window.alert("Downloaded successfully");
+  };
+
   const handleTableClick = (table) => {
     setActiveTable(table);
   };
@@ -252,6 +256,7 @@ function Violation({ navigation }) {
             className="search-box"
           ></input>
           <Button
+            onClick={handleDownload}
             className="add-user-btn"
             style={{
               backgroundColor: "#3E7C1F",
