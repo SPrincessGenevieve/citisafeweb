@@ -12,15 +12,52 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import axios from '../../plugins/axios'
 
 function LoginPage({ onClick }) {
   const navigation = useNavigate();
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
     useState(false);
   const [email, setEmail] = useState("");
+  const [credentials, setCredentials] = useState({
+    username: 'jaydemike15',
+    password: '2023@admin'
+  })
 
   const handleLogin = () => {
-    navigation("/dashboard");
+
+    axios.post('accounts/token/login/', credentials).then((response) => {
+      
+      const id_token = response.data.auth_token
+      console.log(id_token)
+
+      axios.get('accounts/users/me', {
+        headers: {
+          Authorization: `token ${id_token}`
+        }
+      }).then((response) => {
+
+        const role = response.data.role
+
+        if (role == 'ADMIN' || role == 'TREASURER') {
+          alert(`Welcome ${response.data.last_name}, your role is ${role}`)
+          navigation("/dashboard");
+        }else {
+          alert(`${role} you dont have access on this site`)
+        }
+
+      }).catch((error) => {
+        alert("Error Please Try Again Later")
+      })
+
+    }).catch((error) => {
+      alert("Error! Please try again later")
+    })
+  
+
+
+
+    
   };
 
   const openForgotPasswordModal = () => {
@@ -52,12 +89,22 @@ function LoginPage({ onClick }) {
             }}
           >
             <div>
-              <InputCss title={"username"}></InputCss>
+              <InputCss title={"username"} value={credentials.username} onChange={(e) => {
+                setCredentials({
+                  ...credentials, username: e.target.value
+                })
+              }}></InputCss>
             </div>
             <div>
               <InputCssPassword
                 type={"password"}
                 title={"password"}
+                value={credentials.password}
+                onChange={(e) => {
+                  setCredentials({
+                    ...credentials, password: e.target.value
+                  })
+                }}
               ></InputCssPassword>
             </div>
             <div
