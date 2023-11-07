@@ -14,7 +14,6 @@ import {
 import { useState } from "react";
 import {
   Button,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -34,7 +33,6 @@ import ViolationTable from "./../../JSON/ViolationTable.json";
 import StatusSelection from "../../components/StatusSelection";
 import stats from "./../../JSON/Stats.json";
 import PenaltyTable from "./../../JSON/PenaltyTable.json";
-import ConstButton from "../../components/ConstButton";
 import RoundButton from "../../components/RoundButton";
 
 const cellStylesHeader = {
@@ -411,7 +409,7 @@ export default function ViolationList(props) {
                           color: currentPage === index + 1 ? "white" : "black",
                           borderRadius: 10,
                           backgroundColor:
-                            currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0", // Apply green for active, yellow for inactive
+                            currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
                           fontSize: 20,
                         }}
                         key={index}
@@ -420,7 +418,7 @@ export default function ViolationList(props) {
                           currentPage === index + 1
                             ? "activePage"
                             : "inactivePage"
-                        } // Apply activePage class for active, inactivePage class for inactive
+                        }
                       >
                         {index + 1}
                       </button>
@@ -712,7 +710,7 @@ export default function ViolationList(props) {
                           color: penaltyPage === index + 1 ? "white" : "black",
                           borderRadius: 10,
                           backgroundColor:
-                            penaltyPage === index + 1 ? "#3e7c1f" : "#e0e0e0", // Apply green for active, yellow for inactive
+                            penaltyPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
                           fontSize: 20,
                         }}
                         key={index}
@@ -721,7 +719,7 @@ export default function ViolationList(props) {
                           penaltyPage === index + 1
                             ? "activePage"
                             : "inactivePage"
-                        } // Apply activePage class for active, inactivePage class for inactive
+                        }
                       >
                         {index + 1}
                       </button>
