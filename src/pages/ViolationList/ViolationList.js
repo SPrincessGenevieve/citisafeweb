@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../Navbar";
 import "./styles.css";
 import {
@@ -32,8 +32,9 @@ import {
 import ViolationTable from "./../../JSON/ViolationTable.json";
 import StatusSelection from "../../components/StatusSelection";
 import stats from "./../../JSON/Stats.json";
-import PenaltyTable from "./../../JSON/PenaltyTable.json";
 import RoundButton from "../../components/RoundButton";
+import { useSelector } from "react-redux";
+import axios from '../../plugins/axios'
 
 const cellStylesHeader = {
   cell: {
@@ -57,10 +58,42 @@ const cellStylesBody = {
 };
 
 export default function ViolationList(props) {
+
+  // JAYDE modifications
+
+  // get token
+  const Token = useSelector((state) => state.auth.token)
+
+  // penalty
+  const [penaltyData, setPenaltyData] = useState([])
+
+  const [addPenalty,setAddPenalty] = useState({
+    description: '',
+    amount: '',
+    status: '',
+  })
+
+
+  useEffect(() => {
+    axios.get('ticket/penalty/', {
+      headers: {
+        Authorization: `token ${Token}`
+      }
+    }).then((response) => {
+      setPenaltyData(response.data);
+    }).catch(error => {
+      console.log(error);
+    });
+  }, [Token]); // Specify dependencies that trigger the effect
+  
+
+
+
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(ViolationTable);
   const [filteredDataViolation, setFilteredDataViolation] =
-    useState(PenaltyTable);
+    useState(penaltyData);
   const [currentPage, setCurrentPage] = useState(1);
   const [penaltyPage, setPenaltyPage] = useState(1);
   const [penalty, setPenalty] = useState(true);
@@ -95,8 +128,20 @@ export default function ViolationList(props) {
   };
 
   const handleSubmit = () => {
-    handleCloseModal();
-    window.alert("Violation added successfully!");
+
+    axios.post('ticket/penalty/', addPenalty, {
+      headers: {
+        Authorization: `token ${Token}`
+      }
+    }).then((response) => {
+      window.alert("Penalty added successfully!");
+      handleCloseModal();
+    }).catch((error) => {
+      window.alert("Something went wrong, Please Try Again Later");
+      handleCloseModal();
+      console.log(addPenalty)
+    })
+
   };
 
   const handlePageChange = (page) => {
@@ -164,6 +209,87 @@ export default function ViolationList(props) {
         </div>
         {penalty ? (
           <>
+            <Modal
+              open={openModal}
+              onClose={handleCloseModal}
+              closeAfterTransition
+            >
+              <Fade in={openModal}>
+                <div className="modal-paper">
+                  <div className="modal-paper-2">
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                      }}
+                    >
+                      <Button
+                        onClick={handleCloseModal}
+                        style={{ display: "flex" }}
+                      >
+                        <Close style={{ color: "red" }}></Close>
+                      </Button>
+                    </div>
+                    <h2>Add Penalty</h2>
+
+                    <div
+                      style={{
+                        width: "50%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        marginTop: 20,
+                      }}
+                    >
+                      <TextField
+                        label="Penalty Description"
+                        variant="outlined"
+                        fullWidth
+                        value={addPenalty.description}
+                        onChange={(e) =>
+                          setAddPenalty({
+                            ...addPenalty, description: e.target.value
+                          })
+                        }
+                        style={{ marginBottom: 20 }}
+                      />
+                      <TextField
+                        label="Amount"
+                        variant="outlined"
+                        type="number"
+                        fullWidth
+                        value={addPenalty.amount}
+                        onChange={(e) =>
+                          setAddPenalty({
+                            ...addPenalty, amount: e.target.value
+                          })
+                        }
+                        style={{ marginBottom: 20 }}
+                      />                      
+                      <TextField
+                        label="Penalty Status"
+                        variant="outlined"
+                        fullWidth
+                        value={addPenalty.status}
+                        disabled
+                        style={{ marginBottom: 20 }}
+                      />
+                      <Button
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#3E7C1F",
+                          color: "white",
+                          height: 50,
+                        }}
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Fade>
+            </Modal>
             <div className="search-list-con">
               <div className="search-container-user">
                 <Search
@@ -171,6 +297,22 @@ export default function ViolationList(props) {
                   style={{ position: "absolute", left: "2%", marginTop: 10 }}
                 ></Search>
                 <input value={searchQuery} className="search-box-user"></input>
+                <Button
+                  className="add-user-btn"
+                  onClick={handleOpenModal}
+                  style={{
+                    backgroundColor: "#3E7C1F",
+                    borderRadius: 40,
+                    color: "white",
+                    paddingRight: 10,
+                    paddingLeft: 10,
+                    height: 40,
+                    marginLeft: 10,
+                  }}
+                >
+                  <Add style={{}} />
+                  {window.innerWidth <= 600 ? null : "ADD PENALTY"}
+                </Button>
                 <Button
                   className="add-user-btn"
                   onClick={handleDownload}
@@ -214,7 +356,7 @@ export default function ViolationList(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {currentRows.map((user, index) => (
+                      {penaltyData.map((user, index) => (
                         <TableRow
                           className={`table-body-row ${
                             index % 2 === 0 ? "even-row" : "odd-row"
@@ -225,10 +367,10 @@ export default function ViolationList(props) {
                             {user.id}
                           </TableCell>
                           <TableCell style={cellStylesBody.cell}>
-                            {user.desc}
+                            {user.description}
                           </TableCell>
                           <TableCell style={cellStylesBody.cell}>
-                            {user.amt}
+                            {user.amount}
                           </TableCell>
                           <TableCell style={cellStylesBody.cell}>
                             {user.date}
@@ -242,15 +384,15 @@ export default function ViolationList(props) {
                                 style={{
                                   flex: 1,
                                   backgroundColor:
-                                    user.stats === "Active"
+                                    user.status === "Active"
                                       ? "#E2F0D9"
-                                      : user.stats === "Deactivated"
+                                      : user.status === "Deactivated"
                                       ? "#FFD1D1"
                                       : "#EBF9F1",
                                   color:
-                                    user.stats === "Active"
+                                    user.status === "Active"
                                       ? "#649F3F"
-                                      : user.stats === "Deactivated"
+                                      : user.status === "Deactivated"
                                       ? "#D00000"
                                       : "#1F9254",
                                   width: 100,
@@ -282,10 +424,10 @@ export default function ViolationList(props) {
                                       ></StatusSelection>
                                     </div>
                                   </div>
-                                ) : user.stats === "Active" ? (
+                                ) : user.status === "Active" ? (
                                   `Active`
                                 ) : (
-                                  <span>{user.stats}</span>
+                                  <span>{user.status}</span>
                                 )}
                               </p>
                             </div>
@@ -348,7 +490,7 @@ export default function ViolationList(props) {
                               </>
                             ) : (
                               <>
-                                {user.stats === "Active" ? (
+                                {user.status === "Active" ? (
                                   <Button
                                     variant="contained"
                                     style={{
