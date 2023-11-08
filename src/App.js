@@ -6,24 +6,44 @@ import Violation from "./pages/Violation/Violation";
 import Profile from "./pages/Profile/Profile";
 import UserControl from "./pages/UserControl/UserControl";
 import ViolationList from "./pages/ViolationList/ViolationList";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [handleDashboard, setHandleDashboard] = React.useState(true);
 
-  return (
+  const isAuthenticated = useSelector((state) => state.auth.setIsLoggedIn)
+
+  return(
     <div className="container">
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-      </Routes>
-
-      <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/violation" element={<Violation />} />
-        <Route path="/user" element={<UserControl />} />
-        <Route path="/violationList" element={<ViolationList />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      <Router>
+        <Routes>
+        <Route
+          exact
+          path="/"
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />}
+        />
+        <Route
+          path="/dashboard"
+          element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/violation"
+          element={isAuthenticated ? <Violation /> : <Navigate to="/" />}
+        />        
+        <Route
+          path="/user"
+          element={isAuthenticated ? <UserControl /> : <Navigate to="/" />}
+        />                
+        <Route
+          path="/violationList"
+          element={isAuthenticated ? <ViolationList /> : <Navigate to="/" />}
+        />        
+        <Route
+          path="/profile"
+          element={isAuthenticated ? <Profile /> : <Navigate to="/" />}
+        />        
+        </Routes>
+      </Router>
     </div>
   );
 }

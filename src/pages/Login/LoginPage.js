@@ -13,6 +13,8 @@ import {
   TextField,
 } from "@mui/material";
 import axios from '../../plugins/axios'
+import { useDispatch } from "react-redux";
+import { setLogin } from "./authSlice";
 
 function LoginPage({ onClick }) {
   const navigation = useNavigate();
@@ -23,6 +25,8 @@ function LoginPage({ onClick }) {
     username: 'jaydemike15',
     password: '2023@admin'
   })
+
+  const dispatch = useDispatch();
 
   const handleLogin = () => {
 
@@ -41,7 +45,7 @@ function LoginPage({ onClick }) {
 
         if (role == 'ADMIN' || role == 'TREASURER') {
           alert(`Welcome ${response.data.last_name}, your role is ${role}`)
-          navigation("/dashboard");
+          dispatch(setLogin(id_token));
         }else {
           alert(`${role} you dont have access on this site`)
         }
