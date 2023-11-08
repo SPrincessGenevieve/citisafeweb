@@ -70,23 +70,17 @@ export default function ViolationList(props) {
   const [addPenalty,setAddPenalty] = useState({
     description: '',
     amount: '',
-    status: '',
+    status: 'Active',
   })
 
 
-  useEffect(() => {
-    axios.get('ticket/penalty/', {
-      headers: {
-        Authorization: `token ${Token}`
-      }
-    }).then((response) => {
-      setPenaltyData(response.data);
-    }).catch(error => {
-      console.log(error);
-    });
-  }, [Token]); // Specify dependencies that trigger the effect
-  
 
+  // edit penalty
+  const [editPenaltyStatus, setEditPenaltyStatus] = useState('')
+  
+  const handleStatusChange = (newStatus) => {
+    setEditPenaltyStatus(newStatus)
+  };
 
 
 
@@ -181,6 +175,19 @@ export default function ViolationList(props) {
   const handleDownload = () => {
     window.alert("Downloaded successfully");
   };
+
+  useEffect(() => {
+    axios.get('ticket/penalty/', {
+      headers: {
+        Authorization: `token ${Token}`
+      }
+    }).then((response) => {
+      setPenaltyData(response.data);
+    }).catch(error => {
+      console.log(error);
+    });
+  }, [Token]); // Specify dependencies that trigger the effect
+
 
   return (
     <div className="container1">
@@ -421,7 +428,10 @@ export default function ViolationList(props) {
                                         label={"Select Status"}
                                         labelSelect={"Select Status"}
                                         json={stats}
+                                        onStatusChange={handleStatusChange}
                                       ></StatusSelection>
+
+
                                     </div>
                                   </div>
                                 ) : user.status === "Active" ? (
@@ -446,7 +456,28 @@ export default function ViolationList(props) {
                                     color: "black",
                                     marginLeft: 10,
                                   }}
-                                  onClick={() => handleSave(user.id)}
+                                  onClick={() => {
+
+                                    const formData = {
+                                      id: user.id,
+                                      status: editPenaltyStatus
+                                    };
+                                    console.log(formData)
+
+                                    axios.patch(`ticket/penalty/${user.id}/`, formData, {
+                                      headers: {
+                                        Authorization: `token ${Token}`
+                                      }
+                                    }).then((response) => {
+                                      window.alert("Successfully Edit Penalty Status")
+                                      handleSave(user.id)
+                                    }).catch((error) => {
+                                      window.alert("Unsuccessfully Edit Penalty Status")
+                                      console.log(error)
+                                    })
+
+
+                                  }}
                                 >
                                   <Check style={{ height: 25 }} />
                                 </Button>

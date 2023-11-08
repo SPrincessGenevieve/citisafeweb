@@ -1,4 +1,4 @@
 [
-  { "value": "A", "label": "Active" },
-  { "value": "D", "label": "Deactivated" }
+  { "value": "Active", "label": "Active" },
+  { "value": "Inactive", "label": "Deactivated" }
 ]

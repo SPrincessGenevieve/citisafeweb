@@ -32,12 +32,14 @@ function StatusSelection({
   type,
   json,
   labelSelect,
+  onStatusChange,
 }) {
   const [item, setItem] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
+    onStatusChange(event.target.value);
   };
 
   return (
