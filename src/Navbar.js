@@ -3,9 +3,15 @@ import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import "./styles.css";
 import logo from "./assets/logo.png";
 import { Dashboard, Widgets } from "@mui/icons-material";
+import { Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setLogout } from "./pages/Login/authSlice";
+import { red } from "@mui/material/colors";
 
 export default function Navbar() {
   const [isNavVisible, setNavVisibility] = useState(false);
+
+  const dispatch = useDispatch()
 
   const toggleNav = () => {
     setNavVisibility(!isNavVisible);
@@ -28,9 +34,9 @@ export default function Navbar() {
         <CustomLink to="/user">Users</CustomLink>
         <CustomLink to="/violationList">Violation</CustomLink>
         <li className={`nav-item logout-item ${isNavVisible ? "show" : ""}`}>
-          <CustomLink className="logout-link" to="/">
-            Logout
-          </CustomLink>
+          <Button style={{color: 'gray', border: '2px solid red', padding: '10px 50px', borderRadius: '25px', textTransform: 'capitalize'}} title="Logout" onClick={() => {
+            dispatch(setLogout())
+          }} >Logout</Button>
         </li>
       </ul>
     </nav>
