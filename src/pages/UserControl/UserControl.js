@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../Navbar";
 import {
   Add,
@@ -16,6 +16,7 @@ import {
   AddBoxRounded,
   Download,
   Search,
+  WindowSharp,
 } from "@mui/icons-material";
 import InputSearch from "../../components/InputSearch";
 import {
@@ -40,7 +41,9 @@ import ConstButton from "../../components/ConstButton";
 import InputRound from "../../components/InputRound";
 import SelectRound from "../../components/SelectRound";
 import StatusSelection from "../../components/StatusSelection";
-import stats from "./../../JSON/Stats.json";
+import stats from "./../../JSON/is_active.json";
+import { useSelector } from "react-redux";
+import axios from '../../plugins/axios'
 
 const cellStylesHeader = {
   cell: {
@@ -64,6 +67,46 @@ const cellStylesBody = {
 };
 
 function UserControl(props) {
+
+
+  // jayde
+  const [userData, setUserData] = useState([])
+  const Token = useSelector((state) => state.auth.token)
+
+  // add user
+  const [addUser, setAddUser] = useState({
+    email: '',
+    role: '',
+    position: '',
+    first_name: '',
+    last_name: '',
+    middle_name: '',
+    username: '',
+  })
+
+  const handleRoleChange = (selectedRole) => {
+    setAddUser((prevAddUser) => ({
+      ...prevAddUser,
+      role: selectedRole,
+    }));
+  };
+
+  const handlePositionChange = (selectedRole) => {
+    setAddUser((prevAddUser) => ({
+      ...prevAddUser,
+      position: selectedRole,
+    }));
+  };
+
+
+
+  // edit user active/inactive
+  const [editIsActive, setEditIsActive] = useState('')
+
+  const handleStatusChange = (newStatus) => {
+    setEditIsActive(newStatus)
+  };
+
   const [filteredData, setFilteredData] = useState(users);
   const [searchQuery, setSearchQuery] = useState("");
   const [table, setTable] = useState(true);
@@ -104,9 +147,31 @@ function UserControl(props) {
   };
 
   const handleSubmit = () => {
-    window.alert("User created successfully");
-    setAddScreen(!addScreen);
-    setTable(!table);
+
+
+    axios.post('accounts/users/', addUser).then((response) => {
+      window.alert("User created successfully");
+      setAddScreen(!addScreen);
+      setTable(!table);
+
+      setUserData({
+        email: '',
+        role: '',
+        position: '',
+        first_name: '',
+        last_name: '',
+        middle_name: '',
+        username: '',
+      })
+    }).catch((error) => {
+      console.log(error)
+      console.log(addUser)
+    })
+
+
+
+
+
   };
 
   const handleDownload = () => {
@@ -148,6 +213,21 @@ function UserControl(props) {
     }
   });
 
+  useEffect(() => {
+
+    axios.get('accounts/users', {
+      headers: {
+        Authorization: `token ${Token}`
+      }
+    }).then((response) => {
+      setUserData(response.data)
+      console.log(response.data)
+    }).catch((error) => {
+      window.alert("Error Fetching Users Data")
+    })
+
+  }, [Token])
+
   return (
     <div className="container1">
       <Navbar />
@@ -182,23 +262,41 @@ function UserControl(props) {
                       title={"First Name"}
                       width={"40vh"}
                       height={"3vh"}
-                    ></InputRound>
-                    <InputRound
-                      title={"Last Name"}
-                      width={"40vh"}
-                      height={"3vh"}
+                      value={addUser.first_name}
+                      onChange={(e) => {
+                        setAddUser({
+                          ...addUser, first_name: e.target.value
+                        })
+                      }}
                     ></InputRound>
                     <InputRound
                       title={"Middle Name"}
                       width={"40vh"}
                       height={"3vh"}
+                      value={addUser.middle_name}
+                      onChange={(e) => {
+                        setAddUser({
+                          ...addUser, middle_name: e.target.value
+                        })
+                      }}
                     ></InputRound>
-
+                    <InputRound
+                      title={"Last Name"}
+                      width={"40vh"}
+                      height={"3vh"}
+                      value={addUser.last_name}
+                      onChange={(e) => {
+                        setAddUser({
+                          ...addUser, last_name: e.target.value
+                        })
+                      }}
+                    ></InputRound>
                     <SelectRound
                       width={"42vh"}
                       height={"5vh"}
                       title={"Role"}
                       selection={"role"}
+                      onChange={(selectedRole) => handleRoleChange(selectedRole)}
                     ></SelectRound>
                   </div>
                   <div>
@@ -207,17 +305,31 @@ function UserControl(props) {
                       height={"5vh"}
                       title={"Position"}
                       selection={"position"}
+                      onChange={(selectedRole) => handlePositionChange(selectedRole)}
+
                     ></SelectRound>
                     <InputRound
                       title={"Email"}
                       width={"40vh"}
                       height={"3vh"}
                       type={"email"}
+                      value={addUser.email}
+                      onChange={(e) => {
+                        setAddUser({
+                          ...addUser, email: e.target.value
+                        })
+                      }}
                     ></InputRound>
                     <InputRound
                       title={"Username"}
                       width={"40vh"}
                       height={"3vh"}
+                      value={addUser.username}
+                      onChange={(e) => {
+                        setAddUser({
+                          ...addUser, username: e.target.value
+                        })
+                      }}
                     ></InputRound>
                   </div>
                 </div>
@@ -317,7 +429,7 @@ function UserControl(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {currentRows.map((user, index) => (
+                      {userData.map((user, index) => (
                         <TableRow
                           className={`table-body-row ${
                             index % 2 === 0 ? "even-row" : "odd-row"
@@ -333,13 +445,25 @@ function UserControl(props) {
                             style={cellStylesBody.cell}
                             className="row"
                           >
-                            {user.firstName}
+                            {user.first_name}
                           </TableCell>
                           <TableCell
                             style={cellStylesBody.cell}
                             className="row"
                           >
-                            {user.lastName}
+                            {user.middle_name}
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.last_name}
+                          </TableCell>
+                          <TableCell
+                            style={cellStylesBody.cell}
+                            className="row"
+                          >
+                            {user.role}
                           </TableCell>
                           <TableCell
                             style={cellStylesBody.cell}
@@ -357,18 +481,6 @@ function UserControl(props) {
                             style={cellStylesBody.cell}
                             className="row"
                           >
-                            {user.contact_no}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            {user.role}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
                             {user.username}
                           </TableCell>
                           <TableCell
@@ -380,15 +492,15 @@ function UserControl(props) {
                                 style={{
                                   flex: 1,
                                   backgroundColor:
-                                    user.status === "Active"
+                                    user.is_active === true
                                       ? "#E2F0D9"
-                                      : user.status === "Deactivated"
+                                      : user.is_active === false
                                       ? "#FFD1D1"
                                       : "#EBF9F1",
                                   color:
-                                    user.status === "Active"
+                                    user.is_active === true
                                       ? "#649F3F"
-                                      : user.status === "Deactivated"
+                                      : user.is_active === false
                                       ? "#D00000"
                                       : "#1F9254",
                                   width: 100,
@@ -414,12 +526,13 @@ function UserControl(props) {
                                       labelSelect={"Select Status"}
                                       json={stats}
                                       width={150}
+                                      onStatusChange={handleStatusChange}
                                     ></StatusSelection>
                                   </div>
-                                ) : user.status === "Active" ? (
+                                ) : user.is_active === true ? (
                                   `Active`
                                 ) : (
-                                  <span>{user.status}</span>
+                                  <span>{user.is_active ? ('Active') : ('Inactive')}</span>
                                 )}
                               </p>
                             </div>
@@ -438,7 +551,28 @@ function UserControl(props) {
                                     color: "black",
                                     marginLeft: 10,
                                   }}
-                                  onClick={() => handleSave(user.id)}
+                                  onClick={() => {
+
+                                    const formData = {
+                                      id: user.id,
+                                      is_active: editIsActive
+                                    };
+
+                                    
+                                    axios.patch(`accounts/users/${user.id}/`, formData, {
+                                      headers: {
+                                        Authorization: `token ${Token}`
+                                      }
+                                    }).then((response) => {
+                                      window.alert("Successfully Edit User Status")
+                                      handleSave(user.id)
+                                    }).catch((error) => {
+                                      window.alert("Unsuccessfully Edit User Status")
+                                      console.log(error)
+                                    })
+
+
+                                  }}
                                 >
                                   <Check style={{ height: 25 }} />
                                 </Button>

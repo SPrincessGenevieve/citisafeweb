@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-function InputRound({ width, height, onChange, title, type }) {
+function InputRound({ width, height, onChange, title, type, value }) {
   return (
     <>
       <p className="title-form">{title}</p>
@@ -12,6 +12,7 @@ function InputRound({ width, height, onChange, title, type }) {
         }}
         type={type}
         onChange={onChange}
+        value={value}
       ></input>
     </>
   );
