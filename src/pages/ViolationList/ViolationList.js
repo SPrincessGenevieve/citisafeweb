@@ -73,14 +73,50 @@ export default function ViolationList(props) {
     status: 'Active',
   })
 
-
-
   // edit penalty
   const [editPenaltyStatus, setEditPenaltyStatus] = useState('')
   
   const handleStatusChange = (newStatus) => {
     setEditPenaltyStatus(newStatus)
   };
+
+
+  // get violations
+  const [violationData, setViolationData] = useState([])
+  
+  // add violations
+  const [addViolation, setAddViolation] = useState({
+    violation_type: '',
+    penalty_ID: '',
+  })
+
+  // edit violations
+  const [editViolation, setEditViolation] = useState('')
+
+
+  const handleAddViolation = () => {
+
+      axios.post('ticket/violation/', addViolation, {
+        headers: {
+          Authorization: `token ${Token}`
+        }
+      }).then((response) => {
+        window.alert("Violation added successfully!");
+
+        setAddViolation({
+          violation_type: '',
+          penalty_ID: '',
+        })
+        handleCloseModal();
+
+      }).catch((error) => {
+        window.alert("Something went wrong, Please Try Again Later");
+        handleCloseModal();
+        console.log(addViolation)
+      })
+
+  }
+
 
 
 
@@ -129,6 +165,13 @@ export default function ViolationList(props) {
       }
     }).then((response) => {
       window.alert("Penalty added successfully!");
+
+      setAddPenalty({
+        description: '',
+        amount: '',
+        status: 'Active',
+      })
+
       handleCloseModal();
     }).catch((error) => {
       window.alert("Something went wrong, Please Try Again Later");
@@ -137,6 +180,8 @@ export default function ViolationList(props) {
     })
 
   };
+
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -183,6 +228,17 @@ export default function ViolationList(props) {
       }
     }).then((response) => {
       setPenaltyData(response.data);
+    }).catch(error => {
+      console.log(error);
+    });
+
+
+    axios.get('ticket/violation/', {
+      headers: {
+        Authorization: `token ${Token}`
+      }
+    }).then((response) => {
+      setViolationData(response.data);
     }).catch(error => {
       console.log(error);
     });
@@ -649,9 +705,11 @@ export default function ViolationList(props) {
                         label="Violation Description"
                         variant="outlined"
                         fullWidth
-                        value={violationDescription}
+                        value={addViolation.violation_type}
                         onChange={(e) =>
-                          setViolationDescription(e.target.value)
+                          setAddViolation({
+                            ...addViolation, violation_type: e.target.value
+                          })
                         }
                         style={{ marginBottom: 20 }}
                       />
@@ -666,13 +724,19 @@ export default function ViolationList(props) {
                         <Select
                           labelId="penalty-label"
                           id="penalty"
-                          value={selectedPenalty}
-                          onChange={(e) => setSelectedPenalty(e.target.value)}
+                          value={addViolation.penalty_ID}
+                          onChange={(e) => setAddViolation({
+                            ...addViolation, penalty_ID: e.target.value
+                          })}
                           label="Select Penalty"
                         >
-                          {/* Create menu items based on your penalty options */}
-                          <MenuItem value="Penalty1">Penalty 1</MenuItem>
-                          <MenuItem value="Penalty2">Penalty 2</MenuItem>
+                          {penaltyData
+                            .filter((user) => user.status === "Active")
+                            .map((user, index) => (
+                              <MenuItem key={index} value={user.id}>
+                                {user.description}
+                              </MenuItem>
+                            ))}
                         </Select>
                       </FormControl>
                       <Button
@@ -682,7 +746,7 @@ export default function ViolationList(props) {
                           color: "white",
                           height: 50,
                         }}
-                        onClick={handleSubmit}
+                        onClick={handleAddViolation}
                       >
                         Submit
                       </Button>
@@ -746,12 +810,15 @@ export default function ViolationList(props) {
                           Penalty ID
                         </TableCell>
                         <TableCell style={cellStylesHeader.cell}>
+                          Penalty Description
+                        </TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
                           Action
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {penaltyRows.map((user, index) => (
+                      {violationData.map((user, index) => (
                         <TableRow
                           className={`table-body-row ${
                             index % 2 === 0 ? "even-row" : "odd-row"
@@ -765,17 +832,39 @@ export default function ViolationList(props) {
                             {user.violation_type}
                           </TableCell>
                           <TableCell style={cellStylesBody.cell}>
+                            {user.penalty_ID}
+                          </TableCell>
+                          <TableCell style={cellStylesBody.cell}>
                             {editingRow === user.id ? (
                               <div className="input-css-container">
-                                <input
-                                  placeholder="input new value"
-                                  className="input-css-violation"
-                                ></input>
+                                <FormControl
+                                  variant="outlined"
+                                  fullWidth
+                                >
+                                  <InputLabel id="penalty-label">
+                                    Select Penalty
+                                  </InputLabel>
+                                  <Select
+                                    labelId="penalty-label"
+                                    id="penalty"
+                                    value={editViolation}
+                                    onChange={(e) => setEditViolation(e.target.value)}
+                                    label="Select Penalty"
+                                  >
+                                    {penaltyData
+                                      .filter((user) => user.status === "Active")
+                                      .map((user, index) => (
+                                        <MenuItem key={index} value={user.id}>
+                                          {user.description}
+                                        </MenuItem>
+                                      ))}
+                                  </Select>
+                                </FormControl>
                               </div>
-                            ) : user.penalty_id === "Active" ? (
+                            ) : user.status === "Active" ? (
                               `Active`
                             ) : (
-                              <p>{user.penalty_id}</p>
+                              <p>{user.penalty_info.description}</p>
                             )}
                           </TableCell>
 
@@ -793,7 +882,25 @@ export default function ViolationList(props) {
                                     color: "black",
                                     marginLeft: 10,
                                   }}
-                                  onClick={() => handleSave(user.id)}
+                                  onClick={() => {
+                                    const formData = {
+                                      id: user.id,
+                                      penalty_ID: editViolation
+                                    };
+                                    console.log(formData)
+
+                                    axios.patch(`ticket/violation/${user.id}/`, formData, {
+                                      headers: {
+                                        Authorization: `token ${Token}`
+                                      }
+                                    }).then((response) => {
+                                      window.alert("Successfully Edit Violation")
+                                      handleSave(user.id)
+                                    }).catch((error) => {
+                                      window.alert("Unsuccessfully Edit Penalty Status")
+                                      console.log(error)
+                                    })                                    
+                                  }}
                                 >
                                   <Check style={{ height: 25 }} />
                                 </Button>
