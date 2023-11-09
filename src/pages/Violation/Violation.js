@@ -19,6 +19,8 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import { useSelector } from "react-redux";
+import axios from '../../plugins/axios'
 
 const styles = (theme) => ({
   modal: {
@@ -62,6 +64,22 @@ if (window.innerWidth <= 600) {
 }
 
 function Violation({ navigation }) {
+
+
+  // jayde 
+  const [ticketData, setTicketData] = useState([])
+  const Token = useSelector((state) => state.auth.token)
+
+  // edit ticket status
+  const [editTicketStatus, setEditTicketStatus] = useState('')
+  
+  const handleStatusChange = (newStatus) => {
+    setEditTicketStatus(newStatus)
+  };
+
+
+
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(violationsData);
   const [filteredDatas, setFilteredDatas] = useState(violationsSample);
@@ -235,6 +253,22 @@ function Violation({ navigation }) {
     }));
   };
 
+  useEffect(() => {
+
+    axios.get('ticket/register/', {
+      headers: {
+        Authorization: `token ${Token}`
+      }
+    }).then((response) => {
+      console.log(response.data)
+      setTicketData(response.data)
+    }).catch((error) => {
+      window.alert("Error Fetching")
+    })
+
+
+  }, [Token])
+
   return (
     <div className="violation-container">
       <div className="navbar-container">
@@ -270,10 +304,10 @@ function Violation({ navigation }) {
           </Button>
         </div>
         <div className="table-conatiner-violation">
-          {currentRows.map((item, index) => (
+          {ticketData.map((item, index) => (
             <Dialog
-              key={item.ticket_no}
-              open={selectedTicket === item.ticket_no}
+              key={item.MFRTA_TCT_NO}
+              open={selectedTicket === item.MFRTA_TCT_NO}
               onClose={handleCloseModal}
               sx={{
                 "& .MuiDialog-paper": {
@@ -282,115 +316,113 @@ function Violation({ navigation }) {
                 },
               }}
             >
-              <DialogTitle>{item.ticket_no}</DialogTitle>
+              <DialogTitle>{item.MFRTA_TCT_NO}</DialogTitle>
               <DialogContent>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <table>
                     <tr>
                       <td className="row-details">Name</td>
-                      <td className="row-details-value">{item.name}</td>
-                    </tr>
-                    <tr>
-                      <td className="row-details">Date</td>
-                      <td className="row-details-value">{item.date}</td>
+                      <td className="row-details-value">{item.driver_info.first_name} {item.driver_info.middle_initial}. {item.driver_info.last_name} </td>
                     </tr>
                     <tr>
                       <td className="row-details">Address</td>
-                      <td className="row-details-value">{item.address}</td>
+                      <td className="row-details-value">{item.driver_info.address}</td>
                     </tr>
                     <tr>
                       <td className="row-details">License No.</td>
                       <td className="row-details-value">
-                        {item.driver_license_no}
+                        {item.driver_info.license_number}
                       </td>
                     </tr>
                     <tr>
                       <td className="row-details">Type</td>
-                      <td className="row-details-value">{item.type}</td>
+                      <td className="row-details-value">{item.classification}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Date of Birth</td>
-                      <td className="row-details-value">
-                        {item.date_of_birth}
-                      </td>
+                      <td className="row-details-value">{item.driver_info.birthdate}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Nationality</td>
-                      <td className="row-details-value">{item.nationality}</td>
+                      <td className="row-details-value">{item.driver_info.nationality}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Plate No.</td>
                       <td className="row-details-value">
-                        {item.vehicle_plate_no}
+                        {item.vehicle_info.plate_number}
                       </td>
                     </tr>
                     <tr>
                       <td className="row-details">Make</td>
-                      <td className="row-details-value">{item.make}</td>
+                      <td className="row-details-value">{item.vehicle_info.make}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Model</td>
-                      <td className="row-details-value">{item.model}</td>
+                      <td className="row-details-value">{item.vehicle_info.vehicle_model}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Color</td>
-                      <td className="row-details-value">{item.color}</td>
+                      <td className="row-details-value">{item.vehicle_info.color}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Class</td>
-                      <td className="row-details-value">{item.class}</td>
+                      <td className="row-details-value">{item.vehicle_info.vehicle_class}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Body Markings</td>
                       <td className="row-details-value">
-                        {item.body_markings}
+                        {item.vehicle_info.body_markings}
                       </td>
                     </tr>
                     <tr>
                       <td className="row-details">Registered Owner</td>
                       <td className="row-details-value">
-                        {item.registered_owner}
+                        {item.vehicle_info.name}
                       </td>
                     </tr>
                     <tr>
                       <td className="row-details">Registered Owner Address</td>
                       <td className="row-details-value">
-                        {item.registered_owner_address}
+                        {item.vehicle_info.address}
                       </td>
                     </tr>
                     <tr>
                       <td className="row-details">Contact No.</td>
-                      <td className="row-details-value">{item.contact_no}</td>
+                      <td className="row-details-value">{item.vehicle_info.contact_number}</td>
                     </tr>
                     <tr>
-                      <td className="row-details">Time of Violation</td>
+                      <td className="row-details">Date & Time of Violation</td>
                       <td className="row-details-value">
-                        {item.time_of_violation}
+                        {item.date_issued}
                       </td>
                     </tr>
                     <tr>
-                      <td className="row-details">Contact No.</td>
+                      <td className="row-details">Place of Violation</td>
                       <td className="row-details-value">
-                        {item.place_of_violation}
+                        {item.place_violation}
                       </td>
                     </tr>
                     <tr>
                       <td className="row-details">Apprehending Officer</td>
                       <td className="row-details-value">
-                        {item.apprehending_officer}
+                        {item.user_ID.first_name} {item.user_ID.middle_name} {item.user_ID.last_name}
                       </td>
                     </tr>
                     <tr>
-                      <td className="row-details">Place of Violation</td>
-                      <td className="row-details-value">{item.status}</td>
+                      <td className="row-details">Ticket Status</td>
+                      <td className="row-details-value">{item.ticket_status}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Penalty</td>
-                      <td className="row-details-value">{item.penalty}</td>
+                      <td className="row-details-value">{item.penalty_amount}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Violation</td>
-                      <td className="row-details-value">{item.violations}</td>
+                      <td className="row-details-value">
+                        {item.violation_info.violations_info.map((violation, index) => (
+                          <div key={index}>{violation}</div>
+                        ))}
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -408,7 +440,6 @@ function Violation({ navigation }) {
               <Table className="table">
                 <TableHead>
                   <TableRow className="table-row">
-                    <TableCell style={cellStylesHeader.cell}>ID</TableCell>
                     <TableCell style={cellStylesHeader.cell}>
                       Tracking #
                     </TableCell>
@@ -427,7 +458,7 @@ function Violation({ navigation }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {currentRows.map((item, index) => (
+                  {ticketData.map((item, index) => (
                     <TableRow
                       className={`table-body-row ${
                         index % 2 === 0 ? "even-row" : "odd-row"
@@ -435,15 +466,12 @@ function Violation({ navigation }) {
                       key={index}
                     >
                       <TableCell style={cellStylesBody.cell}>
-                        {item.id}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
                         <a
                           className="ticket"
                           href="#"
-                          onClick={() => handleOpenModal(item.ticket_no)}
+                          onClick={() => handleOpenModal(item.MFRTA_TCT_NO)}
                         >
-                          {item.ticket_no}
+                          {item.MFRTA_TCT_NO}
                         </a>
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
@@ -454,32 +482,24 @@ function Violation({ navigation }) {
                           }
                           href="#"
                         >
-                          {item.name}
-                        </a>
+                      {item.driver_info.first_name} {item.driver_info.middle_initial}. {item.driver_info.last_name}                        </a>
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
-                        {item.violations}
+                      {item.violation_info.violations_info.map((violation, index) => (
+                          <div key={index}>{violation}</div>
+                        ))}
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
-                        {item.date}
+                        {item.date_issued}
+                      </TableCell>
+                      <TableCell style={cellStylesBody.cell}>
+                        {item.driver_info.offenses_count}
                       </TableCell>
 
                       <TableCell style={cellStylesBody.cell}>
-                        {offenseCountMap[item.name] === 3
-                          ? "3rd"
-                          : `${offenseCountMap[item.name]}${
-                              offenseCountMap[item.name] === 1
-                                ? "st"
-                                : offenseCountMap[item.name] === 2
-                                ? "nd"
-                                : "th"
-                            } Offense`}
-                      </TableCell>
+                      {item.user_ID.first_name} {item.user_ID.middle_name} {item.user_ID.last_name}                      </TableCell>
                       <TableCell style={cellStylesBody.cell}>
-                        {item.apprehending_officer}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
-                        {item.penalty}
+                        {item.penalty_amount}
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
                         <div className="status-container">
@@ -487,15 +507,15 @@ function Violation({ navigation }) {
                             style={{
                               flex: 1,
                               backgroundColor:
-                                item.status === "Overdue"
+                                item.ticket_status === "Overdue"
                                   ? "#FBE7E8"
-                                  : item.status === "Cleared"
+                                  : item.ticket_status === "PAID"
                                   ? "#FEF2E5"
                                   : "#EBF9F1",
                               color:
-                                item.status === "Overdue"
+                                item.ticket_status === "Overdue"
                                   ? "#A30D11"
-                                  : item.status === "Cleared"
+                                  : item.ticket_status === "PAID"
                                   ? "#CD6200"
                                   : "#1F9254",
                               width: 100,
@@ -505,7 +525,7 @@ function Violation({ navigation }) {
                               borderRadius: 20,
                             }}
                           >
-                            {editingRows[item.id] ? (
+                            {editingRows[item.MFRTA_TCT_NO] ? (
                               <div
                                 className={
                                   index % 2 === 0 ? "even-row" : "odd-row"
@@ -521,19 +541,21 @@ function Violation({ navigation }) {
                                   labelSelect={"Select Status"}
                                   json={StatSelect}
                                   width={150}
+                                  onStatusChange={handleStatusChange}
+
                                 ></StatusSelection>
                               </div>
-                            ) : item.status === "Overdue" ? (
+                            ) : item.ticket_status === "Overdue" ? (
                               `Overdue`
                             ) : (
-                              <span>{item.status}</span>
+                              <span>{item.ticket_status}</span>
                             )}
                           </p>
                         </div>
                       </TableCell>
 
                       <TableCell className="row" style={cellStylesBody.cell}>
-                        {editingRows[item.id] ? (
+                        {editingRows[item.MFRTA_TCT_NO] ? (
                           <div className="check-close">
                             <Button
                               variant="contained"
@@ -543,7 +565,27 @@ function Violation({ navigation }) {
                                 color: "black",
                                 marginLeft: 0,
                               }}
-                              onClick={() => handleSave(item.id)}
+                              onClick={() => {
+                                const formData = {
+                                  MFRTA_TCT_NO: item.MFRTA_TCT_NO,
+                                  ticket_status: editTicketStatus
+                                };
+                                console.log(formData)
+
+                                axios.patch(`ticket/register/${item.MFRTA_TCT_NO}/`, formData, {
+                                  headers: {
+                                    Authorization: `token ${Token}`
+                                  }
+                                }).then((response) => {
+                                  console.log(response.data)
+                                  window.alert("Successfully Edit Penalty Status")
+                                  handleSave(user.MFRTA_TCT_NO)
+                                }).catch((error) => {
+                                  window.alert("Unsuccessfully Edit Penalty Status")
+                                  console.log(error)
+                                })
+
+                              }}
                             >
                               <Check style={{ height: 25 }} />
                             </Button>
@@ -554,12 +596,12 @@ function Violation({ navigation }) {
                                 boxShadow: "none",
                                 color: "black",
                               }}
-                              onClick={() => handleCancelEdit(item.id)}
+                              onClick={() => handleCancelEdit(item.MFRTA_TCT_NO)}
                             >
                               <Close style={{ height: 25 }} />
                             </Button>
                           </div>
-                        ) : deletingRows[item.id] ? (
+                        ) : deletingRows[item.MFRTA_TCT_NO] ? (
                           <>
                             <Button
                               variant="contained"
@@ -569,7 +611,7 @@ function Violation({ navigation }) {
                                 color: "black",
                                 marginLeft: 10,
                               }}
-                              onClick={() => handleCheck(item.id)}
+                              onClick={() => handleCheck(item.MFRTA_TCT_NO)}
                             >
                               <Check style={{ height: 25 }} />
                             </Button>
@@ -584,7 +626,7 @@ function Violation({ navigation }) {
                                 color: "black",
                                 marginLeft: 10,
                               }}
-                              onClick={() => handleEdit(item.id)}
+                              onClick={() => handleEdit(item.MFRTA_TCT_NO)}
                             >
                               <Edit style={{ height: 25 }} />
                             </Button>

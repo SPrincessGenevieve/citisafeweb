@@ -1,6 +1,8 @@
 [
-    { "value": "P", "label": "PENDING" },
-    { "value": "O", "label": "OVERDUE" },
-    { "value": "C", "label": "CLEARED" }
-  ]
+    { "value": "PENDING", "label": "Pending" },
+    { "value": "PAID", "label": "Paid" },
+    { "value": "OVERDUE", "label": "Overdue" },
+    { "value": "DISMISSED", "label": "Dismissed" }
+
+]
   
