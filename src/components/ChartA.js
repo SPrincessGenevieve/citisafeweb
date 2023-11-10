@@ -61,6 +61,8 @@ const data = [
 ];
 
 export default class Example extends PureComponent {
+
+
   static demoUrl = "https://codesandbox.io/s/simple-area-chart-4ujxw";
 
   state = {
