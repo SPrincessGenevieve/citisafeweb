@@ -238,6 +238,7 @@ export default function ViolationList(props) {
         Authorization: `token ${Token}`
       }
     }).then((response) => {
+      console.log(response.data)
       setViolationData(response.data);
     }).catch(error => {
       console.log(error);
@@ -818,7 +819,7 @@ export default function ViolationList(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {violationData.map((user, index) => (
+                      {violationData.filter(user => user.penalty_info.status === "Active").map((user, index) => (
                         <TableRow
                           className={`table-body-row ${
                             index % 2 === 0 ? "even-row" : "odd-row"
