@@ -106,6 +106,8 @@ export default function ViolationList(props) {
   const totalPagesViolation = Math.ceil(
     violationData.length / rowsPerPageViolation
   );
+
+  
   const filteredPenaltyData = penaltyData.filter((penalty) =>
     penalty.description.toLowerCase().includes(searchQueryPenalty.toLowerCase())
   );

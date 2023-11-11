@@ -68,17 +68,10 @@ function Violation({ navigation }) {
   const Token = useSelector((state) => state.auth.token);
   const [editTicketStatus, setEditTicketStatus] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(violationsData);
-  const [filteredDatas, setFilteredDatas] = useState(violationsSample);
-  const [user, setUser] = useState(false);
-  const [table, setTable] = useState(true);
-  const [selectedStatus, setSelectedStatus] = useState([]);
-  const [openModal, setOpenModal] = useState(null);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [editingRows, setEditingRows] = useState({});
   const [deletingRows, setDeletingRows] = useState({});
-  const [activePerson, setActivePerson] = useState(null);
-  const [activeTable, setActiveTable] = useState("personal");
+  const [originalTicketData, setOriginalTicketData] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -92,13 +85,6 @@ function Violation({ navigation }) {
 
   const lastRowIndex = currentPage * rowsPerPage;
   const firstRowIndex = lastRowIndex - rowsPerPage;
-
-  const currentRows =
-    selectedStatus.length === 0
-      ? filteredData.slice(firstRowIndex, lastRowIndex)
-      : filteredData
-          .filter((item) => selectedStatus.includes(item.status))
-          .slice(firstRowIndex, lastRowIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -116,8 +102,10 @@ function Violation({ navigation }) {
     setEditTicketStatus(newStatus);
   };
 
-  const handleOpenModal = (ticketNo) => {
-    setSelectedTicket(ticketNo);
+  const handleOpenModal = (MFRTA_TCT_NO) => {
+    console.log("Opening modal for ticket:", MFRTA_TCT_NO);
+    console.log("Selected ticket:", selectedTicket);
+    setSelectedTicket(MFRTA_TCT_NO);
   };
 
   const handleCloseModal = () => {
@@ -130,99 +118,22 @@ function Violation({ navigation }) {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    const filtered = violationsData.filter(
-      (item) =>
-        item.ticket_no.includes(query) ||
-        item.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredData(filtered);
-    setCurrentPage(1);
+
+    if (Array.isArray(originalTicketData)) {
+      const filteredData = originalTicketData.filter((item) => {
+        if (item && item.MFRTA_TCT_NO) {
+          const tctNoString = item.MFRTA_TCT_NO.toString();
+          return tctNoString.toLowerCase().includes(query.toLowerCase());
+        }
+        return false;
+      });
+
+      setTicketData(filteredData);
+    }
   };
-
-  const offenseCountMap = {};
-  filteredData.forEach((item) => {
-    if (offenseCountMap[item.name]) {
-      offenseCountMap[item.name]++;
-    } else {
-      offenseCountMap[item.name] = 1;
-    }
-  });
-
-  {
-    /*const formatRemainingTime = (remainingTime) => {
-    if (remainingTime <= 0) {
-      return "00:00:00";
-    }
-
-    const hours = Math.floor(remainingTime / (60 * 60 * 1000));
-    const minutes = Math.floor(
-      (remainingTime % (60 * 60 * 1000)) / (60 * 1000)
-    );
-    const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
-
-    const formattedHours = hours.toString().padStart(2, "0");
-    const formattedMinutes = minutes.toString().padStart(2, "0");
-    const formattedSeconds = seconds.toString().padStart(2, "0");
-
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-  };*/
-  }
-  {
-    /* */
-  }
-  const calculateRemainingTime = (date, status) => {
-    if (status === "Cleared") {
-      return 0;
-    }
-
-    const currentTime = new Date().getTime();
-    const targetTime =
-      new Date(Date.parse(date)).getTime() + 72 * 60 * 60 * 1000;
-    let remainingTime = targetTime - currentTime;
-
-    if (remainingTime < 0) {
-      remainingTime = -remainingTime;
-    }
-
-    return remainingTime;
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFilteredData((prevData) =>
-        prevData.map((item) => ({
-          ...item,
-          remainingTime: calculateRemainingTime(item.date),
-        }))
-      );
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFilteredData((prevData) =>
-        prevData.map((item) => ({
-          ...item,
-          remainingTime: calculateRemainingTime(item.date),
-        }))
-      );
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
 
   const handleDownload = () => {
     window.alert("Downloaded successfully");
-  };
-
-  const handleTableClick = (table) => {
-    setActiveTable(table);
   };
 
   const handleEdit = (rowId) => {
@@ -270,6 +181,7 @@ function Violation({ navigation }) {
       .then((response) => {
         console.log(response.data);
         setTicketData(response.data);
+        setOriginalTicketData(response.data);
       })
       .catch((error) => {
         window.alert("Error Fetching");
@@ -292,7 +204,7 @@ function Violation({ navigation }) {
             value={searchQuery}
             onChange={(event) => handleSearch(event.target.value)}
             className="search-box"
-          ></input>
+          />
           <Button
             onClick={handleDownload}
             className="add-user-btn"
@@ -500,26 +412,23 @@ function Violation({ navigation }) {
                       key={index}
                     >
                       <TableCell style={cellStylesBody.cell}>
-                        <a
-                          className="ticket"
-                          href="#"
-                          onClick={() => handleOpenModal(item.MFRTA_TCT_NO)}
-                        >
+                        <div className="container-ticket">
+                          <a
+                            className="ticket"
+                            href="#"
+                            onClick={() => handleOpenModal(item.MFRTA_TCT_NO)}
+                          >
+                            <div className="hover-message">
+                              <p className="view-more">view more...</p>
+                            </div>
+                          </a>
                           {item.MFRTA_TCT_NO}
-                        </a>
+                        </div>
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
-                        <a
-                          className="ticket"
-                          onClick={() =>
-                            setTable(!table) & setActivePerson(item.name)
-                          }
-                          href="#"
-                        >
-                          {item.driver_info.first_name}{" "}
-                          {item.driver_info.middle_initial}.{" "}
-                          {item.driver_info.last_name}{" "}
-                        </a>
+                        {item.driver_info.first_name}
+                        {item.driver_info.middle_initial},{" "}
+                        {item.driver_info.last_name}{" "}
                       </TableCell>
                       <TableCell
                         style={{
@@ -636,7 +545,7 @@ function Violation({ navigation }) {
                                     window.alert(
                                       "Successfully Edit Penalty Status"
                                     );
-                                    handleSave(user.MFRTA_TCT_NO);
+                                    handleSave(item.MFRTA_TCT_NO);
                                   })
                                   .catch((error) => {
                                     window.alert(
