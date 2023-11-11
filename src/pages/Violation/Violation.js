@@ -20,7 +20,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import axios from '../../plugins/axios'
+import axios from "../../plugins/axios";
 
 const styles = (theme) => ({
   modal: {
@@ -53,7 +53,7 @@ const cellStylesBody = {
     height: "auto",
     textAlign: "left",
     width: 150,
-    height: 40,
+    height: "auto",
     textAlign: "center",
   },
 };
@@ -64,29 +64,14 @@ if (window.innerWidth <= 600) {
 }
 
 function Violation({ navigation }) {
-
-
-  // jayde 
-  const [ticketData, setTicketData] = useState([])
-  const Token = useSelector((state) => state.auth.token)
-
-  // edit ticket status
-  const [editTicketStatus, setEditTicketStatus] = useState('')
-  
-  const handleStatusChange = (newStatus) => {
-    setEditTicketStatus(newStatus)
-  };
-
-
-
-
+  const [ticketData, setTicketData] = useState([]);
+  const Token = useSelector((state) => state.auth.token);
+  const [editTicketStatus, setEditTicketStatus] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(violationsData);
   const [filteredDatas, setFilteredDatas] = useState(violationsSample);
-  const [currentPage, setCurrentPage] = useState(1);
   const [user, setUser] = useState(false);
   const [table, setTable] = useState(true);
-  const rowsPerPage = 6;
   const [selectedStatus, setSelectedStatus] = useState([]);
   const [openModal, setOpenModal] = useState(null);
   const [selectedTicket, setSelectedTicket] = useState(null);
@@ -94,9 +79,19 @@ function Violation({ navigation }) {
   const [deletingRows, setDeletingRows] = useState({});
   const [activePerson, setActivePerson] = useState(null);
   const [activeTable, setActiveTable] = useState("personal");
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const rowsPerPage = 5;
+
+  const lastPageIndex = Math.ceil(ticketData.length / rowsPerPage);
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = Math.min(startIndex + rowsPerPage, ticketData.length);
+  const visibleData = ticketData.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(ticketData.length / rowsPerPage);
+
   const lastRowIndex = currentPage * rowsPerPage;
   const firstRowIndex = lastRowIndex - rowsPerPage;
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
   const currentRows =
     selectedStatus.length === 0
@@ -104,6 +99,22 @@ function Violation({ navigation }) {
       : filteredData
           .filter((item) => selectedStatus.includes(item.status))
           .slice(firstRowIndex, lastRowIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const nextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, lastPageIndex));
+  };
+
+  const prevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleStatusChange = (newStatus) => {
+    setEditTicketStatus(newStatus);
+  };
 
   const handleOpenModal = (ticketNo) => {
     setSelectedTicket(ticketNo);
@@ -126,10 +137,6 @@ function Violation({ navigation }) {
     );
     setFilteredData(filtered);
     setCurrentPage(1);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
   };
 
   const offenseCountMap = {};
@@ -254,20 +261,20 @@ function Violation({ navigation }) {
   };
 
   useEffect(() => {
-
-    axios.get('ticket/register/', {
-      headers: {
-        Authorization: `token ${Token}`
-      }
-    }).then((response) => {
-      console.log(response.data)
-      setTicketData(response.data)
-    }).catch((error) => {
-      window.alert("Error Fetching")
-    })
-
-
-  }, [Token])
+    axios
+      .get("ticket/register/", {
+        headers: {
+          Authorization: `token ${Token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setTicketData(response.data);
+      })
+      .catch((error) => {
+        window.alert("Error Fetching");
+      });
+  }, [Token]);
 
   return (
     <div className="violation-container">
@@ -322,11 +329,17 @@ function Violation({ navigation }) {
                   <table>
                     <tr>
                       <td className="row-details">Name</td>
-                      <td className="row-details-value">{item.driver_info.first_name} {item.driver_info.middle_initial}. {item.driver_info.last_name} </td>
+                      <td className="row-details-value">
+                        {item.driver_info.first_name}{" "}
+                        {item.driver_info.middle_initial}.{" "}
+                        {item.driver_info.last_name}{" "}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Address</td>
-                      <td className="row-details-value">{item.driver_info.address}</td>
+                      <td className="row-details-value">
+                        {item.driver_info.address}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">License No.</td>
@@ -336,15 +349,21 @@ function Violation({ navigation }) {
                     </tr>
                     <tr>
                       <td className="row-details">Type</td>
-                      <td className="row-details-value">{item.classification}</td>
+                      <td className="row-details-value">
+                        {item.classification}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Date of Birth</td>
-                      <td className="row-details-value">{item.driver_info.birthdate}</td>
+                      <td className="row-details-value">
+                        {item.driver_info.birthdate}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Nationality</td>
-                      <td className="row-details-value">{item.driver_info.nationality}</td>
+                      <td className="row-details-value">
+                        {item.driver_info.nationality}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Plate No.</td>
@@ -354,19 +373,27 @@ function Violation({ navigation }) {
                     </tr>
                     <tr>
                       <td className="row-details">Make</td>
-                      <td className="row-details-value">{item.vehicle_info.make}</td>
+                      <td className="row-details-value">
+                        {item.vehicle_info.make}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Model</td>
-                      <td className="row-details-value">{item.vehicle_info.vehicle_model}</td>
+                      <td className="row-details-value">
+                        {item.vehicle_info.vehicle_model}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Color</td>
-                      <td className="row-details-value">{item.vehicle_info.color}</td>
+                      <td className="row-details-value">
+                        {item.vehicle_info.color}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Class</td>
-                      <td className="row-details-value">{item.vehicle_info.vehicle_class}</td>
+                      <td className="row-details-value">
+                        {item.vehicle_info.vehicle_class}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Body Markings</td>
@@ -388,13 +415,13 @@ function Violation({ navigation }) {
                     </tr>
                     <tr>
                       <td className="row-details">Contact No.</td>
-                      <td className="row-details-value">{item.vehicle_info.contact_number}</td>
+                      <td className="row-details-value">
+                        {item.vehicle_info.contact_number}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Date & Time of Violation</td>
-                      <td className="row-details-value">
-                        {item.date_issued}
-                      </td>
+                      <td className="row-details-value">{item.date_issued}</td>
                     </tr>
                     <tr>
                       <td className="row-details">Place of Violation</td>
@@ -405,23 +432,30 @@ function Violation({ navigation }) {
                     <tr>
                       <td className="row-details">Apprehending Officer</td>
                       <td className="row-details-value">
-                        {item.user_ID.first_name} {item.user_ID.middle_name} {item.user_ID.last_name}
+                        {item.user_ID.first_name} {item.user_ID.middle_name}{" "}
+                        {item.user_ID.last_name}
                       </td>
                     </tr>
                     <tr>
                       <td className="row-details">Ticket Status</td>
-                      <td className="row-details-value">{item.ticket_status}</td>
+                      <td className="row-details-value">
+                        {item.ticket_status}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Penalty</td>
-                      <td className="row-details-value">{item.penalty_amount}</td>
+                      <td className="row-details-value">
+                        {item.penalty_amount}
+                      </td>
                     </tr>
                     <tr>
                       <td className="row-details">Violation</td>
                       <td className="row-details-value">
-                        {item.violation_info.violations_info.map((violation, index) => (
-                          <div key={index}>{violation}</div>
-                        ))}
+                        {item.violation_info.violations_info.map(
+                          (violation, index) => (
+                            <div key={index}>{violation}</div>
+                          )
+                        )}
                       </td>
                     </tr>
                   </table>
@@ -482,12 +516,26 @@ function Violation({ navigation }) {
                           }
                           href="#"
                         >
-                      {item.driver_info.first_name} {item.driver_info.middle_initial}. {item.driver_info.last_name}                        </a>
+                          {item.driver_info.first_name}{" "}
+                          {item.driver_info.middle_initial}.{" "}
+                          {item.driver_info.last_name}{" "}
+                        </a>
                       </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
-                      {item.violation_info.violations_info.map((violation, index) => (
-                          <div key={index}>{violation}</div>
-                        ))}
+                      <TableCell
+                        style={{
+                          color: "black",
+                          height: "auto",
+                          textAlign: "left",
+                          width: 150,
+                          height: "auto",
+                          textAlign: "center",
+                        }}
+                      >
+                        {item.violation_info.violations_info.map(
+                          (violation, index) => (
+                            <div key={index}>{violation}</div>
+                          )
+                        )}
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
                         {item.date_issued}
@@ -497,7 +545,9 @@ function Violation({ navigation }) {
                       </TableCell>
 
                       <TableCell style={cellStylesBody.cell}>
-                      {item.user_ID.first_name} {item.user_ID.middle_name} {item.user_ID.last_name}                      </TableCell>
+                        {item.user_ID.first_name} {item.user_ID.middle_name}{" "}
+                        {item.user_ID.last_name}{" "}
+                      </TableCell>
                       <TableCell style={cellStylesBody.cell}>
                         {item.penalty_amount}
                       </TableCell>
@@ -542,7 +592,6 @@ function Violation({ navigation }) {
                                   json={StatSelect}
                                   width={150}
                                   onStatusChange={handleStatusChange}
-
                                 ></StatusSelection>
                               </div>
                             ) : item.ticket_status === "Overdue" ? (
@@ -568,23 +617,33 @@ function Violation({ navigation }) {
                               onClick={() => {
                                 const formData = {
                                   MFRTA_TCT_NO: item.MFRTA_TCT_NO,
-                                  ticket_status: editTicketStatus
+                                  ticket_status: editTicketStatus,
                                 };
-                                console.log(formData)
+                                console.log(formData);
 
-                                axios.patch(`ticket/register/${item.MFRTA_TCT_NO}/`, formData, {
-                                  headers: {
-                                    Authorization: `token ${Token}`
-                                  }
-                                }).then((response) => {
-                                  console.log(response.data)
-                                  window.alert("Successfully Edit Penalty Status")
-                                  handleSave(user.MFRTA_TCT_NO)
-                                }).catch((error) => {
-                                  window.alert("Unsuccessfully Edit Penalty Status")
-                                  console.log(error)
-                                })
-
+                                axios
+                                  .patch(
+                                    `ticket/register/${item.MFRTA_TCT_NO}/`,
+                                    formData,
+                                    {
+                                      headers: {
+                                        Authorization: `token ${Token}`,
+                                      },
+                                    }
+                                  )
+                                  .then((response) => {
+                                    console.log(response.data);
+                                    window.alert(
+                                      "Successfully Edit Penalty Status"
+                                    );
+                                    handleSave(user.MFRTA_TCT_NO);
+                                  })
+                                  .catch((error) => {
+                                    window.alert(
+                                      "Unsuccessfully Edit Penalty Status"
+                                    );
+                                    console.log(error);
+                                  });
                               }}
                             >
                               <Check style={{ height: 25 }} />
@@ -596,7 +655,9 @@ function Violation({ navigation }) {
                                 boxShadow: "none",
                                 color: "black",
                               }}
-                              onClick={() => handleCancelEdit(item.MFRTA_TCT_NO)}
+                              onClick={() =>
+                                handleCancelEdit(item.MFRTA_TCT_NO)
+                              }
                             >
                               <Close style={{ height: 25 }} />
                             </Button>
@@ -641,54 +702,56 @@ function Violation({ navigation }) {
           </div>
         </div>
         <div className="pagination">
-          <button
-            style={{ backgroundColor: "transparent", border: 0 }}
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(1)}
-          >
-            <p>Previous</p>
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => {
-            if (
-              totalPages <= 4 ||
-              index + 1 === 1 ||
-              index + 1 === totalPages ||
-              Math.abs(currentPage - (index + 1)) <= 1
-            ) {
-              return (
-                <button
-                  style={{
-                    border: 0,
-                    marginRight: 10,
-                    height: 40,
-                    width: 40,
-                    color: currentPage === index + 1 ? "white" : "black",
-                    borderRadius: 10,
-                    backgroundColor:
-                      currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
-                    fontSize: 20,
-                  }}
-                  key={index}
-                  onClick={() => handlePageChange(index + 1)}
-                  className={
-                    currentPage === index + 1 ? "activePage" : "inactivePage"
-                  }
-                >
-                  {index + 1}
-                </button>
-              );
-            } else if (Math.abs(currentPage - (index + 1)) === 2) {
-              return <span key={index}>...</span>;
-            }
-            return null;
-          })}
-          <button
-            style={{ backgroundColor: "transparent", border: 0 }}
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(totalPages)}
-          >
-            <p>Next</p>
-          </button>
+          <div className="label-page">
+            <Button
+              style={{ backgroundColor: "transparent", border: 0 }}
+              disabled={currentPage === 1}
+              onClick={prevPage}
+            >
+              PREVIOUS
+            </Button>
+            {Array.from({ length: totalPages }, (_, index) => {
+              if (
+                totalPages <= 4 ||
+                index + 1 === 1 ||
+                index + 1 === totalPages ||
+                Math.abs(currentPage - (index + 1)) <= 1
+              ) {
+                return (
+                  <button
+                    style={{
+                      border: 0,
+                      marginRight: 10,
+                      height: 40,
+                      width: 40,
+                      color: currentPage === index + 1 ? "white" : "black",
+                      borderRadius: 10,
+                      backgroundColor:
+                        currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
+                      fontSize: 20,
+                    }}
+                    key={index}
+                    onClick={() => handlePageChange(index + 1)}
+                    className={
+                      currentPage === index + 1 ? "activePage" : "inactivePage"
+                    }
+                  >
+                    {index + 1}
+                  </button>
+                );
+              } else if (Math.abs(currentPage - (index + 1)) === 2) {
+                return <span key={index}>...</span>;
+              }
+              return null;
+            })}
+            <Button
+              style={{ backgroundColor: "transparent", border: 0 }}
+              disabled={currentPage === lastPageIndex}
+              onClick={nextPage}
+            >
+              NEXT
+            </Button>
+          </div>
         </div>
       </div>
     </div>

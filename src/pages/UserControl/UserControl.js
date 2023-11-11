@@ -43,7 +43,7 @@ import SelectRound from "../../components/SelectRound";
 import StatusSelection from "../../components/StatusSelection";
 import stats from "./../../JSON/is_active.json";
 import { useSelector } from "react-redux";
-import axios from '../../plugins/axios'
+import axios from "../../plugins/axios";
 
 const cellStylesHeader = {
   cell: {
@@ -67,22 +67,64 @@ const cellStylesBody = {
 };
 
 function UserControl(props) {
-
-
   // jayde
-  const [userData, setUserData] = useState([])
-  const Token = useSelector((state) => state.auth.token)
+  const [userData, setUserData] = useState([]);
+  const Token = useSelector((state) => state.auth.token);
 
   // add user
   const [addUser, setAddUser] = useState({
-    email: '',
-    role: '',
-    position: '',
-    first_name: '',
-    last_name: '',
-    middle_name: '',
-    username: '',
-  })
+    email: "",
+    role: "",
+    position: "",
+    first_name: "",
+    last_name: "",
+    middle_name: "",
+    username: "",
+  });
+
+  const [filteredData, setFilteredData] = useState(users);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [table, setTable] = useState(true);
+  const [details, setDetails] = useState(true);
+  const [addScreen, setAddScreen] = useState(false);
+  const [proceed, setProceed] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [editingRow, setEditingRow] = useState(null);
+  const [deletingRow, setDeletingRow] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const rowsPerPage = 5;
+
+  const lastPageIndex = Math.ceil(userData.length / rowsPerPage);
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = Math.min(startIndex + rowsPerPage, userData.length);
+  const visibleData = userData.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(userData.length / rowsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const nextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, lastPageIndex));
+  };
+
+  const prevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    const filtered = users.filter(
+      (item) =>
+        item.firstName.toLowerCase().includes(query.toLowerCase()) ||
+        item.lastName.toLowerCase().includes(query.toLowerCase()) ||
+        item.id.toString().includes(query)
+    );
+    setFilteredData(filtered);
+    setCurrentPage(1);
+  };
 
   const handleRoleChange = (selectedRole) => {
     setAddUser((prevAddUser) => ({
@@ -98,40 +140,17 @@ function UserControl(props) {
     }));
   };
 
-
-
   // edit user active/inactive
-  const [editIsActive, setEditIsActive] = useState('')
+  const [editIsActive, setEditIsActive] = useState("");
 
   const handleStatusChange = (newStatus) => {
-    setEditIsActive(newStatus)
-  };
-
-  const [filteredData, setFilteredData] = useState(users);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [table, setTable] = useState(true);
-  const [details, setDetails] = useState(true);
-  const [addScreen, setAddScreen] = useState(false);
-  const [proceed, setProceed] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    const filtered = users.filter(
-      (item) =>
-        item.firstName.toLowerCase().includes(query.toLowerCase()) ||
-        item.lastName.toLowerCase().includes(query.toLowerCase()) ||
-        item.id.toString().includes(query)
-    );
-    setFilteredData(filtered);
-    setCurrentPage(1); // Reset to first page when searching
+    setEditIsActive(newStatus);
   };
 
   const handleBack = () => {
     setTable(!table);
     setProceed(!proceed);
   };
-  const [editingRow, setEditingRow] = useState(null);
-  const [deletingRow, setDeletingRow] = useState(null);
 
   const handleEdit = (rowId) => {
     setEditingRow(rowId);
@@ -147,31 +166,27 @@ function UserControl(props) {
   };
 
   const handleSubmit = () => {
+    axios
+      .post("accounts/users/", addUser)
+      .then((response) => {
+        window.alert("User created successfully");
+        setAddScreen(!addScreen);
+        setTable(!table);
 
-
-    axios.post('accounts/users/', addUser).then((response) => {
-      window.alert("User created successfully");
-      setAddScreen(!addScreen);
-      setTable(!table);
-
-      setUserData({
-        email: '',
-        role: '',
-        position: '',
-        first_name: '',
-        last_name: '',
-        middle_name: '',
-        username: '',
+        setUserData({
+          email: "",
+          role: "",
+          position: "",
+          first_name: "",
+          last_name: "",
+          middle_name: "",
+          username: "",
+        });
       })
-    }).catch((error) => {
-      console.log(error)
-      console.log(addUser)
-    })
-
-
-
-
-
+      .catch((error) => {
+        console.log(error);
+        console.log(addUser);
+      });
   };
 
   const handleDownload = () => {
@@ -191,19 +206,6 @@ function UserControl(props) {
     setDeletingRow(null);
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const rowsPerPage = 5;
-
-  const lastRowIndex = currentPage * rowsPerPage;
-  const firstRowIndex = lastRowIndex - rowsPerPage;
-  const currentRows = filteredData.slice(firstRowIndex, lastRowIndex);
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
   const offenseCountMap = {};
   filteredData.forEach((item) => {
     if (offenseCountMap[item.name]) {
@@ -214,19 +216,20 @@ function UserControl(props) {
   });
 
   useEffect(() => {
-
-    axios.get('accounts/users', {
-      headers: {
-        Authorization: `token ${Token}`
-      }
-    }).then((response) => {
-      setUserData(response.data)
-      console.log(response.data)
-    }).catch((error) => {
-      window.alert("Error Fetching Users Data")
-    })
-
-  }, [Token])
+    axios
+      .get("accounts/users/", {
+        headers: {
+          Authorization: `token ${Token}`,
+        },
+      })
+      .then((response) => {
+        setUserData(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        window.alert("Error Fetching Users Data");
+      });
+  }, [Token]);
 
   return (
     <div className="container1">
@@ -265,8 +268,9 @@ function UserControl(props) {
                       value={addUser.first_name}
                       onChange={(e) => {
                         setAddUser({
-                          ...addUser, first_name: e.target.value
-                        })
+                          ...addUser,
+                          first_name: e.target.value,
+                        });
                       }}
                     ></InputRound>
                     <InputRound
@@ -276,8 +280,9 @@ function UserControl(props) {
                       value={addUser.middle_name}
                       onChange={(e) => {
                         setAddUser({
-                          ...addUser, middle_name: e.target.value
-                        })
+                          ...addUser,
+                          middle_name: e.target.value,
+                        });
                       }}
                     ></InputRound>
                     <InputRound
@@ -287,8 +292,9 @@ function UserControl(props) {
                       value={addUser.last_name}
                       onChange={(e) => {
                         setAddUser({
-                          ...addUser, last_name: e.target.value
-                        })
+                          ...addUser,
+                          last_name: e.target.value,
+                        });
                       }}
                     ></InputRound>
                     <SelectRound
@@ -296,7 +302,9 @@ function UserControl(props) {
                       height={"5vh"}
                       title={"Role"}
                       selection={"role"}
-                      onChange={(selectedRole) => handleRoleChange(selectedRole)}
+                      onChange={(selectedRole) =>
+                        handleRoleChange(selectedRole)
+                      }
                     ></SelectRound>
                   </div>
                   <div>
@@ -305,8 +313,9 @@ function UserControl(props) {
                       height={"5vh"}
                       title={"Position"}
                       selection={"position"}
-                      onChange={(selectedRole) => handlePositionChange(selectedRole)}
-
+                      onChange={(selectedRole) =>
+                        handlePositionChange(selectedRole)
+                      }
                     ></SelectRound>
                     <InputRound
                       title={"Email"}
@@ -316,8 +325,9 @@ function UserControl(props) {
                       value={addUser.email}
                       onChange={(e) => {
                         setAddUser({
-                          ...addUser, email: e.target.value
-                        })
+                          ...addUser,
+                          email: e.target.value,
+                        });
                       }}
                     ></InputRound>
                     <InputRound
@@ -327,8 +337,9 @@ function UserControl(props) {
                       value={addUser.username}
                       onChange={(e) => {
                         setAddUser({
-                          ...addUser, username: e.target.value
-                        })
+                          ...addUser,
+                          username: e.target.value,
+                        });
                       }}
                     ></InputRound>
                   </div>
@@ -429,7 +440,7 @@ function UserControl(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {userData.map((user, index) => (
+                      {visibleData.map((user, index) => (
                         <TableRow
                           className={`table-body-row ${
                             index % 2 === 0 ? "even-row" : "odd-row"
@@ -532,7 +543,9 @@ function UserControl(props) {
                                 ) : user.is_active === true ? (
                                   `Active`
                                 ) : (
-                                  <span>{user.is_active ? ('Active') : ('Inactive')}</span>
+                                  <span>
+                                    {user.is_active ? "Active" : "Inactive"}
+                                  </span>
                                 )}
                               </p>
                             </div>
@@ -552,26 +565,33 @@ function UserControl(props) {
                                     marginLeft: 10,
                                   }}
                                   onClick={() => {
-
                                     const formData = {
                                       id: user.id,
-                                      is_active: editIsActive
+                                      is_active: editIsActive,
                                     };
 
-                                    
-                                    axios.patch(`accounts/users/${user.id}/`, formData, {
-                                      headers: {
-                                        Authorization: `token ${Token}`
-                                      }
-                                    }).then((response) => {
-                                      window.alert("Successfully Edit User Status")
-                                      handleSave(user.id)
-                                    }).catch((error) => {
-                                      window.alert("Unsuccessfully Edit User Status")
-                                      console.log(error)
-                                    })
-
-
+                                    axios
+                                      .patch(
+                                        `accounts/users/${user.id}/`,
+                                        formData,
+                                        {
+                                          headers: {
+                                            Authorization: `token ${Token}`,
+                                          },
+                                        }
+                                      )
+                                      .then((response) => {
+                                        window.alert(
+                                          "Successfully Edit User Status"
+                                        );
+                                        handleSave(user.id);
+                                      })
+                                      .catch((error) => {
+                                        window.alert(
+                                          "Unsuccessfully Edit User Status"
+                                        );
+                                        console.log(error);
+                                      });
                                   }}
                                 >
                                   <Check style={{ height: 25 }} />
@@ -654,56 +674,58 @@ function UserControl(props) {
               </div>
             </div>
             <div className="pagination">
-              <button
-                style={{ backgroundColor: "transparent", border: 0 }}
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(1)}
-              >
-                <p>Previous</p>
-              </button>
-              {Array.from({ length: totalPages }, (_, index) => {
-                if (
-                  totalPages <= 4 ||
-                  index + 1 === 1 ||
-                  index + 1 === totalPages ||
-                  Math.abs(currentPage - (index + 1)) <= 1
-                ) {
-                  return (
-                    <button
-                      style={{
-                        border: 0,
-                        marginRight: 10,
-                        height: 40,
-                        width: 40,
-                        color: currentPage === index + 1 ? "white" : "black",
-                        borderRadius: 10,
-                        backgroundColor:
-                          currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0", // Apply green for active, yellow for inactive
-                        fontSize: 20,
-                      }}
-                      key={index}
-                      onClick={() => handlePageChange(index + 1)}
-                      className={
-                        currentPage === index + 1
-                          ? "activePage"
-                          : "inactivePage"
-                      } // Apply activePage class for active, inactivePage class for inactive
-                    >
-                      {index + 1}
-                    </button>
-                  );
-                } else if (Math.abs(currentPage - (index + 1)) === 2) {
-                  return <span key={index}>...</span>;
-                }
-                return null;
-              })}
-              <button
-                style={{ backgroundColor: "transparent", border: 0 }}
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(totalPages)}
-              >
-                <p>Next</p>
-              </button>
+              <div className="label-page">
+                <Button
+                  style={{ backgroundColor: "transparent", border: 0 }}
+                  disabled={currentPage === 1}
+                  onClick={prevPage}
+                >
+                  PREVIOUS
+                </Button>
+                {Array.from({ length: totalPages }, (_, index) => {
+                  if (
+                    totalPages <= 4 ||
+                    index + 1 === 1 ||
+                    index + 1 === totalPages ||
+                    Math.abs(currentPage - (index + 1)) <= 1
+                  ) {
+                    return (
+                      <button
+                        style={{
+                          border: 0,
+                          marginRight: 10,
+                          height: 40,
+                          width: 40,
+                          color: currentPage === index + 1 ? "white" : "black",
+                          borderRadius: 10,
+                          backgroundColor:
+                            currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
+                          fontSize: 20,
+                        }}
+                        key={index}
+                        onClick={() => handlePageChange(index + 1)}
+                        className={
+                          currentPage === index + 1
+                            ? "activePage"
+                            : "inactivePage"
+                        }
+                      >
+                        {index + 1}
+                      </button>
+                    );
+                  } else if (Math.abs(currentPage - (index + 1)) === 2) {
+                    return <span key={index}>...</span>;
+                  }
+                  return null;
+                })}
+                <Button
+                  style={{ backgroundColor: "transparent", border: 0 }}
+                  disabled={currentPage === lastPageIndex}
+                  onClick={nextPage}
+                >
+                  NEXT
+                </Button>
+              </div>
             </div>
           </>
         ) : null}

@@ -12,7 +12,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import axios from '../../plugins/axios'
+import axios from "../../plugins/axios";
 import { useDispatch } from "react-redux";
 import { setLogin } from "./authSlice";
 
@@ -22,46 +22,42 @@ function LoginPage({ onClick }) {
     useState(false);
   const [email, setEmail] = useState("");
   const [credentials, setCredentials] = useState({
-    username: 'jaydemike15',
-    password: '2023@engracia'
-  })
+    username: "jaydemike15",
+    password: "2023@engracia",
+  });
 
   const dispatch = useDispatch();
 
   const handleLogin = () => {
+    axios
+      .post("accounts/token/login/", credentials)
+      .then((response) => {
+        const id_token = response.data.auth_token;
+        console.log(id_token);
 
-    axios.post('accounts/token/login/', credentials).then((response) => {
-      
-      const id_token = response.data.auth_token
-      console.log(id_token)
+        axios
+          .get("accounts/users/me/", {
+            headers: {
+              Authorization: `token ${id_token}`,
+            },
+          })
+          .then((response) => {
+            const role = response.data.role;
 
-      axios.get('accounts/users/me', {
-        headers: {
-          Authorization: `token ${id_token}`
-        }
-      }).then((response) => {
-
-        const role = response.data.role
-
-        if (role == 'ADMIN' || role == 'TREASURER') {
-          alert(`Welcome ${response.data.last_name}, your role is ${role}`)
-          dispatch(setLogin(id_token));
-        }else {
-          alert(`${role} you dont have access on this site`)
-        }
-
-      }).catch((error) => {
-        alert("Error Please Try Again Later")
+            if (role == "ADMIN" || role == "TREASURER") {
+              alert(`Welcome ${response.data.last_name}, your role is ${role}`);
+              dispatch(setLogin(id_token));
+            } else {
+              alert(`${role} you dont have access on this site`);
+            }
+          })
+          .catch((error) => {
+            alert("Error Please Try Again Later");
+          });
       })
-
-    }).catch((error) => {
-      alert("Error! Please try again later")
-    })
-  
-
-
-
-    
+      .catch((error) => {
+        alert("Error! Please try again later");
+      });
   };
 
   const openForgotPasswordModal = () => {
@@ -93,11 +89,16 @@ function LoginPage({ onClick }) {
             }}
           >
             <div>
-              <InputCss title={"username"} value={credentials.username} onChange={(e) => {
-                setCredentials({
-                  ...credentials, username: e.target.value
-                })
-              }}></InputCss>
+              <InputCss
+                title={"username"}
+                value={credentials.username}
+                onChange={(e) => {
+                  setCredentials({
+                    ...credentials,
+                    username: e.target.value,
+                  });
+                }}
+              ></InputCss>
             </div>
             <div>
               <InputCssPassword
@@ -106,8 +107,9 @@ function LoginPage({ onClick }) {
                 value={credentials.password}
                 onChange={(e) => {
                   setCredentials({
-                    ...credentials, password: e.target.value
-                  })
+                    ...credentials,
+                    password: e.target.value,
+                  });
                 }}
               ></InputCssPassword>
             </div>

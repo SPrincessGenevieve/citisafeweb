@@ -10,6 +10,9 @@ import {
   Edit,
   RecordVoiceOver,
   VoiceOverOff,
+  ArrowBackIos,
+  ArrowForwardIos,
+  Delete,
 } from "@mui/icons-material";
 import { useState } from "react";
 import {
@@ -29,12 +32,11 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import ViolationTable from "./../../JSON/ViolationTable.json";
 import StatusSelection from "../../components/StatusSelection";
 import stats from "./../../JSON/Stats.json";
 import RoundButton from "../../components/RoundButton";
 import { useSelector } from "react-redux";
-import axios from '../../plugins/axios'
+import axios from "../../plugins/axios";
 
 const cellStylesHeader = {
   cell: {
@@ -58,96 +60,127 @@ const cellStylesBody = {
 };
 
 export default function ViolationList(props) {
+  const Token = useSelector((state) => state.auth.token);
+  const [penaltyData, setPenaltyData] = useState([]);
+  const [editPenaltyStatus, setEditPenaltyStatus] = useState("");
+  const [violationData, setViolationData] = useState([]);
+  const [editViolation, setEditViolation] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [penalty, setPenalty] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [editingRow, setEditingRow] = useState(null);
+  const [deletingRow, setDeletingRow] = useState(null);
+  const [addPenalty, setAddPenalty] = useState({
+    description: "",
+    amount: "",
+    status: "Active",
+  });
 
-  // JAYDE modifications
+  //PENALTY TABLE PAGINATION
 
-  // get token
-  const Token = useSelector((state) => state.auth.token)
+  const [currentPagePenalty, setCurrentPagePenalty] = useState(1);
+  const rowsPerPagePenalty = 5;
 
-  // penalty
-  const [penaltyData, setPenaltyData] = useState([])
+  const lastPageIndexPenalty = Math.ceil(
+    penaltyData.length / rowsPerPagePenalty
+  );
 
-  const [addPenalty,setAddPenalty] = useState({
-    description: '',
-    amount: '',
-    status: 'Active',
-  })
+  const startIndexPenalty = (currentPagePenalty - 1) * rowsPerPagePenalty;
+  const endIndexPenalty = Math.min(
+    startIndexPenalty + rowsPerPagePenalty,
+    penaltyData.length
+  );
 
-  // edit penalty
-  const [editPenaltyStatus, setEditPenaltyStatus] = useState('')
-  
-  const handleStatusChange = (newStatus) => {
-    setEditPenaltyStatus(newStatus)
+  const visiblePenaltyData = penaltyData.slice(
+    startIndexPenalty,
+    endIndexPenalty
+  );
+
+  const totalPagesPenalty = Math.ceil(penaltyData.length / rowsPerPagePenalty);
+
+  //VIOLATION TABLE PAGINATION
+  const [currentPageViolation, setCurrentPageViolation] = useState(1);
+  const rowsPerPageViolation = 6;
+
+  const lastPageIndexViolation = Math.ceil(
+    violationData.length / rowsPerPageViolation
+  );
+
+  const startIndexViolation = (currentPageViolation - 1) * rowsPerPageViolation;
+  const endIndexViolation = Math.min(
+    startIndexViolation + rowsPerPageViolation,
+    violationData.length
+  );
+
+  const visibleViolationData = violationData.slice(
+    startIndexViolation,
+    endIndexViolation
+  );
+
+  const totalPagesViolation = Math.ceil(
+    violationData.length / rowsPerPageViolation
+  );
+
+  const handlePageChangePenalty = (page) => {
+    console.log("Changing page to:", page);
+    setCurrentPagePenalty(page);
   };
 
+  const handlePageChangeViolation = (page) => {
+    console.log("Changing page to:", page);
+    setCurrentPageViolation(page);
+  };
 
-  // get violations
-  const [violationData, setViolationData] = useState([])
-  
-  // add violations
+  const nextPageViolation = () => {
+    setCurrentPageViolation((prevPage) =>
+      Math.min(prevPage + 1, lastPageIndexViolation)
+    );
+  };
+
+  const prevPageViolation = () => {
+    setCurrentPageViolation((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const nextPagePenalty = () => {
+    setCurrentPagePenalty((prevPage) =>
+      Math.min(prevPage + 1, lastPageIndexPenalty)
+    );
+  };
+
+  const prevPagePenalty = () => {
+    setCurrentPagePenalty((prevPage) => Math.max(prevPage - 1, 1));
+  };
+  const handleStatusChange = (newStatus) => {
+    setEditPenaltyStatus(newStatus);
+  };
+
   const [addViolation, setAddViolation] = useState({
-    violation_type: '',
-    penalty_ID: '',
-  })
-
-  // edit violations
-  const [editViolation, setEditViolation] = useState('')
-
+    violation_type: "",
+    penalty_ID: "",
+  });
 
   const handleAddViolation = () => {
-
-      axios.post('ticket/violation/', addViolation, {
+    axios
+      .post("ticket/violation/", addViolation, {
         headers: {
-          Authorization: `token ${Token}`
-        }
-      }).then((response) => {
+          Authorization: `token ${Token}`,
+        },
+      })
+      .then((response) => {
         window.alert("Violation added successfully!");
 
         setAddViolation({
-          violation_type: '',
-          penalty_ID: '',
-        })
+          violation_type: "",
+          penalty_ID: "",
+        });
         handleCloseModal();
-
-      }).catch((error) => {
+      })
+      .catch((error) => {
         window.alert("Something went wrong, Please Try Again Later");
         handleCloseModal();
-        console.log(addViolation)
-      })
-
-  }
-
-
-
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState(ViolationTable);
-  const [filteredDataViolation, setFilteredDataViolation] =
-    useState(penaltyData);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [penaltyPage, setPenaltyPage] = useState(1);
-  const [penalty, setPenalty] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
-  const [violationDescription, setViolationDescription] = useState("");
-  const [selectedPenalty, setSelectedPenalty] = useState("");
-
-  const rowsPerPage = 7;
-
-  const lastRowIndex = currentPage * rowsPerPage;
-  const firstRowIndex = lastRowIndex - rowsPerPage;
-  const currentRows = filteredData.slice(firstRowIndex, lastRowIndex);
-
-  const lastRowIndexPenalty = penaltyPage * rowsPerPage;
-  const firstRowIndexPenalty = lastRowIndexPenalty - rowsPerPage;
-  const penaltyRows = filteredDataViolation.slice(
-    firstRowIndexPenalty,
-    lastRowIndexPenalty
-  );
-
-  const nextRows = filteredDataViolation.slice(firstRowIndex, lastRowIndex);
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const [editingRow, setEditingRow] = useState(null);
-  const [deletingRow, setDeletingRow] = useState(null);
+        console.log(addViolation);
+      });
+  };
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -158,54 +191,39 @@ export default function ViolationList(props) {
   };
 
   const handleSubmit = () => {
-
-    axios.post('ticket/penalty/', addPenalty, {
-      headers: {
-        Authorization: `token ${Token}`
-      }
-    }).then((response) => {
-      window.alert("Penalty added successfully!");
-
-      setAddPenalty({
-        description: '',
-        amount: '',
-        status: 'Active',
+    axios
+      .post("ticket/penalty/", addPenalty, {
+        headers: {
+          Authorization: `token ${Token}`,
+        },
       })
+      .then((response) => {
+        window.alert("Penalty added successfully!");
 
-      handleCloseModal();
-    }).catch((error) => {
-      window.alert("Something went wrong, Please Try Again Later");
-      handleCloseModal();
-      console.log(addPenalty)
-    })
+        setAddPenalty({
+          description: "",
+          amount: "",
+          status: "Active",
+        });
 
-  };
-
-
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const handlePagePenaltyChange = (page) => {
-    setPenaltyPage(page);
+        handleCloseModal();
+      })
+      .catch((error) => {
+        window.alert("Something went wrong, Please Try Again Later");
+        handleCloseModal();
+        console.log(addPenalty);
+      });
   };
 
   const handleEdit = (rowId) => {
     setEditingRow(rowId);
   };
 
-  const handleDelete = (rowId) => {
-    setDeletingRow(rowId);
-  };
-
   const handleSave = () => {
-    // Logic to save changes here
     setEditingRow(null);
   };
 
   const handleCheck = () => {
-    // Logic to confirm deletion here
     setDeletingRow(null);
   };
 
@@ -222,29 +240,33 @@ export default function ViolationList(props) {
   };
 
   useEffect(() => {
-    axios.get('ticket/penalty/', {
-      headers: {
-        Authorization: `token ${Token}`
-      }
-    }).then((response) => {
-      setPenaltyData(response.data);
-    }).catch(error => {
-      console.log(error);
-    });
+    axios
+      .get("ticket/penalty/", {
+        headers: {
+          Authorization: `token ${Token}`,
+        },
+      })
+      .then((response) => {
+        setPenaltyData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-
-    axios.get('ticket/violation/', {
-      headers: {
-        Authorization: `token ${Token}`
-      }
-    }).then((response) => {
-      console.log(response.data)
-      setViolationData(response.data);
-    }).catch(error => {
-      console.log(error);
-    });
-  }, [Token]); // Specify dependencies that trigger the effect
-
+    axios
+      .get("ticket/violation/", {
+        headers: {
+          Authorization: `token ${Token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setViolationData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [Token]);
 
   return (
     <div className="container1">
@@ -312,7 +334,8 @@ export default function ViolationList(props) {
                         value={addPenalty.description}
                         onChange={(e) =>
                           setAddPenalty({
-                            ...addPenalty, description: e.target.value
+                            ...addPenalty,
+                            description: e.target.value,
                           })
                         }
                         style={{ marginBottom: 20 }}
@@ -325,11 +348,12 @@ export default function ViolationList(props) {
                         value={addPenalty.amount}
                         onChange={(e) =>
                           setAddPenalty({
-                            ...addPenalty, amount: e.target.value
+                            ...addPenalty,
+                            amount: e.target.value,
                           })
                         }
                         style={{ marginBottom: 20 }}
-                      />                      
+                      />
                       <TextField
                         label="Penalty Status"
                         variant="outlined"
@@ -420,7 +444,7 @@ export default function ViolationList(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {penaltyData.map((user, index) => (
+                      {visiblePenaltyData.map((user, index) => (
                         <TableRow
                           className={`table-body-row ${
                             index % 2 === 0 ? "even-row" : "odd-row"
@@ -487,8 +511,6 @@ export default function ViolationList(props) {
                                         json={stats}
                                         onStatusChange={handleStatusChange}
                                       ></StatusSelection>
-
-
                                     </div>
                                   </div>
                                 ) : user.status === "Active" ? (
@@ -514,26 +536,34 @@ export default function ViolationList(props) {
                                     marginLeft: 10,
                                   }}
                                   onClick={() => {
-
                                     const formData = {
                                       id: user.id,
-                                      status: editPenaltyStatus
+                                      status: editPenaltyStatus,
                                     };
-                                    console.log(formData)
+                                    console.log(formData);
 
-                                    axios.patch(`ticket/penalty/${user.id}/`, formData, {
-                                      headers: {
-                                        Authorization: `token ${Token}`
-                                      }
-                                    }).then((response) => {
-                                      window.alert("Successfully Edit Penalty Status")
-                                      handleSave(user.id)
-                                    }).catch((error) => {
-                                      window.alert("Unsuccessfully Edit Penalty Status")
-                                      console.log(error)
-                                    })
-
-
+                                    axios
+                                      .patch(
+                                        `ticket/penalty/${user.id}/`,
+                                        formData,
+                                        {
+                                          headers: {
+                                            Authorization: `token ${Token}`,
+                                          },
+                                        }
+                                      )
+                                      .then((response) => {
+                                        window.alert(
+                                          "Successfully Edit Penalty Status"
+                                        );
+                                        handleSave(user.id);
+                                      })
+                                      .catch((error) => {
+                                        window.alert(
+                                          "Unsuccessfully Edit Penalty Status"
+                                        );
+                                        console.log(error);
+                                      });
                                   }}
                                 >
                                   <Check style={{ height: 25 }} />
@@ -615,56 +645,66 @@ export default function ViolationList(props) {
                 </TableContainer>
               </div>
               <div className="pagination">
-                <button
-                  style={{ backgroundColor: "transparent", border: 0 }}
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(1)}
-                >
-                  <p>Previous</p>
-                </button>
-                {Array.from({ length: totalPages }, (_, index) => {
-                  if (
-                    totalPages <= 4 ||
-                    index + 1 === 1 ||
-                    index + 1 === totalPages ||
-                    Math.abs(currentPage - (index + 1)) <= 1
-                  ) {
-                    return (
-                      <button
-                        style={{
-                          border: 0,
-                          marginRight: 10,
-                          height: 40,
-                          width: 40,
-                          color: currentPage === index + 1 ? "white" : "black",
-                          borderRadius: 10,
-                          backgroundColor:
-                            currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
-                          fontSize: 20,
-                        }}
-                        key={index}
-                        onClick={() => handlePageChange(index + 1)}
-                        className={
-                          currentPage === index + 1
-                            ? "activePage"
-                            : "inactivePage"
-                        }
-                      >
-                        {index + 1}
-                      </button>
-                    );
-                  } else if (Math.abs(currentPage - (index + 1)) === 2) {
-                    return <span key={index}>...</span>;
-                  }
-                  return null;
-                })}
-                <button
-                  style={{ backgroundColor: "transparent", border: 0 }}
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(totalPages)}
-                >
-                  <p>Next</p>
-                </button>
+                {/*PAGINATION STARTS HERE*/}
+                <div className="label-page">
+                  <Button
+                    style={{ backgroundColor: "transparent", border: 0 }}
+                    disabled={currentPagePenalty === 1}
+                    onClick={prevPagePenalty}
+                  >
+                    PREVIOUS
+                  </Button>
+                  {Array.from({ length: totalPagesPenalty }, (_, index) => {
+                    if (
+                      totalPagesPenalty <= 4 ||
+                      index + 1 === 1 ||
+                      index + 1 === totalPagesPenalty ||
+                      Math.abs(currentPagePenalty - (index + 1)) <= 1
+                    ) {
+                      return (
+                        <button
+                          style={{
+                            border: 0,
+                            marginRight: 10,
+                            height: 40,
+                            width: 40,
+                            color:
+                              currentPagePenalty === index + 1
+                                ? "white"
+                                : "black",
+                            borderRadius: 10,
+                            backgroundColor:
+                              currentPagePenalty === index + 1
+                                ? "#3e7c1f"
+                                : "#e0e0e0",
+                            fontSize: 20,
+                          }}
+                          key={index}
+                          onClick={() => handlePageChangePenalty(index + 1)}
+                          className={
+                            currentPagePenalty === index + 1
+                              ? "activePage"
+                              : "inactivePage"
+                          }
+                        >
+                          {index + 1}
+                        </button>
+                      );
+                    } else if (
+                      Math.abs(currentPagePenalty - (index + 1)) === 2
+                    ) {
+                      return <span key={index}>...</span>;
+                    }
+                    return null;
+                  })}
+                  <Button
+                    style={{ backgroundColor: "transparent", border: 0 }}
+                    disabled={currentPagePenalty === lastPageIndexPenalty}
+                    onClick={nextPagePenalty}
+                  >
+                    NEXT
+                  </Button>
+                </div>
               </div>
             </div>
           </>
@@ -709,7 +749,8 @@ export default function ViolationList(props) {
                         value={addViolation.violation_type}
                         onChange={(e) =>
                           setAddViolation({
-                            ...addViolation, violation_type: e.target.value
+                            ...addViolation,
+                            violation_type: e.target.value,
                           })
                         }
                         style={{ marginBottom: 20 }}
@@ -726,9 +767,12 @@ export default function ViolationList(props) {
                           labelId="penalty-label"
                           id="penalty"
                           value={addViolation.penalty_ID}
-                          onChange={(e) => setAddViolation({
-                            ...addViolation, penalty_ID: e.target.value
-                          })}
+                          onChange={(e) =>
+                            setAddViolation({
+                              ...addViolation,
+                              penalty_ID: e.target.value,
+                            })
+                          }
                           label="Select Penalty"
                         >
                           {penaltyData
@@ -819,204 +863,228 @@ export default function ViolationList(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {violationData.filter(user => user.penalty_info.status === "Active").map((user, index) => (
-                        <TableRow
-                          className={`table-body-row ${
-                            index % 2 === 0 ? "even-row" : "odd-row"
-                          }`}
-                          key={index}
-                        >
-                          <TableCell style={cellStylesBody.cell}>
-                            {user.id}
-                          </TableCell>
-                          <TableCell style={cellStylesBody.cell}>
-                            {user.violation_type}
-                          </TableCell>
-                          <TableCell style={cellStylesBody.cell}>
-                            {user.penalty_ID}
-                          </TableCell>
-                          <TableCell style={cellStylesBody.cell}>
-                            {editingRow === user.id ? (
-                              <div className="input-css-container">
-                                <FormControl
-                                  variant="outlined"
-                                  fullWidth
-                                >
-                                  <InputLabel id="penalty-label">
-                                    Select Penalty
-                                  </InputLabel>
-                                  <Select
-                                    labelId="penalty-label"
-                                    id="penalty"
-                                    value={editViolation}
-                                    onChange={(e) => setEditViolation(e.target.value)}
-                                    label="Select Penalty"
-                                  >
-                                    {penaltyData
-                                      .filter((user) => user.status === "Active")
-                                      .map((user, index) => (
-                                        <MenuItem key={index} value={user.id}>
-                                          {user.description}
-                                        </MenuItem>
-                                      ))}
-                                  </Select>
-                                </FormControl>
-                              </div>
-                            ) : user.status === "Active" ? (
-                              `Active`
-                            ) : (
-                              <p>{user.penalty_info.description}</p>
-                            )}
-                          </TableCell>
-
-                          <TableCell
-                            className="row"
-                            style={cellStylesBody.cell}
+                      {visibleViolationData
+                        .filter((user) => user.penalty_info.status === "Active")
+                        .map((user, index) => (
+                          <TableRow
+                            className={`table-body-row ${
+                              index % 2 === 0 ? "even-row" : "odd-row"
+                            }`}
+                            key={index}
                           >
-                            {editingRow === user.id ? (
-                              <>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                    marginLeft: 10,
-                                  }}
-                                  onClick={() => {
-                                    const formData = {
-                                      id: user.id,
-                                      penalty_ID: editViolation
-                                    };
-                                    console.log(formData)
-
-                                    axios.patch(`ticket/violation/${user.id}/`, formData, {
-                                      headers: {
-                                        Authorization: `token ${Token}`
+                            <TableCell style={cellStylesBody.cell}>
+                              {user.id}
+                            </TableCell>
+                            <TableCell style={cellStylesBody.cell}>
+                              {user.violation_type}
+                            </TableCell>
+                            <TableCell style={cellStylesBody.cell}>
+                              {user.penalty_ID}
+                            </TableCell>
+                            <TableCell style={cellStylesBody.cell}>
+                              {editingRow === user.id ? (
+                                <div className="input-css-container">
+                                  <FormControl variant="outlined" fullWidth>
+                                    <InputLabel id="penalty-label">
+                                      Select Penalty
+                                    </InputLabel>
+                                    <Select
+                                      labelId="penalty-label"
+                                      id="penalty"
+                                      value={editViolation}
+                                      onChange={(e) =>
+                                        setEditViolation(e.target.value)
                                       }
-                                    }).then((response) => {
-                                      window.alert("Successfully Edit Violation")
-                                      handleSave(user.id)
-                                    }).catch((error) => {
-                                      window.alert("Unsuccessfully Edit Penalty Status")
-                                      console.log(error)
-                                    })                                    
-                                  }}
-                                >
-                                  <Check style={{ height: 25 }} />
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                  }}
-                                  onClick={handleCancelEdit}
-                                >
-                                  <Close style={{ height: 25 }} />
-                                </Button>
-                              </>
-                            ) : deletingRow === user.id ? (
-                              <>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                    marginLeft: 10,
-                                  }}
-                                  onClick={() => handleCheck(user.id)}
-                                >
-                                  <Check style={{ height: 25 }} />
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                  }}
-                                  onClick={handleCancelDelete}
-                                >
-                                  <Close style={{ height: 25 }} />
-                                </Button>
-                              </>
-                            ) : (
-                              <>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                    marginLeft: 10,
-                                  }}
-                                  onClick={() => handleEdit(user.id)}
-                                >
-                                  <Edit style={{ height: 25 }} />
-                                </Button>
-                              </>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                                      label="Select Penalty"
+                                    >
+                                      {penaltyData
+                                        .filter(
+                                          (user) => user.status === "Active"
+                                        )
+                                        .map((user, index) => (
+                                          <MenuItem key={index} value={user.id}>
+                                            {user.description}
+                                          </MenuItem>
+                                        ))}
+                                    </Select>
+                                  </FormControl>
+                                </div>
+                              ) : user.status === "Active" ? (
+                                `Active`
+                              ) : (
+                                <p>{user.penalty_info.description}</p>
+                              )}
+                            </TableCell>
+
+                            <TableCell
+                              className="row"
+                              style={cellStylesBody.cell}
+                            >
+                              {editingRow === user.id ? (
+                                <>
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "black",
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => {
+                                      const formData = {
+                                        id: user.id,
+                                        penalty_ID: editViolation,
+                                      };
+                                      console.log(formData);
+
+                                      axios
+                                        .patch(
+                                          `ticket/violation/${user.id}/`,
+                                          formData,
+                                          {
+                                            headers: {
+                                              Authorization: `token ${Token}`,
+                                            },
+                                          }
+                                        )
+                                        .then((response) => {
+                                          window.alert(
+                                            "Successfully Edit Violation"
+                                          );
+                                          handleSave(user.id);
+                                        })
+                                        .catch((error) => {
+                                          window.alert(
+                                            "Unsuccessfully Edit Penalty Status"
+                                          );
+                                          console.log(error);
+                                        });
+                                    }}
+                                  >
+                                    <Check style={{ height: 25 }} />
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "black",
+                                    }}
+                                    onClick={handleCancelEdit}
+                                  >
+                                    <Close style={{ height: 25 }} />
+                                  </Button>
+                                </>
+                              ) : deletingRow === user.id ? (
+                                <>
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "black",
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => handleCheck(user.id)}
+                                  >
+                                    <Check style={{ height: 25 }} />
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "black",
+                                    }}
+                                    onClick={handleCancelDelete}
+                                  >
+                                    <Close style={{ height: 25 }} />
+                                  </Button>
+                                </>
+                              ) : (
+                                <>
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "black",
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => handleEdit(user.id)}
+                                  >
+                                    <Edit style={{ height: 25 }} />
+                                  </Button>
+                                </>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
               </div>
               <div className="pagination">
-                <button
-                  style={{ backgroundColor: "transparent", border: 0 }}
-                  disabled={currentPage === 1}
-                  onClick={() => handlePagePenaltyChange(1)}
-                >
-                  <p>Previous</p>
-                </button>
-                {Array.from({ length: totalPages }, (_, index) => {
-                  if (
-                    totalPages <= 4 ||
-                    index + 1 === 1 ||
-                    index + 1 === totalPages ||
-                    Math.abs(penaltyPage - (index + 1)) <= 1
-                  ) {
-                    return (
-                      <button
-                        style={{
-                          border: 0,
-                          marginRight: 10,
-                          height: 40,
-                          width: 40,
-                          color: penaltyPage === index + 1 ? "white" : "black",
-                          borderRadius: 10,
-                          backgroundColor:
-                            penaltyPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
-                          fontSize: 20,
-                        }}
-                        key={index}
-                        onClick={() => handlePagePenaltyChange(index + 1)}
-                        className={
-                          penaltyPage === index + 1
-                            ? "activePage"
-                            : "inactivePage"
-                        }
-                      >
-                        {index + 1}
-                      </button>
-                    );
-                  } else if (Math.abs(penaltyPage - (index + 1)) === 2) {
-                    return <span key={index}>...</span>;
-                  }
-                  return null;
-                })}
-                <button
-                  style={{ backgroundColor: "transparent", border: 0 }}
-                  disabled={penaltyPage === totalPages}
-                  onClick={() => handlePagePenaltyChange(totalPages)}
-                >
-                  <p>Next</p>
-                </button>
+                {/*PAGINATION STARTS HERE*/}
+                <div className="label-page">
+                  <Button
+                    style={{ backgroundColor: "transparent", border: 0 }}
+                    disabled={currentPageViolation === 1}
+                    onClick={prevPageViolation}
+                  >
+                    PREVIOUS
+                  </Button>
+                  {Array.from({ length: totalPagesViolation }, (_, index) => {
+                    if (
+                      totalPagesPenalty <= 4 ||
+                      index + 1 === 1 ||
+                      index + 1 === totalPagesViolation ||
+                      Math.abs(currentPageViolation - (index + 1)) <= 1
+                    ) {
+                      return (
+                        <button
+                          style={{
+                            border: 0,
+                            marginRight: 10,
+                            height: 40,
+                            width: 40,
+                            color:
+                              currentPageViolation === index + 1
+                                ? "white"
+                                : "black",
+                            borderRadius: 10,
+                            backgroundColor:
+                              currentPageViolation === index + 1
+                                ? "#3e7c1f"
+                                : "#e0e0e0",
+                            fontSize: 20,
+                          }}
+                          key={index}
+                          onClick={() => handlePageChangeViolation(index + 1)}
+                          className={
+                            currentPageViolation === index + 1
+                              ? "activePage"
+                              : "inactivePage"
+                          }
+                        >
+                          {index + 1}
+                        </button>
+                      );
+                    } else if (
+                      Math.abs(currentPageViolation - (index + 1)) === 2
+                    ) {
+                      return <span key={index}>...</span>;
+                    }
+                    return null;
+                  })}
+                  <Button
+                    style={{ backgroundColor: "transparent", border: 0 }}
+                    disabled={currentPageViolation === lastPageIndexViolation}
+                    onClick={nextPageViolation}
+                  >
+                    NEXT
+                  </Button>
+                </div>
               </div>
             </div>
           </>
