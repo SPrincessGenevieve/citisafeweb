@@ -626,7 +626,7 @@ function UserControl(props) {
                               </>
                             ) : (
                               <>
-                                {user.status === "Active" ? (
+                                {user.is_active ? (
                                   <Button
                                     variant="contained"
                                     style={{

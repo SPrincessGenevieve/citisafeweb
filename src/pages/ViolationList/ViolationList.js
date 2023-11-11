@@ -42,7 +42,7 @@ const cellStylesHeader = {
   cell: {
     color: "black",
     width: 150,
-    height: 30,
+    height: 15,
     textAlign: "center",
     fontWeight: "bold",
   },
@@ -91,7 +91,10 @@ export default function ViolationList(props) {
     penaltyData.length
   );
 
-  const visiblePenaltyData = penaltyData.slice(startIndexPenalty,endIndexPenalty);
+  const visiblePenaltyData = penaltyData.slice(
+    startIndexPenalty,
+    endIndexPenalty
+  );
 
   const totalPagesPenalty = Math.ceil(penaltyData.length / rowsPerPagePenalty);
 
@@ -104,7 +107,10 @@ export default function ViolationList(props) {
   );
 
   const startIndexViolation = (currentPageViolation - 1) * rowsPerPageViolation;
-  const endIndexViolation = Math.min(startIndexViolation + rowsPerPageViolation,violationData.length);
+  const endIndexViolation = Math.min(
+    startIndexViolation + rowsPerPageViolation,
+    violationData.length
+  );
 
   const visibleViolationData = violationData.slice(
     startIndexViolation,
