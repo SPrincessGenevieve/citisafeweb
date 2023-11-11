@@ -2,23 +2,14 @@ import React, { useEffect } from "react";
 import Navbar from "../../Navbar";
 import {
   Add,
-  AddBoxOutlined,
-  ArrowBack,
   CloseOutlined,
-  DeleteOutline,
-  Edit,
-  Save,
   Close,
   Check,
-  MicExternalOnOutlined,
   VoiceOverOff,
   RecordVoiceOver,
-  AddBoxRounded,
   Download,
   Search,
-  WindowSharp,
 } from "@mui/icons-material";
-import InputSearch from "../../components/InputSearch";
 import {
   Button,
   Paper,
@@ -33,10 +24,6 @@ import {
 import "./styles.css";
 import { useState } from "react";
 import users from "./users.json";
-import UserOne from "../../components/UserOne";
-import UserCredentials from "../../components/UserCredentials";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ConstButton from "../../components/ConstButton";
 import InputRound from "../../components/InputRound";
 import SelectRound from "../../components/SelectRound";
@@ -67,11 +54,8 @@ const cellStylesBody = {
 };
 
 function UserControl(props) {
-  // jayde
   const [userData, setUserData] = useState([]);
   const Token = useSelector((state) => state.auth.token);
-
-  // add user
   const [addUser, setAddUser] = useState({
     email: "",
     role: "",
@@ -94,12 +78,17 @@ function UserControl(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const rowsPerPage = 5;
+  const rowsPerPage = 6;
 
   const lastPageIndex = Math.ceil(userData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = Math.min(startIndex + rowsPerPage, userData.length);
-  const visibleData = userData.slice(startIndex, endIndex);
+  const visibleData = [];
+  for (let i = startIndex; i < endIndex; i++) {
+    if (userData[i]) {
+      visibleData.push(userData[i]);
+    }
+  }
   const totalPages = Math.ceil(userData.length / rowsPerPage);
 
   const handlePageChange = (page) => {
@@ -186,6 +175,7 @@ function UserControl(props) {
       .catch((error) => {
         console.log(error);
         console.log(addUser);
+        alert("Please use another email or username");
       });
   };
 

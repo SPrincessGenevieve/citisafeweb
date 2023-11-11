@@ -23,11 +23,10 @@ function SelectRound({ title, height, width, selection, onChange }) {
         id="myRole"
         name="role"
         onChange={(e) => onChange(e.target.value)}
-
       >
         <option></option>
         <option value="ADMIN">Admin</option>
-        <option value="TRESURER">Treasurer</option>
+        <option value="TREASURER">Treasurer</option>
         <option value="ENFORCER">Enforcer</option>
       </select>
     );
