@@ -31,6 +31,7 @@ import StatusSelection from "../../components/StatusSelection";
 import stats from "./../../JSON/is_active.json";
 import { useSelector } from "react-redux";
 import axios from "../../plugins/axios";
+import * as XLSX from "xlsx";
 
 const cellStylesHeader = {
   cell: {
@@ -190,6 +191,38 @@ function UserControl(props) {
   };
 
   const handleDownload = () => {
+    const exportData = filteredUserControl.map((item) => ({
+      ID: item.id,
+      LASTNAME: item.last_name,
+      FIRSTNAME: item.first_name,
+      MIDDLENAME: item.middle_name,
+      ROLE: item.role,
+      POSITION: item.position,
+      EMAIL: item.email,
+      USERNAME: item.username,
+      STATUS: item.is_active,
+    }));
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "USERS TABLE");
+
+    const excelDataURI = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "base64",
+    });
+
+    const dataUri = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${excelDataURI}`;
+
+    const a = document.createElement("a");
+    a.href = dataUri;
+    a.download = "users_table.xlsx";
+    a.style.display = "none";
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
     window.alert("Downloaded successfully");
   };
 
