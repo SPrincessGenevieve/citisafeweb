@@ -31,12 +31,12 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-
 import StatusSelection from "../../components/StatusSelection";
 import stats from "./../../JSON/Stats.json";
 import RoundButton from "../../components/RoundButton";
 import { useSelector } from "react-redux";
 import axios from "../../plugins/axios";
+import * as XLSX from "xlsx";
 
 const cellStylesHeader = {
   cell: {
@@ -249,7 +249,66 @@ export default function ViolationList(props) {
     setDeletingRow(null);
   };
 
-  const handleDownload = () => {
+  const handleDownloadPenalty = () => {
+    const exportData = filteredPenaltyData.map((item) => ({
+      ID: item.id,
+      DESCRIPTION: item.description,
+      AMOUNT: item.amount,
+      DATE_ISSUED: item.date,
+      STATUS: item.status,
+    }));
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "PENALTY TABLE");
+
+    const excelDataURI = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "base64",
+    });
+
+    const dataUri = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${excelDataURI}`;
+
+    const a = document.createElement("a");
+    a.href = dataUri;
+    a.download = "penalty_tabel.xlsx";
+    a.style.display = "none";
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    window.alert("Downloaded successfully");
+  };
+
+  const handleDownloadViolation = () => {
+    const exportData = filteredViolationData.map((item) => ({
+      ID: item.id,
+      DESCRIPTION: item.violation_type,
+      PENALTY_ID: item.penalty_ID,
+      DATE_ISSUED: item.penalty_info.description,
+    }));
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "VIOLATION TABLE");
+
+    const excelDataURI = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "base64",
+    });
+
+    const dataUri = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${excelDataURI}`;
+
+    const a = document.createElement("a");
+    a.href = dataUri;
+    a.download = "violatioin_table.xlsx";
+    a.style.display = "none";
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
     window.alert("Downloaded successfully");
   };
 
@@ -421,7 +480,7 @@ export default function ViolationList(props) {
                 </Button>
                 <Button
                   className="add-user-btn"
-                  onClick={handleDownload}
+                  onClick={handleDownloadPenalty}
                   style={{
                     backgroundColor: "#3E7C1F",
                     borderRadius: 40,
@@ -847,7 +906,7 @@ export default function ViolationList(props) {
                 </Button>
                 <Button
                   className="add-user-btn"
-                  onClick={handleDownload}
+                  onClick={handleDownloadViolation}
                   style={{
                     backgroundColor: "#3E7C1F",
                     borderRadius: 40,
