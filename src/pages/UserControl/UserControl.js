@@ -66,8 +66,6 @@ function UserControl(props) {
     username: "",
   });
 
-  const [filteredData, setFilteredData] = useState(users);
-  const [searchQuery, setSearchQuery] = useState("");
   const [table, setTable] = useState(true);
   const [details, setDetails] = useState(true);
   const [addScreen, setAddScreen] = useState(false);
@@ -75,6 +73,9 @@ function UserControl(props) {
   const [isVisible, setIsVisible] = useState(true);
   const [editingRow, setEditingRow] = useState(null);
   const [deletingRow, setDeletingRow] = useState(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState(users);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -90,6 +91,15 @@ function UserControl(props) {
     }
   }
   const totalPages = Math.ceil(userData.length / rowsPerPage);
+
+  const filteredUserControl = userData.filter(
+    (user) =>
+      user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (user && user.last_name.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const visibleUserData = filteredUserControl.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -430,7 +440,7 @@ function UserControl(props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {visibleData.map((user, index) => (
+                      {visibleUserData.map((user, index) => (
                         <TableRow
                           className={`table-body-row ${
                             index % 2 === 0 ? "even-row" : "odd-row"
