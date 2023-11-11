@@ -77,49 +77,63 @@ export default function ViolationList(props) {
   });
 
   //PENALTY TABLE PAGINATION
-
+  const [searchQueryPenalty, setSearchQueryPenalty] = useState("");
   const [currentPagePenalty, setCurrentPagePenalty] = useState(1);
   const rowsPerPagePenalty = 5;
-
   const lastPageIndexPenalty = Math.ceil(
     penaltyData.length / rowsPerPagePenalty
   );
-
   const startIndexPenalty = (currentPagePenalty - 1) * rowsPerPagePenalty;
   const endIndexPenalty = Math.min(
     startIndexPenalty + rowsPerPagePenalty,
     penaltyData.length
   );
 
-  const visiblePenaltyData = penaltyData.slice(
-    startIndexPenalty,
-    endIndexPenalty
-  );
-
   const totalPagesPenalty = Math.ceil(penaltyData.length / rowsPerPagePenalty);
 
   //VIOLATION TABLE PAGINATION
+  const [searchQueryViolation, setSearchQueryViolation] = useState("");
   const [currentPageViolation, setCurrentPageViolation] = useState(1);
   const rowsPerPageViolation = 6;
-
   const lastPageIndexViolation = Math.ceil(
     violationData.length / rowsPerPageViolation
   );
-
   const startIndexViolation = (currentPageViolation - 1) * rowsPerPageViolation;
   const endIndexViolation = Math.min(
     startIndexViolation + rowsPerPageViolation,
     violationData.length
   );
+  const totalPagesViolation = Math.ceil(
+    violationData.length / rowsPerPageViolation
+  );
+  const filteredPenaltyData = penaltyData.filter((penalty) =>
+    penalty.description.toLowerCase().includes(searchQueryPenalty.toLowerCase())
+  );
+  const filteredViolationData = violationData.filter(
+    (violation) =>
+      violation &&
+      violation.violation_type
+        .toLowerCase()
+        .includes(searchQueryViolation.toLowerCase())
+  );
 
-  const visibleViolationData = violationData.slice(
+  const visiblePenaltyData = filteredPenaltyData.slice(
+    startIndexPenalty,
+    endIndexPenalty
+  );
+
+  const visibleViolationData = filteredViolationData.slice(
     startIndexViolation,
     endIndexViolation
   );
 
-  const totalPagesViolation = Math.ceil(
-    violationData.length / rowsPerPageViolation
-  );
+  const handleSearchViolation = (event) => {
+    setSearchQueryViolation(event.target.value);
+  };
+
+  const handleSearchPenalty = (event) => {
+    setSearchQueryPenalty(event.target.value);
+  };
 
   const handlePageChangePenalty = (page) => {
     console.log("Changing page to:", page);
@@ -384,7 +398,11 @@ export default function ViolationList(props) {
                   className="search-icon-user"
                   style={{ position: "absolute", left: "2%", marginTop: 10 }}
                 ></Search>
-                <input value={searchQuery} className="search-box-user"></input>
+                <input
+                  value={searchQueryPenalty}
+                  className="search-box-user"
+                  onChange={handleSearchPenalty}
+                />
                 <Button
                   className="add-user-btn"
                   onClick={handleOpenModal}
@@ -476,13 +494,13 @@ export default function ViolationList(props) {
                                       ? "#E2F0D9"
                                       : user.status === "Deactivated"
                                       ? "#FFD1D1"
-                                      : "#EBF9F1",
+                                      : "#FFD1D1",
                                   color:
                                     user.status === "Active"
                                       ? "#649F3F"
                                       : user.status === "Deactivated"
                                       ? "#D00000"
-                                      : "#1F9254",
+                                      : "#DC3535",
                                   width: 100,
                                   height: 15,
                                   padding: 10,
@@ -806,7 +824,11 @@ export default function ViolationList(props) {
                   className="search-icon-user"
                   style={{ position: "absolute", left: "2%", marginTop: 10 }}
                 ></Search>
-                <input value={searchQuery} className="search-box-user"></input>
+                <input
+                  value={searchQueryViolation}
+                  className="search-box-user"
+                  onChange={handleSearchViolation}
+                />
                 <Button
                   className="add-user-btn"
                   onClick={handleOpenModal}
