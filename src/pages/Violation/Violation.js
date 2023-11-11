@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import axios from "../../plugins/axios";
+import * as XLSX from "xlsx";
 
 const styles = (theme) => ({
   modal: {
@@ -132,8 +133,62 @@ function Violation({ navigation }) {
     }
   };
 
-  const handleDownload = () => {
+
+  const handleDownload = (data, fileName, sheetName) => {
+    if (!Array.isArray(data)) {
+      console.error("Data is not an array");
+      return;
+    }
+
+    const exportData = data.map((item) => ({
+      ID: item.id,
+      LASTNAME: item.driver_info.last_name,
+      FIRSTNAME: item.driver_info.first_name,
+      MIDDLENAME: item.driver_info.middle_name,
+      ADDRESS: item.driver_info.address,
+      LICENSE_NO: item.driver_info.license_number,
+      TYPE: item.classification,
+      DATE_OF_BIRTH: item.driver_info.birthdate,
+      NATIONALITY: item.driver_info.nationality,
+      PLATE_NO: item.vehicle_info.plate_number,
+      MAKE: item.vehicle_info.make,
+      MODEL: item.vehicle_info.vehicle_model,
+      COLOR: item.vehicle_info.color,
+      CLASS: item.vehicle_info.vehicle_class,
+      BODY_MAARKS: item.vehicle_info.body_markings,
+      REGISTERED_OWNER: item.vehicle_info.name,
+      REGISTERED_ADDRESS: item.vehicle_info.address,
+      CONTACT_NO: item.vehicle_info.contact_number,
+      DATE_AND_TIME_OF_VIOLATION: item.date_issued,
+      PLACE_OF_VIOLATION: item.place_violation,
+      APPREHENDING_OFFICER: `${item.user_ID.first_name} ${item.user_ID.middle_name} ${item.user_ID.last_name}`,
+      TICKET_STATUS: item.ticket_status,
+      PENALTY: item.penalty_amount,
+      VIOLATION: item.violation_info.violations_info.join(", "),
+    }));
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+    const excelDataURI = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "base64",
+    });
+
+    const dataUri = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${excelDataURI}`;
+
+    const a = document.createElement("a");
+    a.href = dataUri;
+    a.download = fileName;
+    a.style.display = "none";
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
     window.alert("Downloaded successfully");
+    console.log(data);
   };
 
   const handleEdit = (rowId) => {
@@ -206,7 +261,9 @@ function Violation({ navigation }) {
             className="search-box"
           />
           <Button
-            onClick={handleDownload}
+            onClick={() =>
+              handleDownload(ticketData, "users_table.xlsx", "Sheet 1")
+            }
             className="add-user-btn"
             style={{
               backgroundColor: "#3E7C1F",

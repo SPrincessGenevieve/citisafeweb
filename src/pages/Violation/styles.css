@@ -98,7 +98,7 @@
   color: black;
 }
 .hover-message {
-  background-color: rgba(11, 219, 73, 0.678);
+  background-color: #3e7c1fab;
   color: white;
   display: flex;
   flex: 1;
@@ -109,6 +109,7 @@
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+  left: 4%;
 }
 
 .view-more {
