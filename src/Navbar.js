@@ -11,7 +11,7 @@ import { red } from "@mui/material/colors";
 export default function Navbar() {
   const [isNavVisible, setNavVisibility] = useState(false);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const toggleNav = () => {
     setNavVisibility(!isNavVisible);
@@ -34,9 +34,28 @@ export default function Navbar() {
         <CustomLink to="/user">Users</CustomLink>
         <CustomLink to="/violationList">Violation</CustomLink>
         <li className={`nav-item logout-item ${isNavVisible ? "show" : ""}`}>
-          <Button style={{color: 'gray', border: '2px solid red', padding: '10px 50px', borderRadius: '25px', textTransform: 'capitalize'}} title="Logout" onClick={() => {
-            dispatch(setLogout())
-          }} >Logout</Button>
+          <Button
+            style={{
+              color: "gray",
+              border: "2px solid red",
+              padding: "10px 50px",
+              borderRadius: "25px",
+              textTransform: "capitalize",
+            }}
+            title="Logout"
+            onClick={() => {
+              dispatch(setLogout());
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = "red";
+              e.currentTarget.style.color = "white";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = "";
+            }}
+          >
+            Logout
+          </Button>
         </li>
       </ul>
     </nav>
