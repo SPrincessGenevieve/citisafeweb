@@ -76,7 +76,7 @@ function Violation({ navigation }) {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const rowsPerPage = 5;
+  const rowsPerPage = 6;
 
   const lastPageIndex = Math.ceil(ticketData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -132,7 +132,6 @@ function Violation({ navigation }) {
       setTicketData(filteredData);
     }
   };
-
 
   const handleDownload = (data, fileName, sheetName) => {
     if (!Array.isArray(data)) {
@@ -279,6 +278,7 @@ function Violation({ navigation }) {
             {window.innerWidth <= 600 ? null : "DOWNLOAD"}
           </Button>
         </div>
+
         <div className="table-conatiner-violation">
           {ticketData.map((item, index) => (
             <Dialog
@@ -461,7 +461,7 @@ function Violation({ navigation }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {ticketData.map((item, index) => (
+                  {visibleData.map((item, index) => (
                     <TableRow
                       className={`table-body-row ${
                         index % 2 === 0 ? "even-row" : "odd-row"
@@ -522,18 +522,23 @@ function Violation({ navigation }) {
                           <p
                             style={{
                               flex: 1,
+                              fontWeight: 540,
                               backgroundColor:
-                                item.ticket_status === "Overdue"
-                                  ? "#FBE7E8"
+                                item.ticket_status === "OVERDUE"
+                                  ? "#FFC5C5"
                                   : item.ticket_status === "PAID"
-                                  ? "#FEF2E5"
-                                  : "#EBF9F1",
+                                  ? "#E2F0D9"
+                                  : item.ticket_status === "PENDING"
+                                  ? "#BDD7EE"
+                                  : "#FFF2CC",
                               color:
-                                item.ticket_status === "Overdue"
-                                  ? "#A30D11"
+                                item.ticket_status === "OVERDUE"
+                                  ? "#C00000"
                                   : item.ticket_status === "PAID"
-                                  ? "#CD6200"
-                                  : "#1F9254",
+                                  ? "#70AD47"
+                                  : item.ticket_status === "PENDING"
+                                  ? "#0070C0"
+                                  : "#7F6000",
                               width: 100,
                               height: 15,
                               padding: 10,
