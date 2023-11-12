@@ -617,6 +617,7 @@ function Violation({ navigation }) {
                                           "Successfully Edit Penalty Status"
                                         );
                                         handleSave(item.MFRTA_TCT_NO);
+                                        window.location.reload()
                                       })
                                       .catch((error) => {
                                         window.alert(

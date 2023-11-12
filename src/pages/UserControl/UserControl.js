@@ -172,7 +172,6 @@ function UserControl(props) {
     axios
       .post("accounts/users/", addUser)
       .then((response) => {
-        window.alert("User created successfully");
         setAddScreen(!addScreen);
         setTable(!table);
 
@@ -185,6 +184,7 @@ function UserControl(props) {
           middle_name: "",
           username: "",
         });
+        window.location.reload()
       })
       .catch((error) => {
         console.log(error);
@@ -617,10 +617,10 @@ function UserControl(props) {
                                         }
                                       )
                                       .then((response) => {
-                                        window.alert(
-                                          "Successfully Edit User Status"
-                                        );
+                                        
                                         handleSave(user.id);
+                                        window.location.reload()
+
                                       })
                                       .catch((error) => {
                                         window.alert(

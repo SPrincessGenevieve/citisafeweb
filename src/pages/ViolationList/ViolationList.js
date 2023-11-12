@@ -183,13 +183,12 @@ export default function ViolationList(props) {
         },
       })
       .then((response) => {
-        window.alert("Violation added successfully!");
-
         setAddViolation({
           violation_type: "",
           penalty_ID: "",
         });
         handleCloseModal();
+        window.location.reload()
       })
       .catch((error) => {
         window.alert("Something went wrong, Please Try Again Later");
@@ -214,7 +213,6 @@ export default function ViolationList(props) {
         },
       })
       .then((response) => {
-        window.alert("Penalty added successfully!");
 
         setAddPenalty({
           description: "",
@@ -223,6 +221,8 @@ export default function ViolationList(props) {
         });
 
         handleCloseModal();
+        window.location.reload()
+
       })
       .catch((error) => {
         window.alert("Something went wrong, Please Try Again Later");
@@ -632,10 +632,9 @@ export default function ViolationList(props) {
                                         }
                                       )
                                       .then((response) => {
-                                        window.alert(
-                                          "Successfully Edit Penalty Status"
-                                        );
                                         handleSave(user.id);
+                                        window.location.reload()
+
                                       })
                                       .catch((error) => {
                                         window.alert(
@@ -1031,10 +1030,8 @@ export default function ViolationList(props) {
                                           }
                                         )
                                         .then((response) => {
-                                          window.alert(
-                                            "Successfully Edit Violation"
-                                          );
                                           handleSave(user.id);
+                                          window.location.reload()
                                         })
                                         .catch((error) => {
                                           window.alert(

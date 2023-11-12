@@ -55,7 +55,7 @@ function LoginPage({ onClick }) {
             
 
             if (role === "ADMIN" || role === "TREASURER") {
-              alert(`Welcome ${response.data.last_name}, your role is ${role}`);
+              alert(`Welcome ${response.data.last_name.charAt(0).toUpperCase() + response.data.last_name.slice(1)}, your role is ${role}`);
               dispatch(setLogin(id_token));
               dispatch(setRole(role));
             } else {
