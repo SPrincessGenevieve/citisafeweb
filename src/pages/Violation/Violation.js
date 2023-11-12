@@ -65,6 +65,9 @@ if (window.innerWidth <= 600) {
 }
 
 function Violation({ navigation }) {
+
+  const Role = useSelector((state) => state.auth.role)
+
   const [ticketData, setTicketData] = useState([]);
   const Token = useSelector((state) => state.auth.token);
   const [editTicketStatus, setEditTicketStatus] = useState("");
@@ -457,7 +460,11 @@ function Violation({ navigation }) {
                     </TableCell>
                     <TableCell style={cellStylesHeader.cell}>Penalty</TableCell>
                     <TableCell style={cellStylesHeader.cell}>Status</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Action</TableCell>
+                    {Role === "TREASURER" && (
+                      <>
+                        <TableCell style={cellStylesHeader.cell}>Action</TableCell>
+                      </>
+                    )}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -574,97 +581,103 @@ function Violation({ navigation }) {
                         </div>
                       </TableCell>
 
-                      <TableCell className="row" style={cellStylesBody.cell}>
-                        {editingRows[item.MFRTA_TCT_NO] ? (
-                          <div className="check-close">
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                                marginLeft: 0,
-                              }}
-                              onClick={() => {
-                                const formData = {
-                                  MFRTA_TCT_NO: item.MFRTA_TCT_NO,
-                                  ticket_status: editTicketStatus,
-                                };
-                                console.log(formData);
+                      {Role === 'TREASURER' && (
+                        <>
+                          <TableCell className="row" style={cellStylesBody.cell}>
+                            {editingRows[item.MFRTA_TCT_NO] ? (
+                              <div className="check-close">
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 0,
+                                  }}
+                                  onClick={() => {
+                                    const formData = {
+                                      MFRTA_TCT_NO: item.MFRTA_TCT_NO,
+                                      ticket_status: editTicketStatus,
+                                    };
+                                    console.log(formData);
 
-                                axios
-                                  .patch(
-                                    `ticket/register/${item.MFRTA_TCT_NO}/`,
-                                    formData,
-                                    {
-                                      headers: {
-                                        Authorization: `token ${Token}`,
-                                      },
-                                    }
-                                  )
-                                  .then((response) => {
-                                    console.log(response.data);
-                                    window.alert(
-                                      "Successfully Edit Penalty Status"
-                                    );
-                                    handleSave(item.MFRTA_TCT_NO);
-                                  })
-                                  .catch((error) => {
-                                    window.alert(
-                                      "Unsuccessfully Edit Penalty Status"
-                                    );
-                                    console.log(error);
-                                  });
-                              }}
-                            >
-                              <Check style={{ height: 25 }} />
-                            </Button>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                              }}
-                              onClick={() =>
-                                handleCancelEdit(item.MFRTA_TCT_NO)
-                              }
-                            >
-                              <Close style={{ height: 25 }} />
-                            </Button>
-                          </div>
-                        ) : deletingRows[item.MFRTA_TCT_NO] ? (
-                          <>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                                marginLeft: 10,
-                              }}
-                              onClick={() => handleCheck(item.MFRTA_TCT_NO)}
-                            >
-                              <Check style={{ height: 25 }} />
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button
-                              variant="contained"
-                              style={{
-                                backgroundColor: "transparent",
-                                boxShadow: "none",
-                                color: "black",
-                                marginLeft: 10,
-                              }}
-                              onClick={() => handleEdit(item.MFRTA_TCT_NO)}
-                            >
-                              <Edit style={{ height: 25 }} />
-                            </Button>
-                          </>
-                        )}
-                      </TableCell>
+                                    axios
+                                      .patch(
+                                        `ticket/register/${item.MFRTA_TCT_NO}/`,
+                                        formData,
+                                        {
+                                          headers: {
+                                            Authorization: `token ${Token}`,
+                                          },
+                                        }
+                                      )
+                                      .then((response) => {
+                                        console.log(response.data);
+                                        window.alert(
+                                          "Successfully Edit Penalty Status"
+                                        );
+                                        handleSave(item.MFRTA_TCT_NO);
+                                      })
+                                      .catch((error) => {
+                                        window.alert(
+                                          "Unsuccessfully Edit Penalty Status"
+                                        );
+                                        console.log(error);
+                                      });
+                                  }}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={() =>
+                                    handleCancelEdit(item.MFRTA_TCT_NO)
+                                  }
+                                >
+                                  <Close style={{ height: 25 }} />
+                                </Button>
+                              </div>
+                            ) : deletingRows[item.MFRTA_TCT_NO] ? (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => handleCheck(item.MFRTA_TCT_NO)}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => handleEdit(item.MFRTA_TCT_NO)}
+                                >
+                                  <Edit style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            )}
+                          </TableCell>                        
+                        </>
+                      )}
+
+
                     </TableRow>
                   ))}
                 </TableBody>

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import axios from "../../plugins/axios";
 import { useDispatch } from "react-redux";
-import { setLogin } from "./authSlice";
+import { setLogin, setRole } from "./authSlice";
 
 function LoginPage({ onClick }) {
   const navigation = useNavigate();
@@ -52,10 +52,12 @@ function LoginPage({ onClick }) {
           })
           .then((response) => {
             const role = response.data.role;
+            
 
             if (role === "ADMIN" || role === "TREASURER") {
               alert(`Welcome ${response.data.last_name}, your role is ${role}`);
               dispatch(setLogin(id_token));
+              dispatch(setRole(role));
             } else {
               alert(`${role} you don't have access on this site`);
             }

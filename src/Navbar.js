@@ -4,7 +4,7 @@ import "./styles.css";
 import logo from "./assets/logo.png";
 import { Dashboard, Widgets } from "@mui/icons-material";
 import { Button } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "./pages/Login/authSlice";
 import { red } from "@mui/material/colors";
 
@@ -12,6 +12,8 @@ export default function Navbar() {
   const [isNavVisible, setNavVisibility] = useState(false);
 
   const dispatch = useDispatch();
+
+  const Role = useSelector((state) => state.auth.role)
 
   const toggleNav = () => {
     setNavVisibility(!isNavVisible);
@@ -29,10 +31,19 @@ export default function Navbar() {
         <div className="image-logo">
           <img style={{ width: 200 }} src={logo}></img>
         </div>
-        <CustomLink to="/dashboard">Home</CustomLink>
-        <CustomLink to="/violation">Records</CustomLink>
-        <CustomLink to="/user">Users</CustomLink>
-        <CustomLink to="/violationList">Violation</CustomLink>
+        {Role === "TREASURER" ? (
+          <>
+            <CustomLink to="/dashboard">Home</CustomLink>
+            <CustomLink to="/violation">Records</CustomLink>
+          </>
+        ) : (
+          <>
+            <CustomLink to="/dashboard">Home</CustomLink>
+            <CustomLink to="/violation">Records</CustomLink>
+            <CustomLink to="/user">Users</CustomLink>
+            <CustomLink to="/violationList">Violation</CustomLink>
+          </>
+        )}
         <li className={`nav-item logout-item ${isNavVisible ? "show" : ""}`}>
           <CustomLink
             className="logout-link"
@@ -42,6 +53,8 @@ export default function Navbar() {
           >
             Logout
           </CustomLink>
+
+
         </li>
       </ul>
     </nav>

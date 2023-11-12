@@ -5,6 +5,7 @@ export const authSlice = createSlice({
   initialState: {
     token: localStorage.getItem("token") || "",
     setIsLoggedIn: Boolean(localStorage.getItem("token")),
+    role: ''
   },
   reducers: {
     setLogin: (state, action) => {
@@ -17,10 +18,13 @@ export const authSlice = createSlice({
       state.token = "";
       localStorage.removeItem("token");
     },
+    setRole: (state,action) => {
+      state.role = action.payload
+    }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setLogin, setLogout } = authSlice.actions;
+export const { setLogin, setLogout, setRole } = authSlice.actions;
 
 export default authSlice.reducer;
