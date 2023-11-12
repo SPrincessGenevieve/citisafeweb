@@ -146,7 +146,7 @@ function Violation({ navigation }) {
       MIDDLENAME: item.driver_info.middle_name,
       ADDRESS: item.driver_info.address,
       LICENSE_NO: item.driver_info.license_number,
-      TYPE: item.driver_info.classification,
+      TYPE: item.classification,
       DATE_OF_BIRTH: item.driver_info.birthdate,
       NATIONALITY: item.driver_info.nationality,
       PLATE_NO: item.vehicle_info.plate_number,

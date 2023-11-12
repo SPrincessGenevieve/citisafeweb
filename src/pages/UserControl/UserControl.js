@@ -93,12 +93,15 @@ function UserControl(props) {
   }
   const totalPages = Math.ceil(userData.length / rowsPerPage);
 
-  const filteredUserControl = userData.filter(
-    (user) =>
-      user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (user && user.last_name.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filteredUserControl = Array.isArray(userData)
+    ? userData.filter(
+        (user) =>
+          user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (user &&
+            user.last_name.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    : [];
 
   const visibleUserData = filteredUserControl.slice(startIndex, endIndex);
 

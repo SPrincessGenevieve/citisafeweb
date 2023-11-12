@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./login.css";
 import enforcer from "./../../assets/enforcer.png";
 import { useNavigate } from "react-router-dom";
@@ -28,12 +28,19 @@ function LoginPage({ onClick }) {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(setLogin(token));
+      navigation("/dashboard");
+    }
+  }, [dispatch, navigation]);
+
   const handleLogin = () => {
     axios
       .post("accounts/token/login/", credentials)
       .then((response) => {
         const id_token = response.data.auth_token;
-        console.log(id_token);
 
         axios
           .get("accounts/users/me/", {
@@ -44,19 +51,21 @@ function LoginPage({ onClick }) {
           .then((response) => {
             const role = response.data.role;
 
-            if (role == "ADMIN" || role == "TREASURER") {
+            if (role === "ADMIN" || role === "TREASURER") {
               alert(`Welcome ${response.data.last_name}, your role is ${role}`);
               dispatch(setLogin(id_token));
             } else {
-              alert(`${role} you dont have access on this site`);
+              alert(`${role} you don't have access on this site`);
             }
           })
           .catch((error) => {
-            alert("Error Please Try Again Later");
+            console.error("Error fetching user data:", error);
+            alert("Error fetching user data. Please try again later.");
           });
       })
       .catch((error) => {
-        alert("Error! Please try again later");
+        console.error("Error fetching user data:", error);
+        alert(`Error fetching user data: ${error.message}`);
       });
   };
 
