@@ -8,75 +8,38 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  {
-    name: "JAN",
-    total: 42,
-  },
-  {
-    name: "FEB",
-    total: 15,
-  },
-  {
-    name: "MAR",
-    total: 32,
-  },
-  {
-    name: "APR",
-    total: 40,
-  },
-  {
-    name: "MAY",
-    total: 34,
-  },
-  {
-    name: "JUN",
-    total: 23,
-  },
-  {
-    name: "JUL",
-    total: 34,
-  },
-  {
-    name: "AUG",
-    total: 25,
-  },
-  {
-    name: "SEP",
-    total: 45,
-  },
-  {
-    name: "OCT",
-    total: 25,
-  },
-  {
-    name: "NOV",
-    total: 34,
-  },
-  {
-    name: "DEC",
-    total: 37,
-  },
-];
+import axios from '../plugins/axios';
 
 export default class Example extends PureComponent {
-
-
-  static demoUrl = "https://codesandbox.io/s/simple-area-chart-4ujxw";
-
   state = {
     opacity: {
       total: 1,
     },
+    ticketData: [],
   };
+
+  componentDidMount() {
+    axios
+      .get("ticket/ticket-data/")
+      .then((response) => {
+        const { by_month } = response.data;
+        const ticketData = Object.entries(by_month).map(([name, total]) => ({
+          name,
+          total,
+        }));
+        this.setState({ ticketData });
+      })
+      .catch((error) => {
+        console.error("Error fetching ticket data:", error);
+      });
+  }
 
   handleMouseEnter = (o) => {
     const { dataKey } = o;
     const { opacity } = this.state;
 
     this.setState({
-      opacity: { ...opacity, [dataKey]: 1 }, // Set opacity to 1
+      opacity: { ...opacity, [dataKey]: 1 },
     });
   };
 
@@ -85,19 +48,19 @@ export default class Example extends PureComponent {
     const { opacity } = this.state;
 
     this.setState({
-      opacity: { ...opacity, [dataKey]: 1 }, // Set opacity to 1
+      opacity: { ...opacity, [dataKey]: 1 },
     });
   };
 
   render() {
-    const { opacity } = this.state;
+    const { opacity, ticketData } = this.state;
 
     return (
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           width={500}
           height={300}
-          data={data}
+          data={ticketData}
           margin={{
             top: 10,
             right: 30,
@@ -114,7 +77,7 @@ export default class Example extends PureComponent {
             dataKey="total"
             stroke="#3E7C1F"
             fill="#3E7C1F"
-            fillOpacity={opacity.total} // Use the opacity value from the state
+            fillOpacity={opacity.total}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
           />

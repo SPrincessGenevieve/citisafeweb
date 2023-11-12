@@ -10,12 +10,25 @@ import { Button, Modal } from "@mui/material";
 import StatusSelection from "../../components/StatusSelection";
 import week from "./../../JSON/week.json";
 import { useState, useEffect } from "react";
+import axios from '../../plugins/axios'
 
 function Dashboard(props) {
   const [greeting, setGreeting] = useState("");
   const [currentTime, setCurrentTime] = useState("");
   const [image, setImage] = useState("");
   const [currentDate, setCurrentDate] = useState("");
+
+  const [ticketDay, setTicketDay] = useState('')
+
+  useEffect(() => {
+
+    axios.get('ticket/ticket-daily/').then((response) => {
+      setTicketDay(response.data.total_tickets)
+    }).catch((error) => {
+      console.log(error)
+    })
+
+  }, [])
 
   useEffect(() => {
     // Function to update the time and greeting based on the time of day
@@ -161,7 +174,7 @@ function Dashboard(props) {
                       color: "#366B1B",
                     }}
                   >
-                    13
+                    {ticketDay}
                   </h1>
                   <p
                     style={{
