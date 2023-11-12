@@ -20,7 +20,9 @@ function LoginPage({ onClick }) {
   const navigation = useNavigate();
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
     useState(false);
-  const [email, setEmail] = useState("");
+  const [data, setData] = useState({
+    email: ''
+  });
   const [credentials, setCredentials] = useState({
     username: "jaydemike15",
     password: "2023@engracia",
@@ -78,9 +80,19 @@ function LoginPage({ onClick }) {
   };
 
   const handleSendPasswordReset = () => {
-    alert("Email sent!", email);
 
-    closeForgotPasswordModal();
+    axios.post('accounts/users/reset_password/', data).then((response) => {
+      alert("Email sent!", data.email);
+      closeForgotPasswordModal();
+    }).catch(error => {
+      alert("Email not sent!, Try again", data.email);
+
+      closeForgotPasswordModal();
+    })
+
+
+
+
   };
 
   return (
@@ -172,8 +184,10 @@ function LoginPage({ onClick }) {
             label="Email"
             type="email"
             fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={data.email}
+            onChange={(e) => setData({
+              ...data, email: e.target.value
+            })}
             style={{ marginTop: 20 }}
           />
         </DialogContent>
