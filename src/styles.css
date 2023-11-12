@@ -22,8 +22,10 @@
   margin-top: 3%;
 }
 
-.nav-item.logout-link {
-  border: 2px solid #d30303;
+.nav-item .logout-link {
+  border: 2px solid red;
+  background-color: white;
+  color: red;
 }
 .image-logo {
   margin-right: 1%;
@@ -153,7 +155,7 @@
 }
 
 .logout-link {
-  background-color: rgb(255, 0, 0);
+  background-color: white;
   border-radius: 50px;
   border: 2px solid #d30303;
   display: flex;

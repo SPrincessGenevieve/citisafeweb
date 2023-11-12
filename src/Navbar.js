@@ -34,28 +34,14 @@ export default function Navbar() {
         <CustomLink to="/user">Users</CustomLink>
         <CustomLink to="/violationList">Violation</CustomLink>
         <li className={`nav-item logout-item ${isNavVisible ? "show" : ""}`}>
-          <Button
-            style={{
-              color: "gray",
-              border: "2px solid red",
-              padding: "10px 50px",
-              borderRadius: "25px",
-              textTransform: "capitalize",
-            }}
-            title="Logout"
+          <CustomLink
+            className="logout-link"
             onClick={() => {
               dispatch(setLogout());
             }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = "red";
-              e.currentTarget.style.color = "white";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = "";
-            }}
           >
             Logout
-          </Button>
+          </CustomLink>
         </li>
       </ul>
     </nav>
