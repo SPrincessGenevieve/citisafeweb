@@ -1,11 +1,5 @@
 import React, { PureComponent, useEffect, useState } from "react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import axios from "../plugins/axios";
 
 const COLORS = ["#2B5517", "#3DBC00", "#88FA52", "#476B36"];
@@ -76,9 +70,6 @@ const ChartC = () => {
                       backgroundColor: COLORS[index % COLORS.length],
                     }}
                   ></div>
-                  <div className="violation-title-container">
-                    <p className="violation-title">{entry.name}</p>
-                  </div>
                 </div>
               </div>
             ))}

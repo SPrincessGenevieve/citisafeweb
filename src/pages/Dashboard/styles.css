@@ -97,7 +97,13 @@
   font-weight: bold;
   margin-right: 30px;
 }
-
+.violation-tracker {
+  font-weight: bold;
+  text-align: "center";
+  font-size: 20px;
+  color: black;
+  margin-bottom: 7%;
+}
 @media (max-width: 1856px) {
   .whiteContainer {
     flex-direction: column;
@@ -164,5 +170,8 @@
     width: 90%;
     padding-bottom: 4rem;
     padding-top: 4rem;
+  }
+  .violation-tracker {
+    margin-bottom: 20%;
   }
 }
