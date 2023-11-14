@@ -82,7 +82,11 @@ const ResetPassword = () => {
             required
           />
           {success ? <p>Password reset successful!</p> : <p>{error}</p>}
-          <ConstButton type="submit" title={"Reset Password"}></ConstButton>
+          <ConstButton
+            onClick={handleSubmit}
+            type="submit"
+            title={"Reset Password"}
+          ></ConstButton>
         </form>
       </div>
     </div>
