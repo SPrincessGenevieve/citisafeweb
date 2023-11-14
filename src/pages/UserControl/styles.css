@@ -15,6 +15,18 @@
   color: white;
 }
 
+.add-user-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.add-user-subcontainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .first-layer-control {
   display: flex;
   flex: 1;
@@ -85,9 +97,31 @@
   justify-content: center;
   margin-top: 2%;
 }
+.selection-cont {
+  width: 46%;
+}
+.selection-cont2 {
+  width: 46%;
+}
 @media (max-width: 600px) {
+  .selection-cont {
+    width: 92%;
+  }
   .search-box-user {
     width: 65%;
+  }
+  .cont-select {
+    display: flex;
+    flex-direction: column;
+  }
+  .add-user-container {
+    justify-content: center;
+  }
+
+  .add-user-subcontainer {
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
   }
   .search-container-user {
     width: 100%;

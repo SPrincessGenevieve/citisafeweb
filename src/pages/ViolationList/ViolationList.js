@@ -107,7 +107,6 @@ export default function ViolationList(props) {
     violationData.length / rowsPerPageViolation
   );
 
-  
   const filteredPenaltyData = penaltyData.filter((penalty) =>
     penalty.description.toLowerCase().includes(searchQueryPenalty.toLowerCase())
   );
@@ -188,7 +187,8 @@ export default function ViolationList(props) {
           penalty_ID: "",
         });
         handleCloseModal();
-        window.location.reload()
+        window.location.reload();
+        alert("Successfully Added a violation");
       })
       .catch((error) => {
         window.alert("Something went wrong, Please Try Again Later");
@@ -213,16 +213,14 @@ export default function ViolationList(props) {
         },
       })
       .then((response) => {
-
         setAddPenalty({
           description: "",
           amount: "",
           status: "Active",
         });
-
+        alert("Successfully Added a Penalty");
         handleCloseModal();
-        window.location.reload()
-
+        window.location.reload();
       })
       .catch((error) => {
         window.alert("Something went wrong, Please Try Again Later");
@@ -633,8 +631,8 @@ export default function ViolationList(props) {
                                       )
                                       .then((response) => {
                                         handleSave(user.id);
-                                        window.location.reload()
-
+                                        alert("Updated successfully!");
+                                        window.location.reload();
                                       })
                                       .catch((error) => {
                                         window.alert(
@@ -1031,7 +1029,8 @@ export default function ViolationList(props) {
                                         )
                                         .then((response) => {
                                           handleSave(user.id);
-                                          window.location.reload()
+                                          alert("Updated successfully!");
+                                          window.location.reload();
                                         })
                                         .catch((error) => {
                                           window.alert(

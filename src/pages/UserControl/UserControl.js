@@ -12,14 +12,21 @@ import {
 } from "@mui/icons-material";
 import {
   Button,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import "./styles.css";
 import { useState } from "react";
@@ -55,6 +62,9 @@ const cellStylesBody = {
 };
 
 function UserControl(props) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [role, setRole] = useState("");
+  const [position, setPosition] = useState("");
   const [userData, setUserData] = useState([]);
   const Token = useSelector((state) => state.auth.token);
   const [addUser, setAddUser] = useState({
@@ -104,6 +114,14 @@ function UserControl(props) {
     : [];
 
   const visibleUserData = filteredUserControl.slice(startIndex, endIndex);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -164,11 +182,23 @@ function UserControl(props) {
   };
 
   const handleSave = () => {
-    // Logic to save changes here
     setEditingRow(null);
   };
 
   const handleSubmit = () => {
+    if (
+      !addUser.email ||
+      !addUser.role ||
+      !addUser.position ||
+      !addUser.first_name ||
+      !addUser.last_name ||
+      !addUser.middle_name ||
+      !addUser.username
+    ) {
+      alert("Please fill out all entries to proceed.");
+      return;
+    }
+
     axios
       .post("accounts/users/", addUser)
       .then((response) => {
@@ -184,12 +214,16 @@ function UserControl(props) {
           middle_name: "",
           username: "",
         });
-        window.location.reload()
+
+        window.location.reload();
+        alert("You have successfully created a user.");
       })
       .catch((error) => {
         console.log(error);
         console.log(addUser);
-        alert("Please use another email or username");
+        alert(
+          "The email or username might be already registered. Please use a different one."
+        );
       });
   };
 
@@ -271,93 +305,73 @@ function UserControl(props) {
     <div className="container1">
       <Navbar />
       <div className="first-layer-control">
-        {details ? (
-          <div className="form-user">
-            {addScreen ? (
-              <div className="add-container">
-                <div
-                  style={{
-                    flexDirection: "row",
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                  className="button-next-back"
-                >
-                  <Button
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      color: "red",
+        <Dialog
+          open={isModalOpen}
+          onClose={closeModal}
+          sx={{
+            "& .MuiDialog-paper": {
+              minWidth: "40%",
+              minHeight: "60%",
+            },
+          }}
+        >
+          <DialogTitle>ADD USER</DialogTitle>
+          <DialogContent>
+            <div className="add-user-container">
+              <div className="add-user-subcontainer">
+                <div>
+                  <TextField
+                    label="First Name"
+                    style={{ marginBottom: 25, marginRight: 20 }}
+                    value={addUser.first_name}
+                    onChange={(e) => {
+                      setAddUser({
+                        ...addUser,
+                        first_name: e.target.value,
+                      });
                     }}
-                    onClick={() => setAddScreen(!addScreen) & setTable(!table)}
-                  >
-                    <CloseOutlined style={{}}></CloseOutlined>CANCEL
-                  </Button>
+                  ></TextField>
+                  <TextField
+                    label="Middle Name"
+                    style={{ marginBottom: 25, marginRight: 20 }}
+                    value={addUser.middle_name}
+                    onChange={(e) => {
+                      setAddUser({
+                        ...addUser,
+                        middle_name: e.target.value,
+                      });
+                    }}
+                  ></TextField>
                 </div>
-                <div className="form-container">
-                  <div style={{ marginRight: 10 }}>
-                    <InputRound
-                      title={"First Name"}
-                      width={"40vh"}
-                      height={"3vh"}
-                      value={addUser.first_name}
-                      onChange={(e) => {
-                        setAddUser({
-                          ...addUser,
-                          first_name: e.target.value,
-                        });
-                      }}
-                    ></InputRound>
-                    <InputRound
-                      title={"Middle Name"}
-                      width={"40vh"}
-                      height={"3vh"}
-                      value={addUser.middle_name}
-                      onChange={(e) => {
-                        setAddUser({
-                          ...addUser,
-                          middle_name: e.target.value,
-                        });
-                      }}
-                    ></InputRound>
-                    <InputRound
-                      title={"Last Name"}
-                      width={"40vh"}
-                      height={"3vh"}
-                      value={addUser.last_name}
-                      onChange={(e) => {
-                        setAddUser({
-                          ...addUser,
-                          last_name: e.target.value,
-                        });
-                      }}
-                    ></InputRound>
-                    <SelectRound
-                      width={"42vh"}
-                      height={"5vh"}
-                      title={"Role"}
-                      selection={"role"}
-                      onChange={(selectedRole) =>
-                        handleRoleChange(selectedRole)
-                      }
-                    ></SelectRound>
-                  </div>
+                <div className="cont-select">
+                  <TextField
+                    label="Last Name"
+                    style={{ marginBottom: 25, marginRight: 20 }}
+                    value={addUser.last_name}
+                    onChange={(e) => {
+                      setAddUser({
+                        ...addUser,
+                        last_name: e.target.value,
+                      });
+                    }}
+                  ></TextField>
+                  <TextField
+                    label="Username"
+                    style={{ marginBottom: 25, marginRight: 20 }}
+                    value={addUser.username}
+                    onChange={(e) => {
+                      setAddUser({
+                        ...addUser,
+                        username: e.target.value,
+                      });
+                    }}
+                  ></TextField>
+                </div>
+                <div className="cont-select" style={{ display: "flex" }}>
                   <div>
-                    <SelectRound
-                      width={"42vh"}
-                      height={"5vh"}
-                      title={"Position"}
-                      selection={"position"}
-                      onChange={(selectedRole) =>
-                        handlePositionChange(selectedRole)
-                      }
-                    ></SelectRound>
-                    <InputRound
-                      title={"Email"}
-                      width={"40vh"}
-                      height={"3vh"}
-                      type={"email"}
+                    <TextField
+                      label="Email"
+                      style={{ marginBottom: 25, marginRight: 20 }}
                       value={addUser.email}
                       onChange={(e) => {
                         setAddUser({
@@ -365,34 +379,71 @@ function UserControl(props) {
                           email: e.target.value,
                         });
                       }}
-                    ></InputRound>
-                    <InputRound
-                      title={"Username"}
-                      width={"40vh"}
-                      height={"3vh"}
-                      value={addUser.username}
-                      onChange={(e) => {
-                        setAddUser({
-                          ...addUser,
-                          username: e.target.value,
-                        });
-                      }}
-                    ></InputRound>
+                    ></TextField>
+                  </div>
+                  <div className="selection-cont">
+                    <FormControl sx={{ width: "100%" }}>
+                      <InputLabel>Position</InputLabel>
+                      <Select
+                        value={addUser.position} // Assuming addUser.position is the selected value
+                        label="Position"
+                        onChange={(event) =>
+                          handlePositionChange(event.target.value)
+                        }
+                      >
+                        <MenuItem value="">Select Position</MenuItem>
+                        <MenuItem value="Traffic Aid">Traffic Aid</MenuItem>
+                        <MenuItem value="Office Clerk">Office Clerk</MenuItem>
+                        <MenuItem value="Traffic Enforcer">
+                          Traffic Enforcer
+                        </MenuItem>
+                        <MenuItem value="Others">Others</MenuItem>
+                      </Select>
+                    </FormControl>
                   </div>
                 </div>
-                <div className="next-user-container">
-                  <div className="next-user-btn">
-                    <ConstButton
-                      onClick={handleSubmit}
-                      width={10}
-                      title={"NEXT"}
-                    ></ConstButton>
-                  </div>
+                <div>
+                  <FormControl
+                    sx={{
+                      minWidth: "46%",
+                      "@media (max-width: 600px)": {
+                        minWidth: "92%",
+                        marginTop: 3,
+                      },
+                    }}
+                  >
+                    <InputLabel>Role</InputLabel>
+                    <Select
+                      value={addUser.role}
+                      label="Role"
+                      onChange={(event) => handleRoleChange(event.target.value)}
+                    >
+                      <MenuItem value="">Select Role</MenuItem>
+                      <MenuItem value="ADMIN">Admin</MenuItem>
+                      <MenuItem value="TREASURER">Treasurer</MenuItem>
+                      <MenuItem value="ENFORCER">Enforcer</MenuItem>
+                    </Select>
+                  </FormControl>
                 </div>
               </div>
-            ) : null}
-          </div>
-        ) : null}
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={closeModal}
+              style={{ backgroundColor: "red", color: "white" }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmit}
+              style={{ backgroundColor: "#00B050", color: "white" }}
+            >
+              CREATE
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         {table ? (
           <>
             <div className="search-container-user">
@@ -406,7 +457,7 @@ function UserControl(props) {
                 className="search-box-user"
               ></input>
               <Button
-                onClick={() => setAddScreen(!addScreen) & setTable(!table)}
+                onClick={openModal}
                 className="add-user-btn"
                 style={{
                   backgroundColor: "#3E7C1F",
@@ -617,10 +668,8 @@ function UserControl(props) {
                                         }
                                       )
                                       .then((response) => {
-                                        
                                         handleSave(user.id);
-                                        window.location.reload()
-
+                                        window.location.reload();
                                       })
                                       .catch((error) => {
                                         window.alert(
