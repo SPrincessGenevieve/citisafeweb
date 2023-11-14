@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/SPrincessGenevieve/citisafeweb/static/css/main.c2bc001a.css",
+    "main.js": "/SPrincessGenevieve/citisafeweb/static/js/main.e721c23d.js",
+    "static/js/787.3fa62887.chunk.js": "/SPrincessGenevieve/citisafeweb/static/js/787.3fa62887.chunk.js",
+    "static/media/moon.png": "/SPrincessGenevieve/citisafeweb/static/media/moon.27712923ef2f6e55441d.png",
+    "static/media/profile.avif": "/SPrincessGenevieve/citisafeweb/static/media/profile.e1db1b588918054bb2a1.avif",
+    "static/media/sun.png": "/SPrincessGenevieve/citisafeweb/static/media/sun.96a554a66411e769e4b1.png",
+    "static/media/enforcer.png": "/SPrincessGenevieve/citisafeweb/static/media/enforcer.f84f10a216fe0c5a3fdb.png",
+    "static/media/lock.png": "/SPrincessGenevieve/citisafeweb/static/media/lock.ffa3fa248d43f5bee3b3.png",
+    "static/media/logo.png": "/SPrincessGenevieve/citisafeweb/static/media/logo.d1d318a2e1b3ca627ceb.png",
+    "index.html": "/SPrincessGenevieve/citisafeweb/index.html",
+    "main.c2bc001a.css.map": "/SPrincessGenevieve/citisafeweb/static/css/main.c2bc001a.css.map",
+    "main.e721c23d.js.map": "/SPrincessGenevieve/citisafeweb/static/js/main.e721c23d.js.map",
+    "787.3fa62887.chunk.js.map": "/SPrincessGenevieve/citisafeweb/static/js/787.3fa62887.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c2bc001a.css",
+    "static/js/main.e721c23d.js"
+  ]
+}
