@@ -178,6 +178,7 @@ function Violation({ navigation }) {
       PLACE_OF_VIOLATION: item.place_violation,
       APPREHENDING_OFFICER: `${item.user_ID.first_name} ${item.user_ID.middle_name} ${item.user_ID.last_name}`,
       TICKET_STATUS: item.ticket_status,
+      OFFENSE: item.driver_info.offenses_count,
       PENALTY: item.penalty_amount,
       VIOLATION: item.violation_info.violations_info.join(", "),
     }));
