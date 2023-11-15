@@ -65,8 +65,7 @@ if (window.innerWidth <= 600) {
 }
 
 function Violation({ navigation }) {
-
-  const Role = useSelector((state) => state.auth.role)
+  const Role = useSelector((state) => state.auth.role);
 
   const [ticketData, setTicketData] = useState([]);
   const Token = useSelector((state) => state.auth.token);
@@ -76,7 +75,7 @@ function Violation({ navigation }) {
   const [editingRows, setEditingRows] = useState({});
   const [deletingRows, setDeletingRows] = useState({});
   const [originalTicketData, setOriginalTicketData] = useState([]);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const rowsPerPage = 6;
@@ -109,6 +108,7 @@ function Violation({ navigation }) {
   const handleOpenModal = (MFRTA_TCT_NO) => {
     console.log("Opening modal for ticket:", MFRTA_TCT_NO);
     console.log("Selected ticket:", selectedTicket);
+    setIsModalOpen(true);
     setSelectedTicket(MFRTA_TCT_NO);
   };
 
@@ -462,7 +462,9 @@ function Violation({ navigation }) {
                     <TableCell style={cellStylesHeader.cell}>Status</TableCell>
                     {Role === "TREASURER" && (
                       <>
-                        <TableCell style={cellStylesHeader.cell}>Action</TableCell>
+                        <TableCell style={cellStylesHeader.cell}>
+                          Action
+                        </TableCell>
                       </>
                     )}
                   </TableRow>
@@ -480,7 +482,10 @@ function Violation({ navigation }) {
                           <a
                             className="ticket"
                             href="#"
-                            onClick={() => handleOpenModal(item.MFRTA_TCT_NO)}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              handleOpenModal(item.MFRTA_TCT_NO);
+                            }}
                           >
                             <div className="hover-message">
                               <p className="view-more">view more...</p>
@@ -581,9 +586,12 @@ function Violation({ navigation }) {
                         </div>
                       </TableCell>
 
-                      {Role === 'TREASURER' && (
+                      {Role === "TREASURER" && (
                         <>
-                          <TableCell className="row" style={cellStylesBody.cell}>
+                          <TableCell
+                            className="row"
+                            style={cellStylesBody.cell}
+                          >
                             {editingRows[item.MFRTA_TCT_NO] ? (
                               <div className="check-close">
                                 <Button
@@ -617,7 +625,7 @@ function Violation({ navigation }) {
                                           "Successfully Edit Penalty Status"
                                         );
                                         handleSave(item.MFRTA_TCT_NO);
-                                        window.location.reload()
+                                        window.location.reload();
                                       })
                                       .catch((error) => {
                                         window.alert(
@@ -674,11 +682,9 @@ function Violation({ navigation }) {
                                 </Button>
                               </>
                             )}
-                          </TableCell>                        
+                          </TableCell>
                         </>
                       )}
-
-
                     </TableRow>
                   ))}
                 </TableBody>
