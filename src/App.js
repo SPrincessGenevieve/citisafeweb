@@ -8,7 +8,7 @@ import UserControl from "./pages/UserControl/UserControl";
 import ViolationList from "./pages/ViolationList/ViolationList";
 import ErrorBoundary from "./ErrorBoundary";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Routes,
   Navigate,
