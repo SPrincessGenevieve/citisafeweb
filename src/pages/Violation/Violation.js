@@ -125,9 +125,22 @@ function Violation({ navigation }) {
 
     if (Array.isArray(originalTicketData)) {
       const filteredData = originalTicketData.filter((item) => {
-        if (item && item.MFRTA_TCT_NO) {
+        if (item) {
+          const firstName = item.driver_info.first_name.toLowerCase();
+          const middleInitial = item.driver_info.middle_initial.toLowerCase();
+          const lastName = item.driver_info.last_name.toLowerCase();
+
+          const nameMatches =
+            firstName.includes(query.toLowerCase()) ||
+            middleInitial.includes(query.toLowerCase()) ||
+            lastName.includes(query.toLowerCase());
+
           const tctNoString = item.MFRTA_TCT_NO.toString();
-          return tctNoString.toLowerCase().includes(query.toLowerCase());
+          const tctNoMatches = tctNoString
+            .toLowerCase()
+            .includes(query.toLowerCase());
+
+          return nameMatches || tctNoMatches;
         }
         return false;
       });
