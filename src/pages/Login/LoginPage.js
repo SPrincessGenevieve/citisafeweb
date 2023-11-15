@@ -21,7 +21,7 @@ function LoginPage({ onClick }) {
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
     useState(false);
   const [data, setData] = useState({
-    email: ''
+    email: "",
   });
   const [credentials, setCredentials] = useState({
     username: "jaydemike15",
@@ -52,10 +52,14 @@ function LoginPage({ onClick }) {
           })
           .then((response) => {
             const role = response.data.role;
-            
 
             if (role === "ADMIN" || role === "TREASURER") {
-              alert(`Welcome ${response.data.last_name.charAt(0).toUpperCase() + response.data.last_name.slice(1)}, your role is ${role}`);
+              alert(
+                `Welcome ${
+                  response.data.last_name.charAt(0).toUpperCase() +
+                  response.data.last_name.slice(1)
+                }, your role is ${role}`
+              );
               dispatch(setLogin(id_token));
               dispatch(setRole(role));
             } else {
@@ -82,19 +86,17 @@ function LoginPage({ onClick }) {
   };
 
   const handleSendPasswordReset = () => {
+    axios
+      .post("accounts/users/reset_password/", data)
+      .then((response) => {
+        alert("Email sent!", data.email);
+        closeForgotPasswordModal();
+      })
+      .catch((error) => {
+        alert("Email not sent!, Try again", data.email);
 
-    axios.post('accounts/users/reset_password/', data).then((response) => {
-      alert("Email sent!", data.email);
-      closeForgotPasswordModal();
-    }).catch(error => {
-      alert("Email not sent!, Try again", data.email);
-
-      closeForgotPasswordModal();
-    })
-
-
-
-
+        closeForgotPasswordModal();
+      });
   };
 
   return (
@@ -187,9 +189,12 @@ function LoginPage({ onClick }) {
             type="email"
             fullWidth
             value={data.email}
-            onChange={(e) => setData({
-              ...data, email: e.target.value
-            })}
+            onChange={(e) =>
+              setData({
+                ...data,
+                email: e.target.value,
+              })
+            }
             style={{ marginTop: 20 }}
           />
         </DialogContent>
