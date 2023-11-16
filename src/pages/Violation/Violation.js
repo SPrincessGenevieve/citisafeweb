@@ -509,8 +509,9 @@ function Violation({ navigation }) {
                         </div>
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
-                        {item.driver_info.first_name}
-                        {item.driver_info.middle_initial},{" "}
+                        {item.driver_info.first_name}{" "}
+                        {item.driver_info.middle_initial}
+                        {". "}
                         {item.driver_info.last_name}{" "}
                       </TableCell>
                       <TableCell
