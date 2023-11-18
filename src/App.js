@@ -1,19 +1,19 @@
-import "./App.css";
-import LoginPage from "./pages/Login/LoginPage";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import "./App.css";
+import ErrorBoundary from "./ErrorBoundary";
+import LoginPage from "./pages/Login/LoginPage";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Violation from "./pages/Violation/Violation";
 import Profile from "./pages/Profile/Profile";
 import UserControl from "./pages/UserControl/UserControl";
 import ViolationList from "./pages/ViolationList/ViolationList";
-import ErrorBoundary from "./ErrorBoundary";
-import {
-  HashRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-import { useSelector } from "react-redux";
 import ResetPassword from "./pages/ForgotPassword";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div className="container">
-      <Router>
+      <Router basename="/citisafeweb">
         <Routes>
           <Route
             exact
