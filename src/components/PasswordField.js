@@ -3,7 +3,7 @@ import "./styles.css";
 import { IconButton, TextField } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-function PasswordField({ label, type, value, className }) {
+function PasswordField({ label, type, value, className, onChange }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -23,6 +23,7 @@ function PasswordField({ label, type, value, className }) {
           type={passwordVisible ? "text" : type}
           label={label}
           value={value}
+          onChange={onChange}
         />
       </div>
       <div

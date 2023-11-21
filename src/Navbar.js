@@ -35,9 +35,9 @@ export default function Navbar() {
           <>
             <CustomLink to="/dashboard">Home</CustomLink>
             <CustomLink to="/violation">Records</CustomLink>
-            <div>
-              <CustomLink to="/update"></CustomLink>
-            </div>
+            <CustomLink to="/update" className="updatePass">
+              Settings
+            </CustomLink>
           </>
         ) : (
           <>
@@ -48,6 +48,7 @@ export default function Navbar() {
             <CustomLink to="/update" className="updatePass">
               Settings
             </CustomLink>
+
           </>
         )}
         <li className={`nav-item logout-item ${isNavVisible ? "show" : ""}`}>
