@@ -51,4 +51,7 @@
   .inner-container-update {
     width: 100%;
   }
+  .inner-update {
+    margin-top: -100px;
+  }
 }
