@@ -535,9 +535,7 @@ function UserControl(props) {
                           key={index}
                         >
                           <TableCell style={cellStylesBody.cell}>
-                            <a className="ticket" href="#">
-                              {user.id}
-                            </a>
+                            {user.id}
                           </TableCell>
                           <TableCell
                             style={cellStylesBody.cell}
