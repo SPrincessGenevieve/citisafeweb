@@ -501,11 +501,8 @@ function Violation({ navigation }) {
                               handleOpenModal(item.MFRTA_TCT_NO);
                             }}
                           >
-                            <div className="hover-message">
-                              <p className="view-more">view more...</p>
-                            </div>
+                            {item.MFRTA_TCT_NO}{" "}
                           </a>
-                          {item.MFRTA_TCT_NO}
                         </div>
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>

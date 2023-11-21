@@ -96,8 +96,15 @@
 }
 .ticket {
   text-decoration: none;
-  color: black;
+  color: rgb(30, 204, 39);
+  font-weight: bold;
+  transition: 0.5s;
 }
+.ticket:hover {
+  color: rgb(17, 0, 255);
+  font-weight: bolder;
+}
+
 .hover-message {
   background-color: #3e7c1fab;
   color: white;

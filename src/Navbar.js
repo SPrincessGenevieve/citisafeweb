@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import "./styles.css";
 import logo from "./assets/logo.png";
-import { Dashboard, Widgets } from "@mui/icons-material";
+import { Dashboard, Settings, Widgets } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogout } from "./pages/Login/authSlice";
@@ -13,7 +13,7 @@ export default function Navbar() {
 
   const dispatch = useDispatch();
 
-  const Role = useSelector((state) => state.auth.role)
+  const Role = useSelector((state) => state.auth.role);
 
   const toggleNav = () => {
     setNavVisibility(!isNavVisible);
@@ -35,6 +35,9 @@ export default function Navbar() {
           <>
             <CustomLink to="/dashboard">Home</CustomLink>
             <CustomLink to="/violation">Records</CustomLink>
+            <div>
+              <CustomLink to="/update"></CustomLink>
+            </div>
           </>
         ) : (
           <>
@@ -42,6 +45,9 @@ export default function Navbar() {
             <CustomLink to="/violation">Records</CustomLink>
             <CustomLink to="/user">Users</CustomLink>
             <CustomLink to="/violationList">Violation</CustomLink>
+            <CustomLink to="/update" className="updatePass">
+              Settings
+            </CustomLink>
           </>
         )}
         <li className={`nav-item logout-item ${isNavVisible ? "show" : ""}`}>
@@ -53,8 +59,6 @@ export default function Navbar() {
           >
             Logout
           </CustomLink>
-
-
         </li>
       </ul>
     </nav>

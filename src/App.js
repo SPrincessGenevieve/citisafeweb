@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ResetPassword from "./pages/ForgotPassword";
+import UpdatePassword from "./pages/UpdatePassword/UpdatePassword";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.setIsLoggedIn);
@@ -49,6 +50,10 @@ function App() {
           <Route
             path="/profile"
             element={isAuthenticated ? <Profile /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/update"
+            element={isAuthenticated ? <UpdatePassword /> : <Navigate to="/" />}
           />
           <Route
             path="/reset_password/:uid/:token"

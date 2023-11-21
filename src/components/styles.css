@@ -27,3 +27,26 @@
   font-size: 20px;
   padding-right: 10px;
 }
+.passInput {
+  background-color: grey;
+  position: absolute;
+  display: flex;
+}
+.ComUpdateContainer {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  width: 25vw;
+}
+/* For laptops */
+@media (max-width: 1199px) {
+  .ComUpdateContainer {
+    width: 35vw;
+  }
+}
+
+@media (max-width: 767px) {
+  .ComUpdateContainer {
+    width: 55vw;
+  }
+}
