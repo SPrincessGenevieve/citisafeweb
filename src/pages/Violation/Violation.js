@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../Navbar";
 import "./styles.css";
-import { Edit, Close, Check, Search, Download } from "@mui/icons-material";
+import {
+  Edit,
+  Close,
+  Check,
+  Search,
+  Download,
+  RestartAlt,
+} from "@mui/icons-material";
 import StatusSelection from "../../components/StatusSelection";
 import StatSelect from "./../../JSON/StatSelect.json";
 import violationsData from "./../../JSON/violationsData.json";
@@ -338,6 +345,25 @@ function Violation({ navigation }) {
     setTicketData(originalTicketData);
   };
 
+  const handleRestart = () => {
+    // Reset date filter
+    const initialDateFilter = {
+      startDate: null,
+      endDate: null,
+    };
+    setSelectedDate(initialDateFilter);
+
+    // Reset status filter
+    const initialCheckedStatuses = {
+      PENDING: false,
+      PAID: false,
+      OVERDUE: false,
+      DROPPED: false,
+    };
+    setCheckedStatuses(initialCheckedStatuses);
+    filterData(initialCheckedStatuses, initialDateFilter);
+  };
+
   useEffect(() => {
     axios
       .get("ticket/register/", {
@@ -421,7 +447,7 @@ function Violation({ navigation }) {
                   value={"PAID"}
                   onClick={handleStatusChangeFilter}
                   checked={checkedStatuses.PAID}
-                ></SelectFilter>
+                />
               </div>
               <div className="sub-filterStatus">
                 <SelectFilter
@@ -429,13 +455,13 @@ function Violation({ navigation }) {
                   value={"OVERDUE"}
                   onClick={handleStatusChangeFilter}
                   checked={checkedStatuses.OVERDUE}
-                ></SelectFilter>
+                />
                 <SelectFilter
                   label={"DROPPED"}
                   value={"DROPPED"}
                   onClick={handleStatusChangeFilter}
                   checked={checkedStatuses.DROPPED}
-                ></SelectFilter>
+                />
               </div>
             </div>
           </div>
@@ -449,6 +475,11 @@ function Violation({ navigation }) {
                 onCancel={handleCancelFilter}
                 onDateSelect={handleDateSort}
               />
+            </div>
+            <div className="restart">
+              <Button style={{ color: "green" }} onClick={handleRestart}>
+                <RestartAlt></RestartAlt>
+              </Button>
             </div>
           </div>
         </div>

@@ -1,23 +1,27 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import { CheckBoxOutlineBlank, CheckBoxOutlined } from "@mui/icons-material";
 import { Button } from "@mui/material";
 
-export default function SelectFilter({ label, value, checked, onClick }) {
-  const [check, setCheck] = useState(true);
+export default function SelectFilter({
+  label,
+  value,
+  checked,
+  onClick,
+  resetChecked,
+}) {
+  const [isChecked, setIsChecked] = useState(false);
 
-  const handleCheck = ({ onClicks }) => {
-    setCheck(!check);
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
+
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
 
     if (typeof onClick === "function") {
       onClick(value);
-    }
-
-    if (onClicks && onClicks.length > 0) {
-      onClicks.forEach((onClick) => {
-        onClick();
-      });
     }
   };
 
@@ -32,18 +36,18 @@ export default function SelectFilter({ label, value, checked, onClick }) {
         height: "100%",
       }}
     >
-      <Button onClick={handleCheck} value={value} checked={checked}>
-        {check ? (
-          <CheckBoxOutlineBlank
-            style={{ fontSize: 30, color: "green" }}
-          ></CheckBoxOutlineBlank>
-        ) : (
+      <Button onClick={handleCheck} value={value} checked={isChecked}>
+        {isChecked ? (
           <CheckBoxOutlined
+            style={{ fontSize: 30, color: "green" }}
+          ></CheckBoxOutlined>
+        ) : (
+          <CheckBoxOutlineBlank
             style={{
               fontSize: 30,
               color: "green",
             }}
-          ></CheckBoxOutlined>
+          ></CheckBoxOutlineBlank>
         )}
       </Button>
       <p style={{ margin: "0", marginLeft: "5px" }}>{label}</p>
