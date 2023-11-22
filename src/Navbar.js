@@ -48,6 +48,7 @@ export default function Navbar() {
             <CustomLink to="/update" className="updatePass">
               Settings
             </CustomLink>
+
           </>
         )}
         <li className={`nav-item logout-item ${isNavVisible ? "show" : ""}`}>

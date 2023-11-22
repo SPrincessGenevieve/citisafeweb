@@ -187,8 +187,8 @@ export default function ViolationList(props) {
           penalty_ID: "",
         });
         handleCloseModal();
-        window.location.reload();
         alert("Successfully Added a violation");
+        window.location.reload();
       })
       .catch((error) => {
         window.alert("Something went wrong, Please Try Again Later");
