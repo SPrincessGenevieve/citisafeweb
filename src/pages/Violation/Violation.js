@@ -71,7 +71,11 @@ if (window.innerWidth <= 600) {
 
 function Violation({ navigation }) {
   const Role = useSelector((state) => state.auth.role);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState({
+    startDate: null,
+    endDate: null,
+  });
+
   const [checkedStatuses, setCheckedStatuses] = useState({
     PENDING: false,
     PAID: false,
@@ -324,9 +328,11 @@ function Violation({ navigation }) {
 
   const handleDateSort = (selectedDate) => {
     setSelectedDate(selectedDate);
-    filterData(Object.keys(checkedStatuses).filter((s) => checkedStatuses[s]), selectedDate);
+    filterData(
+      Object.keys(checkedStatuses).filter((s) => checkedStatuses[s]),
+      selectedDate
+    );
   };
-  
 
   const handleCancelFilter = () => {
     setTicketData(originalTicketData);
