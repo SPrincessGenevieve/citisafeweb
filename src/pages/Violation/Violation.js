@@ -22,6 +22,9 @@ import {
 import { useSelector } from "react-redux";
 import axios from "../../plugins/axios";
 import * as XLSX from "xlsx";
+import SelectFilter from "./../../components/SelectFilter";
+import AtoZ from "./../../components/AtoZ";
+import SortDate from "../../components/SortDate";
 
 const styles = (theme) => ({
   modal: {
@@ -66,7 +69,13 @@ if (window.innerWidth <= 600) {
 
 function Violation({ navigation }) {
   const Role = useSelector((state) => state.auth.role);
-
+  const [checkedStatuses, setCheckedStatuses] = useState({
+    PENDING: false,
+    PAID: false,
+    OVERDUE: false,
+    DROPPED: false,
+  });
+  const [sortOrder, setSortOrder] = useState("ascending");
   const [ticketData, setTicketData] = useState([]);
   const Token = useSelector((state) => state.auth.token);
   const [editTicketStatus, setEditTicketStatus] = useState("");
@@ -242,6 +251,46 @@ function Violation({ navigation }) {
     }));
   };
 
+  const handleStatusChangeFilter = (status) => {
+    const newCheckedStatuses = {
+      ...checkedStatuses,
+      [status]: !checkedStatuses[status],
+    };
+    setCheckedStatuses(newCheckedStatuses);
+    filterStatus(newCheckedStatuses);
+  };
+
+  const filterAZ = () => {
+    const newSortOrder = sortOrder === "ascending" ? "descending" : "ascending";
+    setSortOrder(newSortOrder);
+
+    const sortedData = [...ticketData].sort((a, b) => {
+      return sortOrder === "ascending"
+        ? a.MFRTA_TCT_NO - b.MFRTA_TCT_NO
+        : b.MFRTA_TCT_NO - a.MFRTA_TCT_NO;
+    });
+
+    setTicketData(sortedData);
+  };
+
+  const filterStatus = (selectedStatuses) => {
+    const statusesToFilter = Object.keys(selectedStatuses).filter(
+      (status) => selectedStatuses[status]
+    );
+
+    if (statusesToFilter.length === 0) {
+      // If no checkboxes are checked, display all
+      setTicketData(originalTicketData);
+      return;
+    }
+
+    const filteredData = originalTicketData.filter((item) =>
+      statusesToFilter.includes(item.ticket_status)
+    );
+
+    setTicketData(filteredData);
+  };
+
   useEffect(() => {
     axios
       .get("ticket/register/", {
@@ -251,8 +300,13 @@ function Violation({ navigation }) {
       })
       .then((response) => {
         console.log(response.data);
-        setTicketData(response.data);
-        setOriginalTicketData(response.data);
+
+        const sortedData = response.data.sort((a, b) => {
+          return new Date(b.date_issued) - new Date(a.date_issued);
+        });
+
+        setTicketData(sortedData);
+        setOriginalTicketData(sortedData);
       })
       .catch((error) => {
         window.alert("Error Fetching");
@@ -294,6 +348,55 @@ function Violation({ navigation }) {
             <Download style={{}} />
             {window.innerWidth <= 600 ? null : "DOWNLOAD"}
           </Button>
+        </div>
+        <div className="container-filter">
+          <div
+            style={{
+              marginRight: 10,
+              display: "flex",
+              flexDirection: "row",
+              borderRadius: 10,
+              border: "1px solid #c4c4c4",
+            }}
+          >
+            <div style={{ marginRight: 20, display: "flex" }}>
+              <div className="sub-filterStatus">
+                <SelectFilter
+                  label={"PENDING"}
+                  value={"PENDING"}
+                  onClick={handleStatusChangeFilter}
+                  checked={checkedStatuses.PENDING}
+                />
+                <SelectFilter
+                  label={"PAID"}
+                  value={"PAID"}
+                  onClick={handleStatusChangeFilter}
+                  checked={checkedStatuses.PAID}
+                ></SelectFilter>
+              </div>
+              <div className="sub-filterStatus">
+                <SelectFilter
+                  label={"OVERDUE"}
+                  value={"OVERDUE"}
+                  onClick={handleStatusChangeFilter}
+                  checked={checkedStatuses.OVERDUE}
+                ></SelectFilter>
+                <SelectFilter
+                  label={"DROPPED"}
+                  value={"DROPPED"}
+                  onClick={handleStatusChangeFilter}
+                  checked={checkedStatuses.DROPPED}
+                ></SelectFilter>
+              </div>
+            </div>
+          </div>
+          <div>
+            <AtoZ onClicks={[filterAZ]}></AtoZ>
+          </div>
+          <div>
+            {/*SORTING DATE HERE*/}
+            <SortDate></SortDate>
+          </div>
         </div>
 
         <div className="table-conatiner-violation">

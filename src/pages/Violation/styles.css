@@ -1,3 +1,17 @@
+/*NEW*/
+.container-filter {
+  display: flex;
+  flex: 1;
+  padding: 5px;
+  padding-left: 3%;
+  margin-top: 10px;
+}
+.sub-filterStatus {
+  display: flex;
+}
+
+/*OLD*/
+
 .first-layer-violation {
   display: flex;
   flex-direction: column;
