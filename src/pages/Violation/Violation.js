@@ -254,13 +254,41 @@ function Violation({ navigation }) {
     }));
   };
 
+  const filterData = (statusFilters, dateFilter) => {
+    let filteredData = originalTicketData;
+
+    // Filter by status
+    if (statusFilters.length > 0) {
+      filteredData = filteredData.filter((item) =>
+        statusFilters.includes(item.ticket_status)
+      );
+    }
+
+    // Filter by date
+    if (dateFilter.startDate && dateFilter.endDate) {
+      const startDateStr = dateFilter.startDate.toLocaleDateString("en-US");
+      const endDateStr = dateFilter.endDate.toLocaleDateString("en-US");
+
+      filteredData = filteredData.filter((item) => {
+        const itemDate = new Date(item.date_issued).toLocaleDateString("en-US");
+        return itemDate >= startDateStr && itemDate <= endDateStr;
+      });
+    }
+
+    setTicketData(filteredData);
+  };
+
   const handleStatusChangeFilter = (status) => {
     const newCheckedStatuses = {
       ...checkedStatuses,
       [status]: !checkedStatuses[status],
     };
     setCheckedStatuses(newCheckedStatuses);
-    filterStatus(newCheckedStatuses);
+    const selectedStatuses = Object.keys(newCheckedStatuses).filter(
+      (s) => newCheckedStatuses[s]
+    );
+
+    filterData(selectedStatuses, selectedDate);
   };
 
   const filterAZ = () => {
@@ -296,26 +324,9 @@ function Violation({ navigation }) {
 
   const handleDateSort = (selectedDate) => {
     setSelectedDate(selectedDate);
-
-    if (selectedDate.startDate && selectedDate.endDate) {
-      const startDateStr = selectedDate.startDate.toLocaleDateString("en-US");
-      const endDateStr = selectedDate.endDate.toLocaleDateString("en-US");
-
-      console.log("Start Date:", startDateStr);
-      console.log("End Date:", endDateStr);
-
-      // Filter the data based on the selected date range
-      const filteredData = originalTicketData.filter((item) => {
-        const itemDate = new Date(item.date_issued).toLocaleDateString("en-US");
-        console.log("Item Date:", itemDate);
-        return itemDate >= startDateStr && itemDate <= endDateStr;
-      });
-
-      console.log("Filtered Data:", filteredData);
-
-      setTicketData(filteredData);
-    }
+    filterData(Object.keys(checkedStatuses).filter((s) => checkedStatuses[s]), selectedDate);
   };
+  
 
   const handleCancelFilter = () => {
     setTicketData(originalTicketData);
