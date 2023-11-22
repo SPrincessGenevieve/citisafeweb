@@ -44,10 +44,11 @@ const styles = (theme) => ({
 const cellStylesHeader = {
   cell: {
     color: "black",
-    width: 150,
-    height: 30,
+    height: 10,
     textAlign: "center",
+    justifyContent: "center",
     fontWeight: "bold",
+    fontSize: "12px",
   },
 };
 
@@ -59,6 +60,7 @@ const cellStylesBody = {
     width: 150,
     height: "auto",
     textAlign: "center",
+    fontSize: "12px",
   },
 };
 
@@ -69,6 +71,7 @@ if (window.innerWidth <= 600) {
 
 function Violation({ navigation }) {
   const Role = useSelector((state) => state.auth.role);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [checkedStatuses, setCheckedStatuses] = useState({
     PENDING: false,
     PAID: false,
@@ -291,6 +294,33 @@ function Violation({ navigation }) {
     setTicketData(filteredData);
   };
 
+  const handleDateSort = (selectedDate) => {
+    setSelectedDate(selectedDate);
+
+    if (selectedDate.startDate && selectedDate.endDate) {
+      const startDateStr = selectedDate.startDate.toLocaleDateString("en-US");
+      const endDateStr = selectedDate.endDate.toLocaleDateString("en-US");
+
+      console.log("Start Date:", startDateStr);
+      console.log("End Date:", endDateStr);
+
+      // Filter the data based on the selected date range
+      const filteredData = originalTicketData.filter((item) => {
+        const itemDate = new Date(item.date_issued).toLocaleDateString("en-US");
+        console.log("Item Date:", itemDate);
+        return itemDate >= startDateStr && itemDate <= endDateStr;
+      });
+
+      console.log("Filtered Data:", filteredData);
+
+      setTicketData(filteredData);
+    }
+  };
+
+  const handleCancelFilter = () => {
+    setTicketData(originalTicketData);
+  };
+
   useEffect(() => {
     axios
       .get("ticket/register/", {
@@ -359,7 +389,9 @@ function Violation({ navigation }) {
               border: "1px solid #c4c4c4",
             }}
           >
-            <div style={{ marginRight: 20, display: "flex" }}>
+            <div
+              style={{ marginRight: 20, display: "flex", alignItems: "center" }}
+            >
               <div className="sub-filterStatus">
                 <SelectFilter
                   label={"PENDING"}
@@ -390,13 +422,21 @@ function Violation({ navigation }) {
               </div>
             </div>
           </div>
-          <div>
-            <AtoZ onClicks={[filterAZ]}></AtoZ>
+          <div className="other-filter">
+            <div>
+              <AtoZ onClicks={[filterAZ]}></AtoZ>
+            </div>
+            <div>
+              {/*SORTING DATE HERE*/}
+              <SortDate
+                onCancel={handleCancelFilter}
+                onDateSelect={handleDateSort}
+              />
+            </div>
           </div>
-          <div>
-            {/*SORTING DATE HERE*/}
-            <SortDate></SortDate>
-          </div>
+        </div>
+        <div style={{ marginLeft: "3%" }}>
+          <p>TOTAL ROWS: {ticketData.length}</p>
         </div>
 
         <div className="table-conatiner-violation">
@@ -567,8 +607,22 @@ function Violation({ navigation }) {
                       Tracking #
                     </TableCell>
                     <TableCell style={cellStylesHeader.cell}>Name</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>
-                      Violation
+                    <TableCell
+                      sstyle={{
+                        ...cellStylesHeader.cell,
+                        backgroundColor: "pink",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 400,
+                          fontSize: 12,
+                          textAlign: "center",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Violation
+                      </div>
                     </TableCell>
                     <TableCell style={cellStylesHeader.cell}>Date</TableCell>
                     <TableCell style={cellStylesHeader.cell}>Offense</TableCell>
@@ -626,7 +680,9 @@ function Violation({ navigation }) {
                       >
                         {item.violation_info.violations_info.map(
                           (violation, index) => (
-                            <div key={index}>{violation}</div>
+                            <div style={{ width: 400 }} key={index}>
+                              {violation}
+                            </div>
                           )
                         )}
                       </TableCell>

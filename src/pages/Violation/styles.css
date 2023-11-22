@@ -9,7 +9,10 @@
 .sub-filterStatus {
   display: flex;
 }
-
+.other-filter {
+  display: flex;
+  flex-direction: row;
+}
 /*OLD*/
 
 .first-layer-violation {
@@ -49,12 +52,12 @@
 .tab-con-2 {
   display: flex;
   width: 95%;
-  height: 90%;
+  height: 75%;
 }
 
 .table {
   border-collapse: collapse;
-  width: 100%;
+  width: auto;
   border: 0;
 }
 .table-row {
@@ -216,7 +219,6 @@
     margin-left: 5%;
   }
   .table-conatiner-violation {
-    margin-top: 10%;
   }
   .violation-container {
     flex-direction: column;
@@ -249,7 +251,6 @@
     padding-left: 35px;
     padding-right: 20px;
   }
-
   .even-row {
     width: 300px;
   }
@@ -261,5 +262,16 @@
     display: flex;
     width: 150px;
     margin-left: -10px;
+  }
+  .sub-filterStatus {
+    flex-direction: column;
+  }
+  .container-filter {
+    flex-direction: column;
+  }
+  .other-filter {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
   }
 }

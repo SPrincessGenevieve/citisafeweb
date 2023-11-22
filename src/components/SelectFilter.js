@@ -29,6 +29,7 @@ export default function SelectFilter({ label, value, checked, onClick }) {
         alignItems: "center",
         padding: "5px",
         borderRadius: 10,
+        height: "100%",
       }}
     >
       <Button onClick={handleCheck} value={value} checked={checked}>
