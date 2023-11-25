@@ -181,7 +181,7 @@ function Violation({ navigation }) {
     // Convert your data to a string format suitable for HTML
     const htmlContent = data
       .map(
-        (item) => `
+        (item, index) => `
         <!DOCTYPE html>
         <html>
           <head>
@@ -210,7 +210,7 @@ function Violation({ navigation }) {
         </style>
           </head>
           <body>
-            <h2>VIOLATION RECORDS</h2>
+            <h2>TICKET # ${item.MFRTA_TCT_NO}</h2>
         
             <table>
               <tr>
@@ -514,7 +514,7 @@ function Violation({ navigation }) {
             className="search-box"
           />
           <Button
-            onClick={() => handleDownload(ticketData, "users_table.pdf")}
+            onClick={() => handleDownload(ticketData, "RECORDS.pdf")}
             className="add-user-btn"
             style={{
               backgroundColor: "#3E7C1F",
