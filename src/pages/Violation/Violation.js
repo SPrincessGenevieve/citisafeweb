@@ -386,12 +386,16 @@ function Violation({ navigation }) {
     if ("Notification" in window) {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
-          new Notification("ALERT!", {
+          const notification = new Notification("ALERT!", {
             body: "There has been an UPDATE on the RECORDS table.",
             icon: notif,
           });
 
-          console.log("Button clicked and notification shown");
+          notification.onclick = function () {
+            console.log("Notification clicked");
+          };
+
+          console.log("Notification shown");
         } else {
           console.log("Notification permission denied");
         }
