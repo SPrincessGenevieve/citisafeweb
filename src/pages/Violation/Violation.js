@@ -84,7 +84,9 @@ function Violation({ navigation }) {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000"); // Update with your server's URL
+    const newSocket = io(
+      "https://sprincessgenevieve.github.io/citisafeweb/#/violation"
+    ); // Update with your server's URL
     setSocket(newSocket);
 
     return () => {
