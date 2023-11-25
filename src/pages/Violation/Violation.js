@@ -32,6 +32,10 @@ import html2pdf from "html2pdf.js";
 import SelectFilter from "./../../components/SelectFilter";
 import AtoZ from "./../../components/AtoZ";
 import SortDate from "../../components/SortDate";
+import addNotification from "react-push-notification";
+import notif from "./.././../assets/notif.gif";
+import { ToastContainer, toast } from "react-toastify";
+import { io } from "socket.io-client";
 
 const styles = (theme) => ({
   modal: {
@@ -77,6 +81,17 @@ if (window.innerWidth <= 600) {
 }
 
 function Violation({ navigation }) {
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:3000"); // Update with your server's URL
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []); // Run once on component mount
+
   const Role = useSelector((state) => state.auth.role);
   const [selectedDate, setSelectedDate] = useState({
     startDate: null,
@@ -355,10 +370,12 @@ function Violation({ navigation }) {
   };
 
   const handleSave = (rowId) => {
+    handleNotif();
     setEditingRows((prevEditingRows) => ({
       ...prevEditingRows,
       [rowId]: false,
     }));
+    socket.emit("updateRecord", { rowId });
   };
 
   const handleCheck = (rowId) => {
@@ -366,6 +383,25 @@ function Violation({ navigation }) {
       ...prevDeletingRows,
       [rowId]: false,
     }));
+  };
+
+  const handleNotif = () => {
+    if ("Notification" in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          new Notification("ALERT!", {
+            body: "There has been an UPDATE on the RECORDS table.",
+            icon: notif,
+          });
+
+          console.log("Button clicked and notification shown");
+        } else {
+          console.log("Notification permission denied");
+        }
+      });
+    } else {
+      console.log("Notification API not supported");
+    }
   };
 
   const handleCancelEdit = (rowId) => {
@@ -594,7 +630,6 @@ function Violation({ navigation }) {
         <div style={{ marginLeft: "3%" }}>
           <p>TOTAL ROWS: {ticketData.length}</p>
         </div>
-
         <div className="table-conatiner-violation">
           {ticketData.map((item, index) => (
             <Dialog
