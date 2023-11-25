@@ -84,7 +84,7 @@ function Violation({ navigation }) {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3001"); // Update with your server's URL
+    const newSocket = io("https://etcmf-notif-000b9a9d3782.herokuapp.com/"); // Update with your server's URL
     setSocket(newSocket);
 
     return () => {
@@ -193,7 +193,6 @@ function Violation({ navigation }) {
       return;
     }
 
-    // Convert your data to a string format suitable for HTML
     const htmlContent = data
       .map(
         (item, index) => `
@@ -330,11 +329,9 @@ function Violation({ navigation }) {
       )
       .join("\n");
 
-    // Create a new div element with the HTML content
     const container = document.createElement("div");
     container.innerHTML = htmlContent;
 
-    // Use html2pdf to convert the HTML content to a PDF
     html2pdf(container, {
       margin: 10,
       filename: fileName,
@@ -414,14 +411,12 @@ function Violation({ navigation }) {
   const filterData = (statusFilters, dateFilter) => {
     let filteredData = originalTicketData;
 
-    // Filter by status
     if (statusFilters.length > 0) {
       filteredData = filteredData.filter((item) =>
         statusFilters.includes(item.ticket_status)
       );
     }
 
-    // Filter by date
     if (dateFilter.startDate && dateFilter.endDate) {
       const startDateStr = dateFilter.startDate.toLocaleDateString("en-US");
       const endDateStr = dateFilter.endDate.toLocaleDateString("en-US");
@@ -467,7 +462,6 @@ function Violation({ navigation }) {
     );
 
     if (statusesToFilter.length === 0) {
-      // If no checkboxes are checked, display all
       setTicketData(originalTicketData);
       return;
     }
@@ -492,14 +486,12 @@ function Violation({ navigation }) {
   };
 
   const handleRestart = () => {
-    // Reset date filter
     const initialDateFilter = {
       startDate: null,
       endDate: null,
     };
     setSelectedDate(initialDateFilter);
 
-    // Reset status filter
     const initialCheckedStatuses = {
       PENDING: false,
       PAID: false,
@@ -531,6 +523,18 @@ function Violation({ navigation }) {
         window.alert("Error Fetching");
       });
   }, [Token]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("recordUpdated", (data) => {
+      console.log("Record Updated:", data);
+    });
+
+    return () => {
+      socket.off("recordUpdated");
+    };
+  }, [socket]);
 
   return (
     <div className="violation-container">
