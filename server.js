@@ -1,15 +1,25 @@
 const express = require("express");
 const http = require("http");
 const socketIO = require("socket.io");
+const cors = require("cors"); // Import cors module
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: ["http://localhost:3000", "https://sprincessgenevieve.github.io"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+// Remove the following line
+// app.use(cors());
 
 app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
-    "https://sprincessgenevieve.github.io",
+    "https://sprincessgenevieve.github.io/citisafeweb/#/",
   ];
   const origin = req.headers.origin;
 
@@ -19,6 +29,7 @@ app.use((req, res, next) => {
 
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Credentials", true);
   next();
 });
 
