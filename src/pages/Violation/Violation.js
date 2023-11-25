@@ -383,9 +383,16 @@ function Violation({ navigation }) {
   };
 
   const handleNotif = () => {
+    console.log("Checking Notification API support");
     if ("Notification" in window) {
+      console.log("Notification API is supported");
+
       Notification.requestPermission().then((permission) => {
+        console.log("Notification permission:", permission);
+
         if (permission === "granted") {
+          console.log("Permission granted. Showing notification.");
+
           const notification = new Notification("ALERT!", {
             body: "There has been an UPDATE on the RECORDS table.",
             icon: notif,
@@ -972,7 +979,8 @@ function Violation({ navigation }) {
                                     color: "black",
                                     marginLeft: 0,
                                   }}
-                                  onClick={() => {
+                                  onClick={handleNotif}
+                                  /*{() => {
                                     const formData = {
                                       MFRTA_TCT_NO: item.MFRTA_TCT_NO,
                                       ticket_status: editTicketStatus,
@@ -1003,7 +1011,7 @@ function Violation({ navigation }) {
                                         );
                                         console.log(error);
                                       });
-                                  }}
+                                  }}*/
                                 >
                                   <Check style={{ height: 25 }} />
                                 </Button>
