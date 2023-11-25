@@ -84,13 +84,13 @@ function Violation({ navigation }) {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("https://etcmf-notif-000b9a9d3782.herokuapp.com/"); // Update with your server's URL
+    const newSocket = io("https://etcmf-notif-000b9a9d3782.herokuapp.com/");
     setSocket(newSocket);
 
     return () => {
       newSocket.disconnect();
     };
-  }, []); // Run once on component mount
+  }, []);
 
   const Role = useSelector((state) => state.auth.role);
   const [selectedDate, setSelectedDate] = useState({
@@ -540,6 +540,7 @@ function Violation({ navigation }) {
 
     socket.on("recordUpdated", (data) => {
       console.log("Record Updated:", data);
+      // Handle the updated record data as needed
     });
 
     return () => {
