@@ -11,8 +11,6 @@ import {
 } from "@mui/icons-material";
 import StatusSelection from "../../components/StatusSelection";
 import StatSelect from "./../../JSON/StatSelect.json";
-import violationsData from "./../../JSON/violationsData.json";
-import violationsSample from "./../../JSON/sampleViolation.json";
 import {
   Button,
   Table,
@@ -32,10 +30,8 @@ import html2pdf from "html2pdf.js";
 import SelectFilter from "./../../components/SelectFilter";
 import AtoZ from "./../../components/AtoZ";
 import SortDate from "../../components/SortDate";
-import addNotification from "react-push-notification";
 import notif from "./.././../assets/notif.gif";
-import { ToastContainer, toast } from "react-toastify";
-import { io } from "socket.io-client";
+import OneSignalReact from "react-onesignal";
 
 const styles = (theme) => ({
   modal: {
@@ -81,17 +77,6 @@ if (window.innerWidth <= 600) {
 }
 
 function Violation({ navigation }) {
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    const newSocket = io("https://etcmf-notif-000b9a9d3782.herokuapp.com/");
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-
   const Role = useSelector((state) => state.auth.role);
   const [selectedDate, setSelectedDate] = useState({
     startDate: null,
@@ -372,7 +357,6 @@ function Violation({ navigation }) {
       ...prevEditingRows,
       [rowId]: false,
     }));
-    socket.emit("updateRecord", { rowId });
   };
 
   const handleCheck = (rowId) => {
@@ -382,35 +366,7 @@ function Violation({ navigation }) {
     }));
   };
 
-  const handleNotif = () => {
-    console.log("Checking Notification API support");
-    if ("Notification" in window) {
-      console.log("Notification API is supported");
-
-      Notification.requestPermission().then((permission) => {
-        console.log("Notification permission:", permission);
-
-        if (permission === "granted") {
-          console.log("Permission granted. Showing notification.");
-
-          const notification = new Notification("ALERT!", {
-            body: "There has been an UPDATE on the RECORDS table.",
-            icon: notif,
-          });
-
-          notification.onclick = function () {
-            console.log("Notification clicked");
-          };
-
-          console.log("Notification shown");
-        } else {
-          console.log("Notification permission denied");
-        }
-      });
-    } else {
-      console.log("Notification API not supported");
-    }
-  };
+  const handleNotif = () => {};
 
   const handleCancelEdit = (rowId) => {
     setEditingRows((prevEditingRows) => ({
@@ -535,19 +491,6 @@ function Violation({ navigation }) {
       });
   }, [Token]);
 
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.on("recordUpdated", (data) => {
-      console.log("Record Updated:", data);
-      // Handle the updated record data as needed
-    });
-
-    return () => {
-      socket.off("recordUpdated");
-    };
-  }, [socket]);
-
   return (
     <div className="violation-container">
       <div className="navbar-container">
@@ -642,6 +585,9 @@ function Violation({ navigation }) {
               </Button>
             </div>
           </div>
+        </div>
+        <div>
+          <Button onClick={handleNotif}>NOTIFY</Button>
         </div>
         <div style={{ marginLeft: "3%" }}>
           <p>TOTAL ROWS: {ticketData.length}</p>

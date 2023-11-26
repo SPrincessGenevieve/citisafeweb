@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import ResetPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword/UpdatePassword";
 
+import AlertPage from "./pages/DELETELATER/AlertPage";
+
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.setIsLoggedIn);
 
@@ -34,6 +36,10 @@ function App() {
           <Route
             path="/dashboard"
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/alertpage"
+            element={isAuthenticated ? <AlertPage /> : <Navigate to="/" />}
           />
           <Route
             path="/violation"
