@@ -16,41 +16,116 @@ import {
 import { useSelector } from "react-redux";
 import ResetPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword/UpdatePassword";
-
+import AlertPop from "./pages/ALERT/AlertPage";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.setIsLoggedIn);
-
+  const [showNotification, setShowNotification] = useState(false);
+  const closeNotif = () => {
+    setShowNotification(false);
+  };
   return (
     <div className="container">
       <Router>
+        <AlertPop showNotification={showNotification} onClose={closeNotif} />
+
         <Routes>
           <Route
             exact
             path="/"
             element={
-              isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />
+              isAuthenticated ? (
+                <>
+                  <Dashboard />
+                  <AlertPop
+                    showNotification={showNotification}
+                    onClose={closeNotif}
+                  />
+                </>
+              ) : (
+                <LoginPage />
+              )
             }
           />
           <Route
             path="/dashboard"
-            element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />}
+            element={
+              isAuthenticated ? (
+                <>
+                  <Dashboard />
+                  <AlertPop
+                    showNotification={showNotification}
+                    onClose={closeNotif}
+                  />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/violation"
-            element={isAuthenticated ? <Violation /> : <Navigate to="/" />}
+            element={
+              isAuthenticated ? (
+                <>
+                  <Violation />
+                  <AlertPop
+                    showNotification={showNotification}
+                    onClose={closeNotif}
+                  />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/user"
-            element={isAuthenticated ? <UserControl /> : <Navigate to="/" />}
+            element={
+              isAuthenticated ? (
+                <>
+                  <UserControl />
+                  <AlertPop
+                    showNotification={showNotification}
+                    onClose={closeNotif}
+                  />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/violationList"
-            element={isAuthenticated ? <ViolationList /> : <Navigate to="/" />}
+            element={
+              isAuthenticated ? (
+                <>
+                  <ViolationList />
+                  <AlertPop
+                    showNotification={showNotification}
+                    onClose={closeNotif}
+                  />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/profile"
-            element={isAuthenticated ? <Profile /> : <Navigate to="/" />}
+            element={
+              isAuthenticated ? (
+                <>
+                  <Profile />
+                  <AlertPop
+                    showNotification={showNotification}
+                    onClose={closeNotif}
+                  />
+                </>
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/update"

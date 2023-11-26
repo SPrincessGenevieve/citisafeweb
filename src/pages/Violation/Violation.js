@@ -34,6 +34,10 @@ import addNotification from "react-push-notification";
 import notif from "./.././../assets/notif.gif";
 import { ToastContainer, toast } from "react-toastify";
 import { io } from "socket.io-client";
+import AlertPage from "../ALERT/AlertPage";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+
+const socket = io.connect("http://localhost:3001");
 
 const styles = (theme) => ({
   modal: {
@@ -78,18 +82,9 @@ if (window.innerWidth <= 600) {
   cellStylesBody.cell.width = 100;
 }
 
-function Violation({ navigation }) {
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    const newSocket = io("https://etcmf-notif-000b9a9d3782.herokuapp.com/");
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-
+function Violation({}) {
+  const [showNotification, setShowNotification] = useState(false);
+  const navigate = useNavigate();
   const Role = useSelector((state) => state.auth.role);
   const [selectedDate, setSelectedDate] = useState({
     startDate: null,
@@ -369,7 +364,7 @@ function Violation({ navigation }) {
       ...prevEditingRows,
       [rowId]: false,
     }));
-    socket.emit("updateRecord", { rowId });
+    sendMessage();
   };
 
   const handleCheck = (rowId) => {
@@ -377,36 +372,6 @@ function Violation({ navigation }) {
       ...prevDeletingRows,
       [rowId]: false,
     }));
-  };
-
-  const handleNotif = () => {
-    console.log("Checking Notification API support");
-    if ("Notification" in window) {
-      console.log("Notification API is supported");
-
-      Notification.requestPermission().then((permission) => {
-        console.log("Notification permission:", permission);
-
-        if (permission === "granted") {
-          console.log("Permission granted. Showing notification.");
-
-          const notification = new Notification("ALERT!", {
-            body: "There has been an UPDATE on the RECORDS table.",
-            icon: notif,
-          });
-
-          notification.onclick = function () {
-            console.log("Notification clicked");
-          };
-
-          console.log("Notification shown");
-        } else {
-          console.log("Notification permission denied");
-        }
-      });
-    } else {
-      console.log("Notification API not supported");
-    }
   };
 
   const handleCancelEdit = (rowId) => {
@@ -510,6 +475,21 @@ function Violation({ navigation }) {
     filterData(initialCheckedStatuses, initialDateFilter);
   };
 
+  const sendMessage = () => {
+    socket.emit("send_message", {
+      message: "THERE HAS BEEN AN UPDATE ON THE RECORDS TABLE!",
+    });
+  };
+
+  const handleRecords = () => {
+    navigate("/violation");
+    window.location.reload();
+  };
+
+  const closeNotif = () => {
+    setShowNotification(false);
+  };
+
   useEffect(() => {
     axios
       .get("ticket/register/", {
@@ -533,16 +513,13 @@ function Violation({ navigation }) {
   }, [Token]);
 
   useEffect(() => {
-    if (!socket) return;
+    socket.on("received_message", (data) => {
+      setShowNotification(true);
 
-    socket.on("recordUpdated", (data) => {
-      console.log("Record Updated:", data);
-      // Handle the updated record data as needed
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 5000);
     });
-
-    return () => {
-      socket.off("recordUpdated");
-    };
   }, [socket]);
 
   return (
@@ -1001,7 +978,6 @@ function Violation({ navigation }) {
                                         );
                                         handleSave(item.MFRTA_TCT_NO);
                                         window.location.reload();
-                                        handleNotif();
                                       })
                                       .catch((error) => {
                                         window.alert(
