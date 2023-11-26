@@ -26,10 +26,10 @@ function AlertPage(props) {
     console.log("Clicked notify button");
 
     // Ensure that OneSignal is initialized
-    if (OneSignal && typeof OneSignal.showHttpPrompt === "function") {
-      OneSignal.showHttpPrompt();
+    if (OneSignal && typeof OneSignal.showSlidedownPrompt === "function") {
+      OneSignal.showSlidedownPrompt();
     } else {
-      console.error("OneSignal or showHttpPrompt is not available.");
+      console.error("OneSignal or showSlidedownPrompt is not available.");
     }
   };
 
