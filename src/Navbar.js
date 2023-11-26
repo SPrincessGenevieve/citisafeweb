@@ -33,7 +33,6 @@ export default function Navbar() {
         </div>
         {Role === "TREASURER" ? (
           <>
-            <CustomLink to="/alertpage">ALERT</CustomLink>
             <CustomLink to="/dashboard">Home</CustomLink>
             <CustomLink to="/violation">Records</CustomLink>
             <CustomLink to="/update" className="updatePass">
@@ -42,7 +41,6 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <CustomLink to="/alertpage">ALERT</CustomLink>
             <CustomLink to="/dashboard">Home</CustomLink>
             <CustomLink to="/violation">Records</CustomLink>
             <CustomLink to="/user">Users</CustomLink>

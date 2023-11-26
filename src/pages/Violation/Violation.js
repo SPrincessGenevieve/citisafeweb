@@ -30,8 +30,10 @@ import html2pdf from "html2pdf.js";
 import SelectFilter from "./../../components/SelectFilter";
 import AtoZ from "./../../components/AtoZ";
 import SortDate from "../../components/SortDate";
+import addNotification from "react-push-notification";
 import notif from "./.././../assets/notif.gif";
-import OneSignalReact from "react-onesignal";
+import { ToastContainer, toast } from "react-toastify";
+import { io } from "socket.io-client";
 
 const styles = (theme) => ({
   modal: {
@@ -77,6 +79,17 @@ if (window.innerWidth <= 600) {
 }
 
 function Violation({ navigation }) {
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io("https://etcmf-notif-000b9a9d3782.herokuapp.com/");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
   const Role = useSelector((state) => state.auth.role);
   const [selectedDate, setSelectedDate] = useState({
     startDate: null,
@@ -352,11 +365,11 @@ function Violation({ navigation }) {
   };
 
   const handleSave = (rowId) => {
-    handleNotif();
     setEditingRows((prevEditingRows) => ({
       ...prevEditingRows,
       [rowId]: false,
     }));
+    socket.emit("updateRecord", { rowId });
   };
 
   const handleCheck = (rowId) => {
@@ -366,7 +379,35 @@ function Violation({ navigation }) {
     }));
   };
 
-  const handleNotif = () => {};
+  const handleNotif = () => {
+    console.log("Checking Notification API support");
+    if ("Notification" in window) {
+      console.log("Notification API is supported");
+
+      Notification.requestPermission().then((permission) => {
+        console.log("Notification permission:", permission);
+
+        if (permission === "granted") {
+          console.log("Permission granted. Showing notification.");
+
+          const notification = new Notification("ALERT!", {
+            body: "There has been an UPDATE on the RECORDS table.",
+            icon: notif,
+          });
+
+          notification.onclick = function () {
+            console.log("Notification clicked");
+          };
+
+          console.log("Notification shown");
+        } else {
+          console.log("Notification permission denied");
+        }
+      });
+    } else {
+      console.log("Notification API not supported");
+    }
+  };
 
   const handleCancelEdit = (rowId) => {
     setEditingRows((prevEditingRows) => ({
@@ -491,6 +532,19 @@ function Violation({ navigation }) {
       });
   }, [Token]);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("recordUpdated", (data) => {
+      console.log("Record Updated:", data);
+      // Handle the updated record data as needed
+    });
+
+    return () => {
+      socket.off("recordUpdated");
+    };
+  }, [socket]);
+
   return (
     <div className="violation-container">
       <div className="navbar-container">
@@ -585,9 +639,6 @@ function Violation({ navigation }) {
               </Button>
             </div>
           </div>
-        </div>
-        <div>
-          <Button onClick={handleNotif}>NOTIFY</Button>
         </div>
         <div style={{ marginLeft: "3%" }}>
           <p>TOTAL ROWS: {ticketData.length}</p>
@@ -926,8 +977,7 @@ function Violation({ navigation }) {
                                     color: "black",
                                     marginLeft: 0,
                                   }}
-                                  onClick={handleNotif}
-                                  /*{() => {
+                                  onClick={() => {
                                     const formData = {
                                       MFRTA_TCT_NO: item.MFRTA_TCT_NO,
                                       ticket_status: editTicketStatus,
@@ -951,6 +1001,7 @@ function Violation({ navigation }) {
                                         );
                                         handleSave(item.MFRTA_TCT_NO);
                                         window.location.reload();
+                                        handleNotif();
                                       })
                                       .catch((error) => {
                                         window.alert(
@@ -958,7 +1009,7 @@ function Violation({ navigation }) {
                                         );
                                         console.log(error);
                                       });
-                                  }}*/
+                                  }}
                                 >
                                   <Check style={{ height: 25 }} />
                                 </Button>
