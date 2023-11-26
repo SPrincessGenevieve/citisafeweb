@@ -24,10 +24,13 @@ function AlertPage(props) {
 
   const handleNotifyClick = () => {
     console.log("Clicked notify button");
-    OneSignal.push(() => {
-      console.log("Triggering OneSignal prompt");
-      OneSignal.showSlidedownPrompt();
-    });
+
+    // Ensure that OneSignal is initialized
+    if (OneSignal && typeof OneSignal.showHttpPrompt === "function") {
+      OneSignal.showHttpPrompt();
+    } else {
+      console.error("OneSignal or showHttpPrompt is not available.");
+    }
   };
 
   return (
