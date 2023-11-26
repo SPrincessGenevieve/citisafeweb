@@ -10,7 +10,7 @@ function AlertPage(props) {
     const initOneSignal = async () => {
       try {
         await OneSignal.init({
-          appId: "0f49507a-47fe-4ff2-87c6-b1f838dd83f9",
+          appId: "7fab2e64-49c1-4037-950a-9934a6072ec7",
           allowLocalhostAsSecureOrigin: true,
         });
         console.log("OneSignal initialized successfully");
