@@ -16,116 +16,67 @@ import {
 import { useSelector } from "react-redux";
 import ResetPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword/UpdatePassword";
-import AlertPop from "./pages/ALERT/AlertPage";
+import axios from './plugins/axios'
+import { useEffect } from "react";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.setIsLoggedIn);
-  const [showNotification, setShowNotification] = useState(false);
-  const closeNotif = () => {
-    setShowNotification(false);
-  };
+
+  const Token = useSelector((state) => state.auth.token)
+
+  useEffect(() => {
+
+    const socket = new WebSocket('ws://127.0.0.1:8000/ws/ticketnotification/');
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === 'ticket.notification' || data.type === 'ticket.status_update') {
+        
+        const datatype = data.type
+        const datamessage = data.message
+
+        console.log(datatype, datamessage)
+
+        alert("There has been update of the RECORDS table!")
+      }
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [Token]);
+
   return (
     <div className="container">
       <Router>
-        <AlertPop showNotification={showNotification} onClose={closeNotif} />
-
         <Routes>
           <Route
             exact
             path="/"
             element={
-              isAuthenticated ? (
-                <>
-                  <Dashboard />
-                  <AlertPop
-                    showNotification={showNotification}
-                    onClose={closeNotif}
-                  />
-                </>
-              ) : (
-                <LoginPage />
-              )
+              isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />
             }
           />
           <Route
             path="/dashboard"
-            element={
-              isAuthenticated ? (
-                <>
-                  <Dashboard />
-                  <AlertPop
-                    showNotification={showNotification}
-                    onClose={closeNotif}
-                  />
-                </>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
+            element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />}
           />
           <Route
             path="/violation"
-            element={
-              isAuthenticated ? (
-                <>
-                  <Violation />
-                  <AlertPop
-                    showNotification={showNotification}
-                    onClose={closeNotif}
-                  />
-                </>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
+            element={isAuthenticated ? <Violation /> : <Navigate to="/" />}
           />
           <Route
             path="/user"
-            element={
-              isAuthenticated ? (
-                <>
-                  <UserControl />
-                  <AlertPop
-                    showNotification={showNotification}
-                    onClose={closeNotif}
-                  />
-                </>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
+            element={isAuthenticated ? <UserControl /> : <Navigate to="/" />}
           />
           <Route
             path="/violationList"
-            element={
-              isAuthenticated ? (
-                <>
-                  <ViolationList />
-                  <AlertPop
-                    showNotification={showNotification}
-                    onClose={closeNotif}
-                  />
-                </>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
+            element={isAuthenticated ? <ViolationList /> : <Navigate to="/" />}
           />
           <Route
             path="/profile"
-            element={
-              isAuthenticated ? (
-                <>
-                  <Profile />
-                  <AlertPop
-                    showNotification={showNotification}
-                    onClose={closeNotif}
-                  />
-                </>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
+            element={isAuthenticated ? <Profile /> : <Navigate to="/" />}
           />
           <Route
             path="/update"

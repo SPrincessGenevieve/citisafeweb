@@ -11,6 +11,8 @@ import {
 } from "@mui/icons-material";
 import StatusSelection from "../../components/StatusSelection";
 import StatSelect from "./../../JSON/StatSelect.json";
+import violationsData from "./../../JSON/violationsData.json";
+import violationsSample from "./../../JSON/sampleViolation.json";
 import {
   Button,
   Table,
@@ -26,18 +28,10 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import axios from "../../plugins/axios";
-import html2pdf from "html2pdf.js";
+import * as XLSX from "xlsx";
 import SelectFilter from "./../../components/SelectFilter";
 import AtoZ from "./../../components/AtoZ";
 import SortDate from "../../components/SortDate";
-import addNotification from "react-push-notification";
-import notif from "./.././../assets/notif.gif";
-import { ToastContainer, toast } from "react-toastify";
-import { io } from "socket.io-client";
-import AlertPage from "../ALERT/AlertPage";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-
-const socket = io.connect("http://localhost:3001");
 
 const styles = (theme) => ({
   modal: {
@@ -82,9 +76,10 @@ if (window.innerWidth <= 600) {
   cellStylesBody.cell.width = 100;
 }
 
-function Violation({}) {
-  const [showNotification, setShowNotification] = useState(false);
-  const navigate = useNavigate();
+function Violation({ navigation }) {
+
+
+
   const Role = useSelector((state) => state.auth.role);
   const [selectedDate, setSelectedDate] = useState({
     startDate: null,
@@ -109,7 +104,7 @@ function Violation({}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const rowsPerPage = 5;
+  const rowsPerPage = 6;
 
   const lastPageIndex = Math.ceil(ticketData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -180,171 +175,64 @@ function Violation({}) {
     }
   };
 
-  const handleDownload = (data, fileName) => {
+  const handleDownload = (data, fileName, sheetName) => {
     if (!Array.isArray(data)) {
       console.error("Data is not an array");
       return;
     }
 
-    const htmlContent = data
-      .map(
-        (item, index) => `
-        <!DOCTYPE html>
-        <html>
-          <head>
-          <style>
-          table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-          }
-    
-          td, th {
-            text-align: left;
-            padding: 3px;
-            font-size: 10px;
-          }
+    const exportData = data.map((item) => ({
+      ID: item.id,
+      LASTNAME: item.driver_info.last_name,
+      FIRSTNAME: item.driver_info.first_name,
+      MIDDLENAME: item.driver_info.middle_name,
+      ADDRESS: item.driver_info.address,
+      LICENSE_NO: item.driver_info.license_number,
+      TYPE: item.classification,
+      DATE_OF_BIRTH: item.driver_info.birthdate,
+      NATIONALITY: item.driver_info.nationality,
+      PLATE_NO: item.vehicle_info.plate_number,
+      MAKE: item.vehicle_info.make,
+      MODEL: item.vehicle_info.vehicle_model,
+      COLOR: item.vehicle_info.color,
+      CLASS: item.vehicle_info.vehicle_class,
+      BODY_MAARKS: item.vehicle_info.body_markings,
+      REGISTERED_OWNER: item.vehicle_info.name,
+      REGISTERED_ADDRESS: item.vehicle_info.address,
+      CONTACT_NO: item.vehicle_info.contact_number,
+      DATE_AND_TIME_OF_VIOLATION: item.date_issued,
+      PLACE_OF_VIOLATION: item.place_violation,
+      APPREHENDING_OFFICER: `${item.user_ID.first_name} ${item.user_ID.middle_name} ${item.user_ID.last_name}`,
+      TICKET_STATUS: item.ticket_status,
+      OFFENSE: item.driver_info.offenses_count,
+      PENALTY: item.penalty_amount,
+      VIOLATION: item.violation_info.violations_info.join(", "),
+    }));
 
-          th {
-            text-align: left;
-            padding: 3px;
-            width: 280px;
-          }
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
 
-          tr:nth-child(even) {
-            background-color: #dddddd;
-          }
-        </style>
-          </head>
-          <body>
-            <h2>TICKET # ${item.MFRTA_TCT_NO}</h2>
-        
-            <table>
-              <tr>
-                <th class="title">TICKET NO</th>
-                <td>${item.MFRTA_TCT_NO}</td>
-              </tr>
-              <tr>
-                <th class="title">Name</th>
-                <td>${item.driver_info.first_name}${" "}
-                ${item.driver_info.middle_initial}${". "}
-                ${item.driver_info.last_name}</td>
-              </tr>
-              <tr>
-                <th class="title">Address</th>
-                <td>${item.driver_info.address}</td>
-              </tr>
-              <tr>
-                <th class="title">License No.</th>
-                <td>${item.driver_info.license_number}</td>
-              </tr>
-              <tr>
-                <th class="title">Type</th>
-                <td>${item.driver_info.classification}</td>
-              </tr>
-              <tr>
-                <th class="title">Date of Birth</th>
-                <td>${item.driver_info.birthdate}</td>
-              </tr>
-              <tr>
-                <th class="title">Nationality</th>
-                <td>${item.driver_info.nationality}</td>
-              </tr>
-              <tr>
-                <th class="title">Plate No.</th>
-                <td>${item.vehicle_info.plate_number}</td>
-              </tr>
-              <tr>
-                <th class="title">Make</th>
-                <td>${item.vehicle_info.make}</td>
-              </tr>
-              <tr>
-                <th class="title">Model</th>
-                <td>${item.vehicle_info.vehicle_model}</td>
-              </tr>
-              <tr>
-                <th class="title">Color</th>
-                <td>${item.vehicle_info.color}</td>
-              </tr>
-              <tr>
-                <th class="title">Class</th>
-                <td>${item.vehicle_info.vehicle_class}</td>
-              </tr>
-              <tr>
-                <th class="title">Body Markings</th>
-                <td>${item.vehicle_info.body_markings}</td>
-              </tr>
-              <tr>
-                <th class="title">Registered Owner</th>
-                <td>${item.vehicle_info.name}</td>
-              </tr>
-              <tr>
-                <th class="title">Registered Owner Address</th>
-                <td>${item.vehicle_info.address}</td>
-              </tr>
-              <tr>
-                <th class="title">Contact No.</th>
-                <td>${item.vehicle_info.contact_number}</td>
-              </tr>
-              <tr>
-                <th class="title">Date & Time of Violation</th>
-                <td>${item.date_issued}</td>
-              </tr>
-              <tr>
-                <th class="title">Place of Violation</th>
-                <td>
-                ${item.place_violation}
-                </td>
-              </tr>
-              <tr>
-                <th class="title">Apprehending Officer</th>
-                <td>${item.user_ID.first_name} ${" "} ${
-          item.user_ID.middle_name
-        } ${" "} ${item.user_ID.last_name}</td>
-              </tr>
-              <tr>
-                <th class="title">Ticket Status</th>
-                <td>${item.ticket_status}</td>
-              </tr>
-              <tr>
-                <th class="title">Penalty</th>
-                <td>${item.penalty_amount}</td>
-              </tr>
-              <tr>
-                <th class="title">Violation</th>
-                <td>${item.violation_info.violations_info}</td>
-              </tr>
-            </table>
-          </body>
-        </html>
-        
-        `
-      )
-      .join("\n");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+    const excelDataURI = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "base64",
+    });
 
-    const container = document.createElement("div");
-    container.innerHTML = htmlContent;
+    const dataUri = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${excelDataURI}`;
 
-    html2pdf(container, {
-      margin: 10,
-      filename: fileName,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: {
-        unit: "mm",
-        format: "a4",
-        orientation: "portrait",
-        avoid: "avoid",
-      },
-    })
-      .then(() => {
-        window.alert("Downloaded successfully");
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error generating PDF:", error);
-      });
+    const a = document.createElement("a");
+    a.href = dataUri;
+    a.download = fileName;
+    a.style.display = "none";
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    window.alert("Downloaded successfully");
+    console.log(data);
   };
+
   const handleEdit = (rowId) => {
     setEditingRows((prevEditingRows) => ({
       ...prevEditingRows,
@@ -364,7 +252,6 @@ function Violation({}) {
       ...prevEditingRows,
       [rowId]: false,
     }));
-    sendMessage();
   };
 
   const handleCheck = (rowId) => {
@@ -384,12 +271,14 @@ function Violation({}) {
   const filterData = (statusFilters, dateFilter) => {
     let filteredData = originalTicketData;
 
+    // Filter by status
     if (statusFilters.length > 0) {
       filteredData = filteredData.filter((item) =>
         statusFilters.includes(item.ticket_status)
       );
     }
 
+    // Filter by date
     if (dateFilter.startDate && dateFilter.endDate) {
       const startDateStr = dateFilter.startDate.toLocaleDateString("en-US");
       const endDateStr = dateFilter.endDate.toLocaleDateString("en-US");
@@ -435,6 +324,7 @@ function Violation({}) {
     );
 
     if (statusesToFilter.length === 0) {
+      // If no checkboxes are checked, display all
       setTicketData(originalTicketData);
       return;
     }
@@ -459,12 +349,14 @@ function Violation({}) {
   };
 
   const handleRestart = () => {
+    // Reset date filter
     const initialDateFilter = {
       startDate: null,
       endDate: null,
     };
     setSelectedDate(initialDateFilter);
 
+    // Reset status filter
     const initialCheckedStatuses = {
       PENDING: false,
       PAID: false,
@@ -474,21 +366,42 @@ function Violation({}) {
     setCheckedStatuses(initialCheckedStatuses);
     filterData(initialCheckedStatuses, initialDateFilter);
   };
+// websocket
 
-  const sendMessage = () => {
-    socket.emit("send_message", {
-      message: "THERE HAS BEEN AN UPDATE ON THE RECORDS TABLE!",
-    });
-  };
+  useEffect(() => {
 
-  const handleRecords = () => {
-    navigate("/violation");
-    window.location.reload();
-  };
+    const socket = new WebSocket('ws://127.0.0.1:8000/ws/ticketnotification/');
 
-  const closeNotif = () => {
-    setShowNotification(false);
-  };
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === 'ticket.notification' || data.type === 'ticket.status_update') {
+        
+        axios
+          .get("ticket/register/", {
+            headers: {
+              Authorization: `token ${Token}`,
+            },
+          })
+          .then((response) => {
+            const sortedData = response.data.sort((a, b) => {
+              return new Date(b.date_issued) - new Date(a.date_issued);
+            });
+
+            // Update the state with the new data
+            setTicketData(sortedData);
+            setOriginalTicketData(sortedData);
+          })
+          .catch((error) => {
+            window.alert("Error Fetching");
+          });
+      }
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [Token]);
 
   useEffect(() => {
     axios
@@ -512,16 +425,6 @@ function Violation({}) {
       });
   }, [Token]);
 
-  useEffect(() => {
-    socket.on("received_message", (data) => {
-      setShowNotification(true);
-
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 5000);
-    });
-  }, [socket]);
-
   return (
     <div className="violation-container">
       <div className="navbar-container">
@@ -540,7 +443,9 @@ function Violation({}) {
             className="search-box"
           />
           <Button
-            onClick={() => handleDownload(ticketData, "RECORDS.pdf")}
+            onClick={() =>
+              handleDownload(ticketData, "users_table.xlsx", "Sheet 1")
+            }
             className="add-user-btn"
             style={{
               backgroundColor: "#3E7C1F",
@@ -620,6 +525,7 @@ function Violation({}) {
         <div style={{ marginLeft: "3%" }}>
           <p>TOTAL ROWS: {ticketData.length}</p>
         </div>
+
         <div className="table-conatiner-violation">
           {ticketData.map((item, index) => (
             <Dialog
@@ -973,11 +879,7 @@ function Violation({}) {
                                       )
                                       .then((response) => {
                                         console.log(response.data);
-                                        window.alert(
-                                          "Successfully Edit Penalty Status"
-                                        );
                                         handleSave(item.MFRTA_TCT_NO);
-                                        window.location.reload();
                                       })
                                       .catch((error) => {
                                         window.alert(
