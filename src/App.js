@@ -16,29 +16,30 @@ import {
 import { useSelector } from "react-redux";
 import ResetPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword/UpdatePassword";
-import axios from './plugins/axios'
+import axios from "./plugins/axios";
 import { useEffect } from "react";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.setIsLoggedIn);
 
-  const Token = useSelector((state) => state.auth.token)
+  const Token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-
-    const socket = new WebSocket('ws://127.0.0.1:8000/ws/ticketnotification/');
+    const socket = new WebSocket("ws://127.0.0.1:8000/ws/ticketnotification/");
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.type === 'ticket.notification' || data.type === 'ticket.status_update') {
-        
-        const datatype = data.type
-        const datamessage = data.message
+      if (
+        data.type === "ticket.notification" ||
+        data.type === "ticket.status_update"
+      ) {
+        const datatype = data.type;
+        const datamessage = data.message;
 
-        console.log(datatype, datamessage)
+        console.log(datatype, datamessage);
 
-        alert("There has been update of the RECORDS table!")
+        alert("There has been update of the RECORDS table!");
       }
     };
 
