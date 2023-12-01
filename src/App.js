@@ -1,12 +1,11 @@
 import "./App.css";
 import LoginPage from "./pages/Login/LoginPage";
-import React, { useState } from "react";
+import React from "react";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Violation from "./pages/Violation/Violation";
 import Profile from "./pages/Profile/Profile";
 import UserControl from "./pages/UserControl/UserControl";
 import ViolationList from "./pages/ViolationList/ViolationList";
-import ErrorBoundary from "./ErrorBoundary";
 import {
   HashRouter as Router,
   Route,
@@ -16,7 +15,6 @@ import {
 import { useSelector } from "react-redux";
 import ResetPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword/UpdatePassword";
-import axios from "./plugins/axios";
 import { useEffect } from "react";
 
 function App() {
@@ -25,22 +23,26 @@ function App() {
   const Token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://127.0.0.1:8000/ws/ticketnotification/");
+    console.log("Attempting to connect to WebSocket...");
+
+    const socket = new WebSocket(
+      "wss://etcmf.keannu1.duckdns.org/ws/ticketnotification/"
+    );
+
+    socket.onopen = () => {
+      console.log("WebSocket connection opened!");
+    };
 
     socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+      console.log("WebSocket message received:", event.data);
+    };
 
-      if (
-        data.type === "ticket.notification" ||
-        data.type === "ticket.status_update"
-      ) {
-        const datatype = data.type;
-        const datamessage = data.message;
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
 
-        console.log(datatype, datamessage);
-
-        alert("There has been update of the RECORDS table!");
-      }
+    socket.onclose = (event) => {
+      console.log("WebSocket connection closed!", event);
     };
 
     return () => {
