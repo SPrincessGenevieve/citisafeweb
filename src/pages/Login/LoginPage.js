@@ -24,8 +24,8 @@ function LoginPage({ onClick }) {
     email: "",
   });
   const [credentials, setCredentials] = useState({
-    username: "admin",
-    password: "admin",
+    username: "",
+    password: "",
   });
 
   const dispatch = useDispatch();
