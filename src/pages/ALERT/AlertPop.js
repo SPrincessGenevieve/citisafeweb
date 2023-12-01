@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./../../Navbar";
+import Navbar from "../../Navbar";
 import { Button } from "@mui/material";
 import "./styles.css";
 import io from "socket.io-client";
 import notif from "./../../assets/notif.gif";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-const socket = io.connect("http://localhost:3001"); // backend server
+const socket = io.connect(
+  "wss://etcmf.keannu1.duckdns.org/ws/ticketnotification/"
+); // backend server
 
-function AlertPage({ onClickSendMessage, onClickClose, navigateTo }) {
+function AlertPop({ onClickSendMessage, onClickClose, navigateTo }) {
   const navigate = useNavigate(); // Use useNavigate for navigation
 
   const [showNotification, setShowNotification] = useState(false);
@@ -80,4 +82,4 @@ function AlertPage({ onClickSendMessage, onClickClose, navigateTo }) {
   );
 }
 
-export default AlertPage;
+export default AlertPop;

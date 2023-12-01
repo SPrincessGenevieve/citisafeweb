@@ -18,9 +18,14 @@ import ResetPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword/UpdatePassword";
 import axios from "./plugins/axios";
 import { useEffect } from "react";
+import AlertPop from "./pages/ALERT/AlertPop";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.setIsLoggedIn);
+  const [showNotification, setShowNotification] = useState(false);
+  const closeNotif = () => {
+    setShowNotification(false);
+  };
 
   const Token = useSelector((state) => state.auth.token);
 
@@ -40,8 +45,8 @@ function App() {
         const datamessage = data.message;
 
         console.log(datatype, datamessage);
-
-        alert("There has been update of the RECORDS table!");
+        setShowNotification(true);
+        //alert("There has been update of the RECORDS table!");
       }
     };
 
@@ -53,6 +58,7 @@ function App() {
   return (
     <div className="container">
       <Router>
+        <AlertPop showNotification={showNotification} onClose={closeNotif} />
         <Routes>
           <Route
             exact
