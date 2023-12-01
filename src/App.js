@@ -11,7 +11,7 @@ import {
   Route,
   Routes,
   Navigate,
-  useLocation, // Import useLocation
+  useLocation as useReactRouterLocation,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ResetPassword from "./pages/ForgotPassword";
@@ -94,7 +94,8 @@ function App() {
             element={<ResetPassword />}
           />
         </Routes>
-        {showPopup && isAuthenticated && window.location.pathname !== "/" && (
+        {showPopup && isAuthenticated && (
+          // Use useReactRouterLocation here instead of useLocation
           <Notification closeNotif={closeNotif} showPopup={showPopup} />
         )}
       </Router>
