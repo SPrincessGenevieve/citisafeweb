@@ -77,9 +77,6 @@ if (window.innerWidth <= 600) {
 }
 
 function Violation({ navigation }) {
-
-
-
   const Role = useSelector((state) => state.auth.role);
   const [selectedDate, setSelectedDate] = useState({
     startDate: null,
@@ -366,17 +363,20 @@ function Violation({ navigation }) {
     setCheckedStatuses(initialCheckedStatuses);
     filterData(initialCheckedStatuses, initialDateFilter);
   };
-// websocket
+  // websocket
 
   useEffect(() => {
-
-    const socket = new WebSocket('ws://127.0.0.1:8000/ws/ticketnotification/');
+    const socket = new WebSocket(
+      "wss://etcmf.keannu1.duckdns.org/ws/ticketnotification/"
+    );
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.type === 'ticket.notification' || data.type === 'ticket.status_update') {
-        
+      if (
+        data.type === "ticket.notification" ||
+        data.type === "ticket.status_update"
+      ) {
         axios
           .get("ticket/register/", {
             headers: {
