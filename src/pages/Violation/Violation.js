@@ -496,7 +496,7 @@ function Violation({ navigation }) {
                   label={"SERVICE"}
                   value={"COMMUNITY SERVICE"}
                   onClick={handleStatusChangeFilter}
-                  checked={checkedStatuses.OVERDUE}
+                  checked={checkedStatuses.SERVICE}
                 />
               </div>
               <div className="sub-filterStatus sub">
