@@ -90,7 +90,7 @@ function UserControl(props) {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const rowsPerPage = 6;
+  const rowsPerPage = 7;
 
   const lastPageIndex = Math.ceil(userData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
@@ -492,269 +492,216 @@ function UserControl(props) {
             </div>
 
             <div className="table-conatiner-user">
-              <div className="tab-con-2-user">
-                <TableContainer>
-                  <Table className="table">
-                    <TableHead>
-                      <TableRow className="table-row">
-                        <TableCell style={cellStylesHeader.cell}>ID</TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          First Name
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Middle Name
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Last Name
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Role
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Position
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Email
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Username
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Status
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Action
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {visibleUserData.map((user, index) => (
-                        <TableRow
-                          className={`table-body-row ${
-                            index % 2 === 0 ? "even-row" : "odd-row"
-                          }`}
-                          key={index}
-                        >
-                          <TableCell style={cellStylesBody.cell}>
-                            {user.id}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            {user.first_name}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            {user.middle_name}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            {user.last_name}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            {user.role}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            {user.position}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            {user.email}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            {user.username}
-                          </TableCell>
-                          <TableCell
-                            style={cellStylesBody.cell}
-                            className="row"
-                          >
-                            <div className="status-container">
-                              <p
+              <div className="table-sub-user">
+                <table className="users-table">
+                  <thead>
+                    <tr>
+                      <th className="header-title user">ID</th>
+                      <th className="header-title user">First Name</th>
+                      <th className="header-title user">Middle Name</th>
+                      <th className="header-title user">Last Name</th>
+                      <th className="header-title user">Role</th>
+                      <th className="header-title user">Position</th>
+                      <th className="header-title user">Email</th>
+                      <th className="header-title user">Username</th>
+                      <th className="header-title user">Status</th>
+                      <th className="header-title user">Action</th>
+                    </tr>
+                  </thead>
+                  {visibleUserData.map((user, index) => (
+                    <tbody>
+                      <tr
+                        className={` ${
+                          index % 2 === 0 ? "even-row" : "odd-row"
+                        }`}
+                      >
+                        <td className="content-title user">
+                          <p className="title-size user">{user.id}</p>
+                        </td>
+                        <td className="content-title user">
+                          <p className="title-size user">{user.first_name}</p>
+                        </td>
+                        <td className="content-title user">
+                          <p className="title-size user">{user.middle_name}</p>
+                        </td>
+                        <td className="content-title user">
+                          <p className="title-size user">{user.last_name}</p>
+                        </td>
+                        <td className="content-title user">
+                          <p className="title-size user">{user.role}</p>
+                        </td>
+                        <td className="content-title user">
+                          <p className="title-size user">{user.position}</p>
+                        </td>
+                        <td className="content-title user">
+                          <p className="title-size user">{user.email}</p>
+                        </td>
+                        <td className="content-title user">
+                          <p className="title-size user">{user.username}</p>
+                        </td>
+                        <td className="content-title user status">
+                          <div className="status-container user">
+                            <p
+                              style={{
+                                fontSize: 12,
+                                display: "flex",
+                                flex: 1,
+                                backgroundColor:
+                                  user.is_active === true
+                                    ? "#E2F0D9"
+                                    : user.is_active === false
+                                    ? "#FFD1D1"
+                                    : "#EBF9F1",
+                                color:
+                                  user.is_active === true
+                                    ? "#649F3F"
+                                    : user.is_active === false
+                                    ? "#D00000"
+                                    : "#1F9254",
+                                width: 70,
+                                height: 12,
+                                padding: 7,
+                                textAlign: "center",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderRadius: 20,
+                              }}
+                            >
+                              {editingRow === user.id ? (
+                                <div>
+                                  <StatusSelection
+                                    label={"Select Status"}
+                                    labelSelect={"Select Status"}
+                                    json={stats}
+                                    width={150}
+                                    onStatusChange={handleStatusChange}
+                                  ></StatusSelection>
+                                </div>
+                              ) : user.is_active === true ? (
+                                `Active`
+                              ) : (
+                                <span>
+                                  {user.is_active ? "Active" : "Inactive"}
+                                </span>
+                              )}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="content-title action">
+                          {editingRow === user.id ? (
+                            <>
+                              <Button
+                                variant="contained"
                                 style={{
-                                  flex: 1,
-                                  backgroundColor:
-                                    user.is_active === true
-                                      ? "#E2F0D9"
-                                      : user.is_active === false
-                                      ? "#FFD1D1"
-                                      : "#EBF9F1",
-                                  color:
-                                    user.is_active === true
-                                      ? "#649F3F"
-                                      : user.is_active === false
-                                      ? "#D00000"
-                                      : "#1F9254",
-                                  width: 100,
-                                  height: 15,
-                                  padding: 10,
-                                  textAlign: "center",
-                                  borderRadius: 20,
+                                  backgroundColor: "transparent",
+                                  boxShadow: "none",
+                                  color: "black",
+                                  marginLeft: 10,
+                                }}
+                                onClick={() => {
+                                  const formData = {
+                                    id: user.id,
+                                    is_active: editIsActive,
+                                  };
+
+                                  axios
+                                    .patch(
+                                      `accounts/users/${user.id}/`,
+                                      formData,
+                                      {
+                                        headers: {
+                                          Authorization: `token ${Token}`,
+                                        },
+                                      }
+                                    )
+                                    .then((response) => {
+                                      handleSave(user.id);
+                                      window.location.reload();
+                                    })
+                                    .catch((error) => {
+                                      window.alert(
+                                        "Unsuccessfully Edit User Status"
+                                      );
+                                      console.log(error);
+                                    });
                                 }}
                               >
-                                {editingRow === user.id ? (
-                                  <div
-                                    className={
-                                      index % 2 === 0 ? "even-row" : "odd-row"
-                                    }
-                                    style={{
-                                      marginTop: -15,
-                                      width: 200,
-                                      marginLeft: -10,
-                                    }}
-                                  >
-                                    <StatusSelection
-                                      label={"Select Status"}
-                                      labelSelect={"Select Status"}
-                                      json={stats}
-                                      width={150}
-                                      onStatusChange={handleStatusChange}
-                                    ></StatusSelection>
-                                  </div>
-                                ) : user.is_active === true ? (
-                                  `Active`
-                                ) : (
-                                  <span>
-                                    {user.is_active ? "Active" : "Inactive"}
-                                  </span>
-                                )}
-                              </p>
-                            </div>
-                          </TableCell>
-                          <TableCell
-                            className="row"
-                            style={cellStylesBody.cell}
-                          >
-                            {editingRow === user.id ? (
-                              <>
+                                <Check style={{ height: 25 }} />
+                              </Button>
+                              <Button
+                                variant="contained"
+                                style={{
+                                  backgroundColor: "transparent",
+                                  boxShadow: "none",
+                                  color: "black",
+                                }}
+                                onClick={handleCancelEdit}
+                              >
+                                <Close style={{ height: 25 }} />
+                              </Button>
+                            </>
+                          ) : deletingRow === user.id ? (
+                            <>
+                              <Button
+                                variant="contained"
+                                style={{
+                                  backgroundColor: "transparent",
+                                  boxShadow: "none",
+                                  color: "black",
+                                  marginLeft: 10,
+                                }}
+                                onClick={() => handleCheck(user.id)}
+                              >
+                                <Check style={{ height: 25 }} />
+                              </Button>
+                              <Button
+                                variant="contained"
+                                style={{
+                                  backgroundColor: "transparent",
+                                  boxShadow: "none",
+                                  color: "black",
+                                }}
+                                onClick={handleCancelDelete}
+                              >
+                                <Close style={{ height: 25 }} />
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              {user.is_active ? (
                                 <Button
                                   variant="contained"
                                   style={{
                                     backgroundColor: "transparent",
                                     boxShadow: "none",
-                                    color: "black",
+                                    color: "green",
                                     marginLeft: 10,
                                   }}
-                                  onClick={() => {
-                                    const formData = {
-                                      id: user.id,
-                                      is_active: editIsActive,
-                                    };
-
-                                    axios
-                                      .patch(
-                                        `accounts/users/${user.id}/`,
-                                        formData,
-                                        {
-                                          headers: {
-                                            Authorization: `token ${Token}`,
-                                          },
-                                        }
-                                      )
-                                      .then((response) => {
-                                        handleSave(user.id);
-                                        window.location.reload();
-                                      })
-                                      .catch((error) => {
-                                        window.alert(
-                                          "Unsuccessfully Edit User Status"
-                                        );
-                                        console.log(error);
-                                      });
-                                  }}
+                                  onClick={() => handleEdit(user.id)}
                                 >
-                                  <Check style={{ height: 25 }} />
+                                  <RecordVoiceOver style={{ height: 25 }} />
                                 </Button>
+                              ) : (
                                 <Button
                                   variant="contained"
                                   style={{
                                     backgroundColor: "transparent",
                                     boxShadow: "none",
-                                    color: "black",
-                                  }}
-                                  onClick={handleCancelEdit}
-                                >
-                                  <Close style={{ height: 25 }} />
-                                </Button>
-                              </>
-                            ) : deletingRow === user.id ? (
-                              <>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
+                                    color: "red",
                                     marginLeft: 10,
                                   }}
-                                  onClick={() => handleCheck(user.id)}
+                                  onClick={() => handleEdit(user.id)}
                                 >
-                                  <Check style={{ height: 25 }} />
+                                  <VoiceOverOff style={{ height: 25 }} />
                                 </Button>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                  }}
-                                  onClick={handleCancelDelete}
-                                >
-                                  <Close style={{ height: 25 }} />
-                                </Button>
-                              </>
-                            ) : (
-                              <>
-                                {user.is_active ? (
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
-                                      color: "green",
-                                      marginLeft: 10,
-                                    }}
-                                    onClick={() => handleEdit(user.id)}
-                                  >
-                                    <RecordVoiceOver style={{ height: 25 }} />
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
-                                      color: "red",
-                                      marginLeft: 10,
-                                    }}
-                                    onClick={() => handleEdit(user.id)}
-                                  >
-                                    <VoiceOverOff style={{ height: 25 }} />
-                                  </Button>
-                                )}
-                              </>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                              )}
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))}
+                </table>
               </div>
             </div>
             <div className="pagination">
