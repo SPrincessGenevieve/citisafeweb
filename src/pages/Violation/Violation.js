@@ -364,6 +364,7 @@ function Violation({ navigation }) {
       PAID: false,
       OVERDUE: false,
       DROPPED: false,
+      SERVICE: false,
     };
     setCheckedStatuses(initialCheckedStatuses);
     filterData(initialCheckedStatuses, initialDateFilter);
