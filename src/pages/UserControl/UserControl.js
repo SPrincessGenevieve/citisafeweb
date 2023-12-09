@@ -293,8 +293,9 @@ function UserControl(props) {
         },
       })
       .then((response) => {
-        setUserData(response.data);
-        console.log(response.data);
+        const sortedData = response.data.sort((a, b) => b.id - a.id);
+        setUserData(sortedData);
+        console.log(sortedData);
       })
       .catch((error) => {
         window.alert("Error Fetching Users Data");

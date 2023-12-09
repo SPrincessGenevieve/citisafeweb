@@ -393,7 +393,7 @@ export default function ViolationList(props) {
 
                     <div
                       style={{
-                        width: "50%",
+                        width: "90%",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
@@ -811,7 +811,7 @@ export default function ViolationList(props) {
 
                     <div
                       style={{
-                        width: "50%",
+                        width: "90%",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",

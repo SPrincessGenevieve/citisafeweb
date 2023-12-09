@@ -88,6 +88,7 @@ function Violation({ navigation }) {
     PAID: false,
     OVERDUE: false,
     DROPPED: false,
+    SERVICE: false,
   });
   const [sortOrder, setSortOrder] = useState("ascending");
   const [ticketData, setTicketData] = useState([]);
@@ -487,8 +488,14 @@ function Violation({ navigation }) {
                   onClick={handleStatusChangeFilter}
                   checked={checkedStatuses.PAID}
                 />
+                <SelectFilter
+                  label={"COMMUNITY SERVICE"}
+                  value={"COMMUNITY SERVICE"}
+                  onClick={handleStatusChangeFilter}
+                  checked={checkedStatuses.OVERDUE}
+                />
               </div>
-              <div className="sub-filterStatus">
+              <div className="sub-filterStatus sub">
                 <SelectFilter
                   label={"OVERDUE"}
                   value={"OVERDUE"}
@@ -547,7 +554,7 @@ function Violation({ navigation }) {
                       <td className="row-details">Name</td>
                       <td className="row-details-value">
                         {item.driver_info.first_name}{" "}
-                        {item.driver_info.middle_initial}.{" "}
+                        {item.driver_info.middle_initial}{" "}
                         {item.driver_info.last_name}{" "}
                       </td>
                     </tr>
@@ -751,8 +758,7 @@ function Violation({ navigation }) {
                       </TableCell>
                       <TableCell style={cellStylesBody.cell}>
                         {item.driver_info.first_name}{" "}
-                        {item.driver_info.middle_initial}
-                        {". "}
+                        {item.driver_info.middle_initial}{" "}
                         {item.driver_info.last_name}{" "}
                       </TableCell>
                       <TableCell
@@ -800,7 +806,9 @@ function Violation({ navigation }) {
                                   ? "#E2F0D9"
                                   : item.ticket_status === "PENDING"
                                   ? "#BDD7EE"
-                                  : "#FFF2CC",
+                                  : item.ticket_status === "DROPPED"
+                                  ? "#FFF2CC"
+                                  : "#FFC1F8",
                               color:
                                 item.ticket_status === "OVERDUE"
                                   ? "#C00000"
@@ -808,9 +816,11 @@ function Violation({ navigation }) {
                                   ? "#70AD47"
                                   : item.ticket_status === "PENDING"
                                   ? "#0070C0"
-                                  : "#7F6000",
+                                  : item.ticket_status === "DROPPED"
+                                  ? "#7F6000"
+                                  : "#C400AD",
                               width: 100,
-                              height: 15,
+                              height: "auto",
                               padding: 10,
                               textAlign: "center",
                               borderRadius: 20,
