@@ -51,7 +51,8 @@ const styles = (theme) => ({
 const cellStylesHeader = {
   cell: {
     color: "black",
-    height: 10,
+    height: 5,
+    lineHeight: 1,
     textAlign: "center",
     justifyContent: "center",
     fontWeight: "bold",
@@ -68,6 +69,7 @@ const cellStylesBody = {
     height: "auto",
     textAlign: "center",
     fontSize: "12px",
+    lineHeight: 1,
   },
 };
 
@@ -267,7 +269,7 @@ function Violation({ navigation }) {
   };
 
   const filterData = (statusFilters, dateFilter) => {
-    let filteredData = originalTicketData;
+    let filteredData = [...originalTicketData]; // Use a copy to avoid modifying the original array
 
     // Filter by status
     if (statusFilters.length > 0) {
@@ -278,12 +280,13 @@ function Violation({ navigation }) {
 
     // Filter by date
     if (dateFilter.startDate && dateFilter.endDate) {
-      const startDateStr = dateFilter.startDate.toLocaleDateString("en-US");
-      const endDateStr = dateFilter.endDate.toLocaleDateString("en-US");
+      const startDate = dateFilter.startDate.setHours(0, 0, 0, 0); // Set time to midnight
+      const endDate = dateFilter.endDate.setHours(23, 59, 59, 999); // Set time to the last millisecond
 
       filteredData = filteredData.filter((item) => {
-        const itemDate = new Date(item.date_issued).toLocaleDateString("en-US");
-        return itemDate >= startDateStr && itemDate <= endDateStr;
+        const itemDate = new Date(item.date_issued).getTime(); // Get timestamp
+
+        return itemDate >= startDate && itemDate <= endDate;
       });
     }
 
@@ -335,6 +338,7 @@ function Violation({ navigation }) {
   };
 
   const handleDateSort = (selectedDate) => {
+    console.log("Selected Date Range:", selectedDate);
     setSelectedDate(selectedDate);
     filterData(
       Object.keys(checkedStatuses).filter((s) => checkedStatuses[s]),
@@ -489,7 +493,7 @@ function Violation({ navigation }) {
                   checked={checkedStatuses.PAID}
                 />
                 <SelectFilter
-                  label={"COMMUNITY SERVICE"}
+                  label={"SERVICE"}
                   value={"COMMUNITY SERVICE"}
                   onClick={handleStatusChangeFilter}
                   checked={checkedStatuses.OVERDUE}
@@ -692,57 +696,32 @@ function Violation({ navigation }) {
             </Dialog>
           ))}
 
-          <div className="tab-con-2">
-            <TableContainer>
-              <Table className="table">
-                <TableHead>
-                  <TableRow className="table-row">
-                    <TableCell style={cellStylesHeader.cell}>
-                      Tracking #
-                    </TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Name</TableCell>
-                    <TableCell
-                      sstyle={{
-                        ...cellStylesHeader.cell,
-                        backgroundColor: "pink",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: 400,
-                          fontSize: 12,
-                          textAlign: "center",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        Violation
-                      </div>
-                    </TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Date</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Offense</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>
-                      Apprehending Officer
-                    </TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Penalty</TableCell>
-                    <TableCell style={cellStylesHeader.cell}>Status</TableCell>
+          <div className="violation-table-container">
+            <div style={{ height: 100, width: "100%" }}>
+              <table className="violation-table">
+                <thead>
+                  <tr>
+                    <th className="header-title">Tracking #</th>
+                    <th className="header-title">Name</th>
+                    <th className="header-title">Violation</th>
+                    <th className="header-title">Date</th>
+                    <th className="header-title">Offense</th>
+                    <th className="header-title">Apprehending Officer</th>
+                    <th className="header-title">Penalty</th>
+                    <th className="header-title">Status</th>
                     {Role === "TREASURER" && (
                       <>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Action
-                        </TableCell>
+                        <th className="header-title">Action</th>
                       </>
                     )}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {visibleData.map((item, index) => (
-                    <TableRow
-                      className={`table-body-row ${
-                        index % 2 === 0 ? "even-row" : "odd-row"
-                      }`}
-                      key={index}
+                  </tr>
+                </thead>
+                {visibleData.map((item, index) => (
+                  <tbody>
+                    <tr
+                      className={` ${index % 2 === 0 ? "even-row" : "odd-row"}`}
                     >
-                      <TableCell style={cellStylesBody.cell}>
+                      <td className="content-title">
                         <div className="container-ticket">
                           <a
                             className="ticket"
@@ -752,53 +731,50 @@ function Violation({ navigation }) {
                               handleOpenModal(item.MFRTA_TCT_NO);
                             }}
                           >
-                            {item.MFRTA_TCT_NO}{" "}
+                            <p className="title-size">{item.MFRTA_TCT_NO}</p>
                           </a>
                         </div>
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
-                        {item.driver_info.first_name}{" "}
-                        {item.driver_info.middle_initial}{" "}
-                        {item.driver_info.last_name}{" "}
-                      </TableCell>
-                      <TableCell
-                        style={{
-                          color: "black",
-                          height: "auto",
-                          textAlign: "left",
-                          width: 150,
-                          height: "auto",
-                          textAlign: "center",
-                        }}
-                      >
+                      </td>
+                      <td className="content-title">
+                        <p className="title-size">
+                          {item.driver_info.first_name}{" "}
+                          {item.driver_info.middle_initial}{" "}
+                          {item.driver_info.last_name}{" "}
+                        </p>
+                      </td>
+                      <td className="content-title">
                         {item.violation_info.violations_info.map(
                           (violation, index) => (
-                            <div style={{ width: 400 }} key={index}>
-                              {violation}
+                            <div key={index}>
+                              <p className="title-size">{violation}</p>
                             </div>
                           )
                         )}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
-                        {item.date_issued}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
-                        {item.driver_info.offenses_count}
-                      </TableCell>
-
-                      <TableCell style={cellStylesBody.cell}>
-                        {item.user_ID.first_name} {item.user_ID.middle_name}{" "}
-                        {item.user_ID.last_name}{" "}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
-                        {item.penalty_amount}
-                      </TableCell>
-                      <TableCell style={cellStylesBody.cell}>
+                      </td>
+                      <td className="content-title">
+                        <p className="title-size">{item.date_issued}</p>
+                      </td>
+                      <td className="content-title">
+                        <p className="title-size">
+                          {item.driver_info.offenses_count}
+                        </p>
+                      </td>
+                      <td className="content-title">
+                        <p className="title-size">
+                          {item.user_ID.first_name} {item.user_ID.middle_name}{" "}
+                          {item.user_ID.last_name}{" "}
+                        </p>
+                      </td>
+                      <td className="content-title">
+                        <p className="title-size">{item.penalty_amount}</p>
+                      </td>
+                      <td className="content-title status">
                         <div className="status-container">
                           <p
                             style={{
                               flex: 1,
                               fontWeight: 540,
+                              fontSize: 13,
                               backgroundColor:
                                 item.ticket_status === "OVERDUE"
                                   ? "#FFC5C5"
@@ -819,24 +795,14 @@ function Violation({ navigation }) {
                                   : item.ticket_status === "DROPPED"
                                   ? "#7F6000"
                                   : "#C400AD",
-                              width: 100,
-                              height: "auto",
-                              padding: 10,
+                              width: 50,
+                              padding: 5,
                               textAlign: "center",
                               borderRadius: 20,
                             }}
                           >
                             {editingRows[item.MFRTA_TCT_NO] ? (
-                              <div
-                                className={
-                                  index % 2 === 0 ? "even-row" : "odd-row"
-                                }
-                                style={{
-                                  marginTop: -15,
-                                  width: 200,
-                                  marginLeft: -10,
-                                }}
-                              >
+                              <div>
                                 <StatusSelection
                                   label={"Select Status"}
                                   labelSelect={"Select Status"}
@@ -852,86 +818,88 @@ function Violation({ navigation }) {
                             )}
                           </p>
                         </div>
-                      </TableCell>
-
+                      </td>
                       {Role === "TREASURER" && (
-                        <>
-                          <TableCell
-                            className="row"
-                            style={cellStylesBody.cell}
-                          >
-                            {editingRows[item.MFRTA_TCT_NO] ? (
-                              <div className="check-close">
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                    marginLeft: 0,
-                                  }}
-                                  onClick={() => {
-                                    const formData = {
-                                      MFRTA_TCT_NO: item.MFRTA_TCT_NO,
-                                      ticket_status: editTicketStatus,
-                                    };
-                                    console.log(formData);
+                        <td className="content-title status">
+                          {editingRows[item.MFRTA_TCT_NO] ? (
+                            <div className="check-close">
+                              <Button
+                                variant="contained"
+                                style={{
+                                  backgroundColor: "transparent",
+                                  boxShadow: "none",
+                                  color: "black",
+                                  marginLeft: 0,
+                                }}
+                                onClick={() => {
+                                  const formData = {
+                                    MFRTA_TCT_NO: item.MFRTA_TCT_NO,
+                                    ticket_status: editTicketStatus,
+                                  };
+                                  console.log(formData);
 
-                                    axios
-                                      .patch(
-                                        `ticket/register/${item.MFRTA_TCT_NO}/`,
-                                        formData,
-                                        {
-                                          headers: {
-                                            Authorization: `token ${Token}`,
-                                          },
-                                        }
-                                      )
-                                      .then((response) => {
-                                        console.log(response.data);
-                                        handleSave(item.MFRTA_TCT_NO);
-                                      })
-                                      .catch((error) => {
-                                        window.alert(
-                                          "Unsuccessfully Edit Penalty Status"
-                                        );
-                                        console.log(error);
-                                      });
-                                  }}
-                                >
-                                  <Check style={{ height: 25 }} />
-                                </Button>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                  }}
-                                  onClick={() =>
-                                    handleCancelEdit(item.MFRTA_TCT_NO)
-                                  }
-                                >
-                                  <Close style={{ height: 25 }} />
-                                </Button>
-                              </div>
-                            ) : deletingRows[item.MFRTA_TCT_NO] ? (
-                              <>
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "black",
-                                    marginLeft: 10,
-                                  }}
-                                  onClick={() => handleCheck(item.MFRTA_TCT_NO)}
-                                >
-                                  <Check style={{ height: 25 }} />
-                                </Button>
-                              </>
-                            ) : (
-                              <>
+                                  axios
+                                    .patch(
+                                      `ticket/register/${item.MFRTA_TCT_NO}/`,
+                                      formData,
+                                      {
+                                        headers: {
+                                          Authorization: `token ${Token}`,
+                                        },
+                                      }
+                                    )
+                                    .then((response) => {
+                                      console.log(response.data);
+                                      handleSave(item.MFRTA_TCT_NO);
+                                    })
+                                    .catch((error) => {
+                                      window.alert(
+                                        "Unsuccessfully Edit Penalty Status"
+                                      );
+                                      console.log(error);
+                                    });
+                                }}
+                              >
+                                <Check style={{ height: 25 }} />
+                              </Button>
+                              <Button
+                                variant="contained"
+                                style={{
+                                  backgroundColor: "transparent",
+                                  boxShadow: "none",
+                                  color: "black",
+                                }}
+                                onClick={() =>
+                                  handleCancelEdit(item.MFRTA_TCT_NO)
+                                }
+                              >
+                                <Close style={{ height: 25 }} />
+                              </Button>
+                            </div>
+                          ) : deletingRows[item.MFRTA_TCT_NO] ? (
+                            <>
+                              <Button
+                                variant="contained"
+                                style={{
+                                  backgroundColor: "transparent",
+                                  boxShadow: "none",
+                                  color: "black",
+                                  marginLeft: 10,
+                                }}
+                                onClick={() => handleCheck(item.MFRTA_TCT_NO)}
+                              >
+                                <Check style={{ height: 25 }} />
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
                                 <Button
                                   variant="contained"
                                   style={{
@@ -944,16 +912,16 @@ function Violation({ navigation }) {
                                 >
                                   <Edit style={{ height: 25 }} />
                                 </Button>
-                              </>
-                            )}
-                          </TableCell>
-                        </>
+                              </div>
+                            </>
+                          )}
+                        </td>
                       )}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    </tr>
+                  </tbody>
+                ))}
+              </table>
+            </div>
           </div>
         </div>
         <div className="pagination">

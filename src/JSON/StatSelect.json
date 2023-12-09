@@ -3,5 +3,5 @@
   { "value": "PAID", "label": "PAID" },
   { "value": "OVERDUE", "label": "OVERDUE" },
   { "value": "DROPPED", "label": "DROPPED" },
-  { "value": "SERVICE", "label": "COMMUNITY SERVICE" }
+  { "value": "COMMUNITY SERVICE", "label": "SERVICE" }
 ]
