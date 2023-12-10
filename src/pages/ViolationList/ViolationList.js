@@ -975,7 +975,9 @@ export default function ViolationList(props) {
                             ) : user.status === "Active" ? (
                               `Active`
                             ) : (
-                              <p>{user.penalty_info.description}</p>
+                              <p className="title-size">
+                                {user.penalty_info.description}
+                              </p>
                             )}
                           </td>
                           <td className="content-title">
