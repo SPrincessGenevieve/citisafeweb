@@ -96,7 +96,11 @@ function App() {
         </Routes>
         {showPopup && isAuthenticated && (
           // Use useReactRouterLocation here instead of useLocation
-          <Notification closeNotif={closeNotif} showPopup={showPopup} />
+          <div
+            style={{ position: "fixed", display: "flex", bottom: 30, right: 0 }}
+          >
+            <Notification closeNotif={closeNotif} showPopup={showPopup} />
+          </div>
         )}
       </Router>
     </div>

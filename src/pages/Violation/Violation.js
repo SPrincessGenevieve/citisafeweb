@@ -11,16 +11,8 @@ import {
 } from "@mui/icons-material";
 import StatusSelection from "../../components/StatusSelection";
 import StatSelect from "./../../JSON/StatSelect.json";
-import violationsData from "./../../JSON/violationsData.json";
-import violationsSample from "./../../JSON/sampleViolation.json";
 import {
   Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Dialog,
   DialogActions,
   DialogContent,
@@ -436,7 +428,7 @@ function Violation({ navigation }) {
       <div className="navbar-container">
         <Navbar></Navbar>
       </div>
-
+      <div className="navbar-container-2"></div>
       <div className="first-layer-violation">
         <div className="search-container-violation">
           <Search
@@ -537,7 +529,6 @@ function Violation({ navigation }) {
         <div style={{ marginLeft: "3%" }}>
           <p>TOTAL ROWS: {ticketData.length}</p>
         </div>
-
         <div className="table-conatiner-violation">
           {ticketData.map((item, index) => (
             <Dialog
@@ -698,7 +689,7 @@ function Violation({ navigation }) {
           ))}
 
           <div className="violation-table-container">
-            <div style={{ height: 100, width: "100%" }}>
+            <div className="table-flex">
               <table className="violation-table">
                 <thead>
                   <tr>
@@ -922,60 +913,71 @@ function Violation({ navigation }) {
                   </tbody>
                 ))}
               </table>
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  width: "100%",
+                  height: 50,
+                  backgroundColor: "white",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              ></div>
             </div>
           </div>
         </div>
-        <div className="pagination">
-          <div className="label-page">
-            <Button
-              style={{ backgroundColor: "transparent", border: 0 }}
-              disabled={currentPage === 1}
-              onClick={prevPage}
-            >
-              PREVIOUS
-            </Button>
-            {Array.from({ length: totalPages }, (_, index) => {
-              if (
-                totalPages <= 4 ||
-                index + 1 === 1 ||
-                index + 1 === totalPages ||
-                Math.abs(currentPage - (index + 1)) <= 1
-              ) {
-                return (
-                  <button
-                    style={{
-                      border: 0,
-                      marginRight: 10,
-                      height: 40,
-                      width: 40,
-                      color: currentPage === index + 1 ? "white" : "black",
-                      borderRadius: 10,
-                      backgroundColor:
-                        currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
-                      fontSize: 20,
-                    }}
-                    key={index}
-                    onClick={() => handlePageChange(index + 1)}
-                    className={
-                      currentPage === index + 1 ? "activePage" : "inactivePage"
-                    }
-                  >
-                    {index + 1}
-                  </button>
-                );
-              } else if (Math.abs(currentPage - (index + 1)) === 2) {
-                return <span key={index}>...</span>;
-              }
-              return null;
-            })}
-            <Button
-              style={{ backgroundColor: "transparent", border: 0 }}
-              disabled={currentPage === lastPageIndex}
-              onClick={nextPage}
-            >
-              NEXT
-            </Button>
-          </div>
+      </div>
+      <div className="pagination">
+        <div className="label-page">
+          <Button
+            style={{ backgroundColor: "transparent", border: 0 }}
+            disabled={currentPage === 1}
+            onClick={prevPage}
+          >
+            PREVIOUS
+          </Button>
+          {Array.from({ length: totalPages }, (_, index) => {
+            if (
+              totalPages <= 4 ||
+              index + 1 === 1 ||
+              index + 1 === totalPages ||
+              Math.abs(currentPage - (index + 1)) <= 1
+            ) {
+              return (
+                <button
+                  style={{
+                    border: 0,
+                    marginRight: 10,
+                    height: 40,
+                    width: 40,
+                    color: currentPage === index + 1 ? "white" : "black",
+                    borderRadius: 10,
+                    backgroundColor:
+                      currentPage === index + 1 ? "#3e7c1f" : "#e0e0e0",
+                    fontSize: 20,
+                  }}
+                  key={index}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={
+                    currentPage === index + 1 ? "activePage" : "inactivePage"
+                  }
+                >
+                  {index + 1}
+                </button>
+              );
+            } else if (Math.abs(currentPage - (index + 1)) === 2) {
+              return <span key={index}>...</span>;
+            }
+            return null;
+          })}
+          <Button
+            style={{ backgroundColor: "transparent", border: 0 }}
+            disabled={currentPage === lastPageIndex}
+            onClick={nextPage}
+          >
+            NEXT
+          </Button>
         </div>
       </div>
     </div>

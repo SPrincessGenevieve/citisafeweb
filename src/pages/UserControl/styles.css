@@ -81,12 +81,11 @@
   height: 7%;
 }
 .table-conatiner-user {
+  width: 95%;
+  height: 90%;
   display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+  background-color: white;
   overflow-y: auto;
-  margin-top: 30px;
 }
 .tab-con-2-user {
   display: flex;

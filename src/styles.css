@@ -98,7 +98,7 @@
   }
 }
 
-@media (max-width: 1556px) {
+@media (max-width: 1256px) {
   .nav-list {
     display: none;
     width: 100%;
@@ -120,6 +120,7 @@
 
   .nav-item {
     margin-right: 0;
+    margin-top: 1%;
   }
 
   .nav-item a {

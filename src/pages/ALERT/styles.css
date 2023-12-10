@@ -1,5 +1,6 @@
 .alert-notif {
   opacity: 0;
+  position: fixed;
   display: flex;
   width: 500px;
   height: 180px;

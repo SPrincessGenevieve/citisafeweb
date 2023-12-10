@@ -45,7 +45,7 @@ function AlertPop({ onClickSendMessage, onClickClose, navigateTo }) {
   return (
     <>
       {isVisible && (
-        <>
+        <div style={{ position: "absolute", backgroundColor: "red" }}>
           <Button onClick={onClickSendMessage}></Button>
 
           <div className={`alert-notif ${showNotification ? "active" : ""}`}>
@@ -76,7 +76,7 @@ function AlertPop({ onClickSendMessage, onClickClose, navigateTo }) {
               </Button>
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );
