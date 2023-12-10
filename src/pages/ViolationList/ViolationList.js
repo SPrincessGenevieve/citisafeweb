@@ -13,6 +13,8 @@ import {
   ArrowBackIos,
   ArrowForwardIos,
   Delete,
+  CheckCircle,
+  HighlightOff,
 } from "@mui/icons-material";
 import { useState } from "react";
 import {
@@ -70,6 +72,7 @@ export default function ViolationList(props) {
   const [openModal, setOpenModal] = useState(false);
   const [editingRow, setEditingRow] = useState(null);
   const [deletingRow, setDeletingRow] = useState(null);
+  const isMobile = window.innerWidth <= 600;
   const [addPenalty, setAddPenalty] = useState({
     description: "",
     amount: "",
@@ -498,13 +501,7 @@ export default function ViolationList(props) {
             </div>
 
             <div className="violation-pen-table-container">
-              <div
-                style={{
-                  height: "90%",
-                  width: "100%",
-                  overflowY: "auto",
-                }}
-              >
+              <div className="sub-pen">
                 <table className="violation-table">
                   <thead>
                     <tr>
@@ -535,7 +532,7 @@ export default function ViolationList(props) {
                         <td className="content-title">
                           <p className="title-size">{user.date}</p>
                         </td>
-                        <td className="content-title">
+                        <td className="content-title pen status">
                           <div className="penalty-stat-con">
                             <p
                               style={{
@@ -543,15 +540,11 @@ export default function ViolationList(props) {
                                 backgroundColor:
                                   user.status === "Active"
                                     ? "#E2F0D9"
-                                    : user.status === "Deactivated"
-                                    ? "#FFD1D1"
                                     : "#FFD1D1",
                                 color:
                                   user.status === "Active"
                                     ? "#649F3F"
-                                    : user.status === "Deactivated"
-                                    ? "#D00000"
-                                    : "#DC3535",
+                                    : "#D00000",
                                 width: 10,
                                 fontSize: 12,
                                 height: 25,
@@ -580,6 +573,13 @@ export default function ViolationList(props) {
                                     ></StatusSelection>
                                   </div>
                                 </div>
+                              ) : window.innerWidth <= 600 ? (
+                                // Check if the screen width is less than or equal to 600
+                                user.status === "Active" ? (
+                                  <CheckCircle style={{ height: 25 }} />
+                                ) : (
+                                  <HighlightOff style={{ height: 25 }} />
+                                )
                               ) : user.status === "Active" ? (
                                 `Active`
                               ) : (
@@ -588,9 +588,10 @@ export default function ViolationList(props) {
                             </p>
                           </div>
                         </td>
-                        <td className="content-title">
+                        <td className="content-title pen">
                           {editingRow === user.id ? (
                             <div
+                              className="direction-pen"
                               style={{
                                 display: "flex",
                                 alignItems: "center",
@@ -649,7 +650,7 @@ export default function ViolationList(props) {
                               </Button>
                             </div>
                           ) : deletingRow === user.id ? (
-                            <>
+                            <div>
                               <Button
                                 variant="contained"
                                 style={{
@@ -673,7 +674,7 @@ export default function ViolationList(props) {
                               >
                                 <Close style={{ height: 25 }} />
                               </Button>
-                            </>
+                            </div>
                           ) : (
                             <>
                               {user.status === "Active" ? (
@@ -914,13 +915,7 @@ export default function ViolationList(props) {
               </div>
             </div>
             <div className="violation-pen-table-container">
-              <div
-                style={{
-                  height: "90%",
-                  width: "100%",
-                  overflowY: "auto",
-                }}
-              >
+              <div className="sub-pen">
                 <table className="violation-table">
                   <thead>
                     <tr>

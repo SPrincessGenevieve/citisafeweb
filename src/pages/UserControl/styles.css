@@ -171,4 +171,7 @@
     display: flex;
     height: 5%;
   }
+  .status-container.user {
+    width: 140px;
+  }
 }

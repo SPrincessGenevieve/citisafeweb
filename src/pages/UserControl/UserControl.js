@@ -504,7 +504,7 @@ function UserControl(props) {
                       <th className="header-title user">Position</th>
                       <th className="header-title user">Email</th>
                       <th className="header-title user">Username</th>
-                      <th className="header-title user">Status</th>
+                      <th className="header-title user status">Status</th>
                       <th className="header-title user">Action</th>
                     </tr>
                   </thead>
@@ -568,7 +568,7 @@ function UserControl(props) {
                               }}
                             >
                               {editingRow === user.id ? (
-                                <div>
+                                <div className="status-con-user">
                                   <StatusSelection
                                     label={"Select Status"}
                                     labelSelect={"Select Status"}

@@ -93,6 +93,12 @@
   justify-content: center;
 }
 
+.direction-pen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .modal-paper-2 {
   display: flex;
   flex-direction: column;
@@ -104,6 +110,12 @@
   padding: 20px;
 }
 
+.sub-pen {
+  height: 90%;
+  width: 100%;
+  overflow-y: auto;
+}
+
 @media (max-width: 600px) {
   .buttons-container {
     display: flex;
@@ -112,7 +124,17 @@
     align-items: center;
     justify-content: center;
   }
+  .sub-pen {
+    height: 100%;
+  }
   .modal-paper-2 {
     width: 90%;
+  }
+  .direction-pen {
+    display: flex;
+    flex-direction: column;
+  }
+  .penalty-stat-con {
+    width: 140px;
   }
 }
