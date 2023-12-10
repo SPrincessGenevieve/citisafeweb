@@ -913,188 +913,180 @@ export default function ViolationList(props) {
                 </Button>
               </div>
             </div>
-            <div className="table-conatiner-user">
-              <div className="tab-con-2-user">
-                <TableContainer>
-                  <Table className="table">
-                    <TableHead>
-                      <TableRow className="table-row">
-                        <TableCell style={cellStylesHeader.cell}>ID</TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Description
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Penalty ID
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Penalty Description
-                        </TableCell>
-                        <TableCell style={cellStylesHeader.cell}>
-                          Action
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {visibleViolationData
-                        .filter((user) => user.penalty_info.status === "Active")
-                        .map((user, index) => (
-                          <TableRow
-                            className={`table-body-row ${
-                              index % 2 === 0 ? "even-row" : "odd-row"
-                            }`}
-                            key={index}
-                          >
-                            <TableCell style={cellStylesBody.cell}>
-                              {user.id}
-                            </TableCell>
-                            <TableCell style={cellStylesBody.cell}>
-                              {user.violation_type}
-                            </TableCell>
-                            <TableCell style={cellStylesBody.cell}>
-                              {user.penalty_ID}
-                            </TableCell>
-                            <TableCell style={cellStylesBody.cell}>
-                              {editingRow === user.id ? (
-                                <div className="input-css-container">
-                                  <FormControl variant="outlined" fullWidth>
-                                    <InputLabel id="penalty-label">
-                                      Select Penalty
-                                    </InputLabel>
-                                    <Select
-                                      labelId="penalty-label"
-                                      id="penalty"
-                                      value={editViolation}
-                                      onChange={(e) =>
-                                        setEditViolation(e.target.value)
-                                      }
-                                      label="Select Penalty"
-                                    >
-                                      {penaltyData
-                                        .filter(
-                                          (user) => user.status === "Active"
-                                        )
-                                        .map((user, index) => (
-                                          <MenuItem key={index} value={user.id}>
-                                            {user.description}
-                                          </MenuItem>
-                                        ))}
-                                    </Select>
-                                  </FormControl>
-                                </div>
-                              ) : user.status === "Active" ? (
-                                `Active`
-                              ) : (
-                                <p>{user.penalty_info.description}</p>
-                              )}
-                            </TableCell>
+            <div className="violation-pen-table-container">
+              <div
+                style={{
+                  height: "90%",
+                  width: "100%",
+                  overflowY: "auto",
+                }}
+              >
+                <table className="violation-table">
+                  <thead>
+                    <tr>
+                      <th className="header-title pen">ID</th>
+                      <th className="header-title pen">Description</th>
+                      <th className="header-title pen">Penalty ID</th>
+                      <th className="header-title pen">Penalty Description</th>
+                      <th className="header-title pen action">Action</th>
+                    </tr>
+                  </thead>
+                  {visibleViolationData
+                    .filter((user) => user.penalty_info.status === "Active")
+                    .map((user, index) => (
+                      <tbody>
+                        <tr
+                          className={` ${
+                            index % 2 === 0 ? "even-row" : "odd-row"
+                          }`}
+                        >
+                          <td className="content-title">
+                            <p className="title-size">{user.id}</p>
+                          </td>
+                          <td className="content-title">
+                            <p className="title-size">{user.violation_type}</p>
+                          </td>
+                          <td className="content-title">
+                            <p className="title-size">{user.penalty_ID}</p>
+                          </td>
+                          <td className="content-title">
+                            {editingRow === user.id ? (
+                              <div className="input-css-container">
+                                <FormControl variant="outlined" fullWidth>
+                                  <InputLabel id="penalty-label">
+                                    Select Penalty
+                                  </InputLabel>
+                                  <Select
+                                    labelId="penalty-label"
+                                    id="penalty"
+                                    value={editViolation}
+                                    onChange={(e) =>
+                                      setEditViolation(e.target.value)
+                                    }
+                                    label="Select Penalty"
+                                  >
+                                    {penaltyData
+                                      .filter(
+                                        (user) => user.status === "Active"
+                                      )
+                                      .map((user, index) => (
+                                        <MenuItem key={index} value={user.id}>
+                                          {user.description}
+                                        </MenuItem>
+                                      ))}
+                                  </Select>
+                                </FormControl>
+                              </div>
+                            ) : user.status === "Active" ? (
+                              `Active`
+                            ) : (
+                              <p>{user.penalty_info.description}</p>
+                            )}
+                          </td>
+                          <td className="content-title">
+                            {editingRow === user.id ? (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => {
+                                    const formData = {
+                                      id: user.id,
+                                      penalty_ID: editViolation,
+                                    };
+                                    console.log(formData);
 
-                            <TableCell
-                              className="row"
-                              style={cellStylesBody.cell}
-                            >
-                              {editingRow === user.id ? (
-                                <>
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
-                                      color: "black",
-                                      marginLeft: 10,
-                                    }}
-                                    onClick={() => {
-                                      const formData = {
-                                        id: user.id,
-                                        penalty_ID: editViolation,
-                                      };
-                                      console.log(formData);
-
-                                      axios
-                                        .patch(
-                                          `ticket/violation/${user.id}/`,
-                                          formData,
-                                          {
-                                            headers: {
-                                              Authorization: `token ${Token}`,
-                                            },
-                                          }
-                                        )
-                                        .then((response) => {
-                                          handleSave(user.id);
-                                          alert("Updated successfully!");
-                                          window.location.reload();
-                                        })
-                                        .catch((error) => {
-                                          window.alert(
-                                            "Unsuccessfully Edit Penalty Status"
-                                          );
-                                          console.log(error);
-                                        });
-                                    }}
-                                  >
-                                    <Check style={{ height: 25 }} />
-                                  </Button>
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
-                                      color: "black",
-                                    }}
-                                    onClick={handleCancelEdit}
-                                  >
-                                    <Close style={{ height: 25 }} />
-                                  </Button>
-                                </>
-                              ) : deletingRow === user.id ? (
-                                <>
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
-                                      color: "black",
-                                      marginLeft: 10,
-                                    }}
-                                    onClick={() => handleCheck(user.id)}
-                                  >
-                                    <Check style={{ height: 25 }} />
-                                  </Button>
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
-                                      color: "black",
-                                    }}
-                                    onClick={handleCancelDelete}
-                                  >
-                                    <Close style={{ height: 25 }} />
-                                  </Button>
-                                </>
-                              ) : (
-                                <>
-                                  <Button
-                                    variant="contained"
-                                    style={{
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
-                                      color: "black",
-                                      marginLeft: 10,
-                                    }}
-                                    onClick={() => handleEdit(user.id)}
-                                  >
-                                    <Edit style={{ height: 25 }} />
-                                  </Button>
-                                </>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                                    axios
+                                      .patch(
+                                        `ticket/violation/${user.id}/`,
+                                        formData,
+                                        {
+                                          headers: {
+                                            Authorization: `token ${Token}`,
+                                          },
+                                        }
+                                      )
+                                      .then((response) => {
+                                        handleSave(user.id);
+                                        alert("Updated successfully!");
+                                        window.location.reload();
+                                      })
+                                      .catch((error) => {
+                                        window.alert(
+                                          "Unsuccessfully Edit Penalty Status"
+                                        );
+                                        console.log(error);
+                                      });
+                                  }}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={handleCancelEdit}
+                                >
+                                  <Close style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            ) : deletingRow === user.id ? (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => handleCheck(user.id)}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={handleCancelDelete}
+                                >
+                                  <Close style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => handleEdit(user.id)}
+                                >
+                                  <Edit style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
+                </table>
               </div>
+
               <div className="pagination">
                 {/*PAGINATION STARTS HERE*/}
                 <div className="label-page">
