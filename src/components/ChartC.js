@@ -1,6 +1,7 @@
 import React, { PureComponent, useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import axios from "../plugins/axios";
+import { useTheme } from "@mui/system";
 
 const COLORS = ["#2B5517", "#3DBC00", "#88FA52", "#476B36"];
 
@@ -23,16 +24,16 @@ const ChartC = () => {
   const filteredData = data.filter((entry) => entry.value !== 0);
 
   return (
-    <div style={{ marginTop: -20 }}>
-      <ResponsiveContainer width="100%" height={300}>
+    <div style={{ width: "100%", height: "100%" }}>
+      <ResponsiveContainer width={"100%"} height={"100%"}>
         <PieChart>
           <Pie
             data={filteredData}
             cx="50%"
             cy="50%"
-            outerRadius={130}
             fill="#8884d8"
             dataKey="value"
+            outerRadius={"100%"}
           >
             {filteredData.map((entry, index) => (
               <Cell

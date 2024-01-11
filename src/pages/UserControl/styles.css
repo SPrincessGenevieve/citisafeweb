@@ -19,6 +19,7 @@
   height: 75%;
   width: 100%;
   overflow-y: auto;
+  margin-top: 5vh;
 }
 .container1 {
   height: 90vh;
@@ -126,7 +127,15 @@
 .selection-cont2 {
   width: 46%;
 }
+@media (max-width: 1000px) {
+  .table-conatiner-user {
+    margin-top: 5vh;
+  }
+}
 @media (max-width: 600px) {
+  .table-conatiner-user {
+    margin-top: 0vh;
+  }
   .table-sub-user {
     height: 90%;
   }

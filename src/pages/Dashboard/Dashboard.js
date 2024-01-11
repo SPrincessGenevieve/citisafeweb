@@ -76,32 +76,13 @@ function Dashboard(props) {
 
   return (
     <>
-      <div
-        className="div-beginning"
-        style={{
-          width: "100%",
-          height: "20vh",
-        }}
-      >
-        <Navbar></Navbar>
-      </div>
-      <div
-        className="chart-container"
-        style={{
-          width: "100%",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{ width: "90%", height: "90%" }}
-          className="container-of-all"
-        >
-          <div className="whiteContainer">
-            <div className="row">
-              <div className="greeting">
+      <Navbar></Navbar>
+
+      <div className="chart-container">
+        <div className="inner-container">
+          <div className="white-container-dash">
+            <div className="graph-con A">
+              <div className="greet-date">
                 <div>
                   <img
                     style={{ height: 100, width: 100, borderRadius: 100 }}
@@ -109,155 +90,78 @@ function Dashboard(props) {
                     alt="Sun/Moon"
                   ></img>
                 </div>
-                <p
-                  style={{
-                    textAlign: "center",
-                    color: "black",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {greeting}!
-                </p>
-                <h1
-                  style={{ textAlign: "center", fontSize: 50, color: "black" }}
-                >
-                  {currentTime}
-                </h1>
-                <p style={{ textAlign: "center", color: "black" }}>
-                  {currentDate}
-                </p>
+                <div className="greetings">
+                  <p className="greeting-p">{greeting}</p>
+                </div>
+                <p className="current-time-p">{currentTime}</p>
+                <div className="date-cont-p">
+                  {currentDate && (
+                    <>
+                      <p className="current-date-p">
+                        {new Date(currentDate).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        })}
+                        ,
+                      </p>
+                      <p className="day-of-week-p">
+                        {new Date(currentDate).toLocaleDateString("en-US", {
+                          weekday: "long",
+                        })}
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
-              <div className="chartA-container">
-                <div className="chartA">
-                  <div
-                    style={{
-                      width: "100%",
-                      flexDirection: "row",
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontWeight: "bold",
-                        marginLeft: 60,
-                        fontSize: 20,
-                        color: "black",
-                      }}
-                    >
+              <div className="month-cont">
+                <div className="graph-cont A">
+                  <div>
+                    <p className="total-violation-p">
                       Total number of violations
                     </p>
-                    <div className="title-container">
-                      <p className="title-date">Monthly</p>
-                    </div>
                   </div>
+                </div>
+                <div className="container-oval A">
+                  <div className="title-container">
+                    <p className="title-date">Monthly</p>
+                  </div>
+                </div>
+                <div className="chart-cont A">
                   <ChartA></ChartA>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="whiteContainer1">
-            <div className="row2">
-              <div className="total">
-                <div style={{ width: "100%" }}>
-                  <h1
-                    style={{
-                      textAlign: "center",
-                      color: "black",
-                    }}
-                  >
-                    TOTAL
-                  </h1>
-                  <h1
-                    style={{
-                      textAlign: "center",
-                      fontSize: 100,
-                      color: "#366B1B",
-                    }}
-                  >
-                    {ticketDay}
-                  </h1>
-                  <p
-                    style={{
-                      textAlign: "center",
-                      color: "black",
-                      fontSize: 25,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    VIOLATIONS
-                  </p>
-                  <p
-                    style={{
-                      textAlign: "center",
-                      color: "black",
-                      fontSize: 25,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    TODAY
-                  </p>
+            <div className="graph-con B">
+              <div className="total-today-cont">
+                <div className="total">
+                  <h1 className="ticketDay-h1">{ticketDay}</h1>
+                  <h1 className="total-h1">TOTAL</h1>
+                  <p className="violation-p">VIOLATIONS</p>
+                  <p className="today-p">TODAY</p>
                 </div>
               </div>
-              <div className="chartC-container">
-                <div className="chartC">
-                  <div
-                    style={{
-                      width: "100%",
-                      flexDirection: "row",
-                      display: "flex",
-                      justifyContent: "center",
-                      marginTop: -40,
-                    }}
-                  >
-                    <p className="violation-tracker">VIOLATION TRACKER</p>
-                  </div>
+              <div className="tracker-cont">
+                <div className="graph-cont C">
+                  <p className="violation-tracker-p">Violation Tracker</p>
+                </div>
+                <div className="chart-cont C">
                   <ChartC></ChartC>
                 </div>
               </div>
-              <div className="chartC-container">
-                <div className="chartC">
-                  <div
-                    style={{
-                      width: "100%",
-                      flexDirection: "row",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      marginTop: -40,
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontWeight: "bold",
-                        marginLeft: 60,
-                        fontSize: 20,
-                        color: "black",
-                      }}
-                    >
-                      Total number of violations
-                    </p>
-                    <div className="title-container">
-                      <p className="title-date">Weekly</p>
-                    </div>
+              <div className="total-week-cont">
+                <div>
+                  <p className="title-container-total-title">
+                    Total number of violations
+                  </p>
+                </div>
+                <div className="container-oval D">
+                  <div className="title-container">
+                    <p className="title-date">Weekly</p>
                   </div>
-
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "90%",
-                        height: "100%",
-                      }}
-                    >
-                      <ChartD></ChartD>
-                    </div>
-                  </div>
+                </div>
+                <div className="chart-cont D">
+                  <ChartD></ChartD>
                 </div>
               </div>
             </div>

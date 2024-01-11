@@ -1,177 +1,248 @@
-.whiteContainer {
-  height: "100%";
-  width: "100%";
-}
-
-.whiteContainer1 {
-  height: "100%";
-  width: "100%";
-  border-radius: 20px;
-  margin-top: 15px;
-}
-
-.nav {
-  z-index: 1;
-}
-
-.dash-subcontainer {
-  background-color: rgb(255, 199, 199);
+.chart-container {
+  display: flex;
   width: 100%;
-  height: 100%;
-}
-
-.greeting {
-  background-color: rgb(231, 231, 231);
-  border-radius: 20px;
+  height: 100vh;
   align-items: center;
   justify-content: center;
+}
+.inner-container {
   display: flex;
-  width: 25%;
+  height: 85vh;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+}
+.white-container-dash {
+  display: flex;
+  background-color: white;
+  width: 100%;
+  padding: 2vh;
+  height: 80vh;
   flex-direction: column;
-  line-height: 0;
 }
-.total {
-  background-color: rgb(231, 231, 231);
+.graph-con {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.greet-date {
+  background-color: #e7e6e6;
+  height: 40vh;
+  width: 40vh;
   border-radius: 20px;
   align-items: center;
   justify-content: center;
   display: flex;
-  width: 25%;
   flex-direction: column;
-  line-height: 0;
-  height: 100%;
+  line-height: 1px;
 }
-.row {
-  width: 100%;
-  height: 300px;
+.month-cont {
   display: flex;
-  flex-direction: row;
-}
-.row2 {
-  width: 100%;
-  height: 400px;
-  display: flex;
-  flex-direction: row;
-}
-.chartA-container {
-  background-color: rgb(231, 231, 231);
+  flex-direction: column;
+  height: 40vh;
+  width: 120vh;
+  margin-left: 1vh;
   border-radius: 20px;
-  height: 100%;
-  width: 140vh;
   align-items: center;
   justify-content: center;
-  display: flex;
-  margin-left: 1%;
+  background-color: #e7e6e6;
 }
-.chartA {
-  height: 70%;
-  width: 100%;
-  margin-top: -8%;
+.graph-con.B {
+  margin-top: 1vh;
 }
 
-.chartC-container {
-  background-color: rgb(231, 231, 231);
-  border-radius: 20px;
-  height: 100%;
-  width: 69.5vh;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  margin-left: 1%;
-}
-.chartC {
-  height: 70%;
-  width: 100%;
-  margin-top: -8%;
-}
-
-.title-date {
-  background-color: green;
-  height: 40px;
-  width: 120px;
+.total-today-cont {
+  background-color: #e7e6e6;
+  height: 40vh;
+  width: 40vh;
   border-radius: 20px;
   align-items: center;
   justify-content: center;
   display: flex;
+  flex-direction: column;
+  margin-left: 1vh;
+  line-height: 10px;
+}
+.tracker-cont {
+  display: flex;
+  flex-direction: column;
+  line-height: 1px;
+  height: 40vh;
+  width: 60vh;
+  margin-left: 1vh;
+  border-radius: 20px;
+  align-items: center;
+  background-color: #e7e6e6;
+}
+.total-week-cont {
+  display: flex;
+  flex-direction: column;
+  height: 40vh;
+  width: 60vh;
+  margin-left: 1vh;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+  background-color: #e7e6e6;
+}
+.chart-cont.A {
+  width: 100vh;
+  height: 30vh;
+}
+.chart-cont.C {
+  width: 50vh;
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.greeting-p {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 2vh;
+  text-align: center;
+}
+.current-time-p {
+  font-size: 3vh;
+  font-weight: bold;
+}
+.date-cont-p {
+  display: flex;
+  line-height: 1vh;
+}
+.current-date-p {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 2vh;
+  text-align: center;
+  margin-right: 1vh;
+}
+.day-of-week-p {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 2vh;
+  text-align: center;
+}
+.total-violation-p {
+  text-align: center;
+  font-weight: bold;
+  font-size: 2vh;
+}
+.title-container-total-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 2vh;
+}
+.title-container {
+  background-color: #008000;
+  border-radius: 30px;
+  height: 4vh;
+  width: 13vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
   font-weight: bold;
-  margin-right: 30px;
+  font-size: 1.5vh;
 }
-.violation-tracker {
+.container-oval {
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.container-oval.A {
+  width: 95%;
+}
+.total {
+  text-align: center;
+}
+.chart-cont.D {
+  height: 100%;
+  width: 90%;
+}
+.container-oval.D {
+  width: 90%;
+}
+.violation-tracker-p {
   font-weight: bold;
-  text-align: "center";
-  font-size: 20px;
-  color: black;
-  margin-bottom: 7%;
+  font-size: 2vh;
+  margin-top: 3vh;
 }
-@media (max-width: 1856px) {
-  .whiteContainer {
-    flex-direction: column;
+.ticketDay-h1 {
+  font-size: 10vh;
+}
+@media (max-width: 960px) {
+  .greet-date {
+    height: 30vh;
+    width: 30vh;
   }
-}
 
-@media (max-width: 1556px) {
+  .month-cont {
+    height: 30vh;
+    width: 60vh;
+  }
+  .chart-cont.A {
+    width: 100%;
+  }
+  .chart-cont.A {
+    width: 50vh;
+    height: 20vh;
+  }
+
+  .tracker-cont {
+    height: 30vh;
+    width: 28vh;
+  }
+
+  .total-today-cont {
+    background-color: #e7e6e6;
+    height: 30vh;
+    width: 30vh;
+    margin-left: 0.5vh;
+  }
+  .total-week-cont {
+    height: 30vh;
+    width: 31vh;
+  }
+  .white-container-dash {
+    align-items: flex-start;
+  }
+  .chart-cont.C {
+    width: 10px;
+    height: 8px;
+    display: flex;
+  }
+  .graph-cont.C {
+    margin-top: 15px;
+  }
 }
 
 @media (max-width: 600px) {
-  .chart-container {
-    display: flex;
+  .graph-con {
+    flex-direction: column;
     align-items: center;
     justify-content: center;
   }
-  .container-of-all {
-    width: 50%;
-    height: 100%;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  .greet-date,
+  .month-cont,
+  .total-today-cont,
+  .tracker-cont,
+  .total-week-cont {
+    height: 40vh;
+    width: 40vh;
+    margin-bottom: 2vh;
   }
 
-  .row {
+  .chart-cont.A {
+    width: 100%;
+    height: 30vh;
+  }
+
+  .chart-cont.C {
+    width: 50vh;
+    height: 30vh;
     display: flex;
     align-items: center;
-    flex-direction: column;
     justify-content: center;
-    margin-top: 100vh;
-  }
-  .row2 {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 27.5rem;
-  }
-  .greeting {
-    width: 90%;
-    margin-bottom: 2rem;
-  }
-  .chartA-container {
-    height: 100%;
-    width: 90%;
-    margin-bottom: 6rem;
-    padding-bottom: 4rem;
-  }
-  .total {
-    width: 90%;
-    height: 100%;
-    margin-top: 10rem;
-    margin-bottom: 2rem;
-    padding: 10px;
-  }
-  .chartC-container {
-    height: 100%;
-    width: 90%;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-  }
-  .chartC {
-    height: 70%;
-    width: 90%;
-    padding-bottom: 4rem;
-    padding-top: 4rem;
-  }
-  .violation-tracker {
-    margin-bottom: 20%;
   }
 }

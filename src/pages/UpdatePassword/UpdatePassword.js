@@ -6,7 +6,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import PasswordField from "../../components/PasswordField";
 import ConstButton from "./../../components/ConstButton";
 import update from "./../../assets/udpate.jpg";
-import axios from '../../plugins/axios'
+import axios from "../../plugins/axios";
 import { useSelector } from "react-redux";
 
 function UpdatePassword({ label, type }) {
@@ -34,13 +34,10 @@ function UpdatePassword({ label, type }) {
         });
       })
       .catch((error) => {
-        console.log(newPassword)
+        console.log(newPassword);
         alert("Error Changed Password");
       });
   };
-
-
-
 
   return (
     <div className="updateContainer">
@@ -54,14 +51,15 @@ function UpdatePassword({ label, type }) {
             least 6 characters long
           </p>
           <div className="input-up">
-          <PasswordField
+            <PasswordField
               type={"password"}
               label={"Current Password"}
               value={newPassword.current_password}
               onChange={(text) => {
                 setNewPassword({
-                  ...newPassword, current_password: text.target.value
-                })
+                  ...newPassword,
+                  current_password: text.target.value,
+                });
               }}
             ></PasswordField>
             <PasswordField
@@ -70,8 +68,9 @@ function UpdatePassword({ label, type }) {
               value={newPassword.new_password}
               onChange={(text) => {
                 setNewPassword({
-                  ...newPassword, new_password: text.target.value
-                })
+                  ...newPassword,
+                  new_password: text.target.value,
+                });
               }}
             ></PasswordField>
             <PasswordField
@@ -80,16 +79,19 @@ function UpdatePassword({ label, type }) {
               value={newPassword.re_new_password}
               onChange={(text) => {
                 setNewPassword({
-                  ...newPassword, re_new_password: text.target.value
-                })
+                  ...newPassword,
+                  re_new_password: text.target.value,
+                });
               }}
             ></PasswordField>
           </div>
-          <ConstButton
-            title={"UPDATE PASSWORD"}
-            marginTop={"10%"}
-            onClick={handleChangePassword}
-          ></ConstButton>
+          <div>
+            <ConstButton
+              title={"UPDATE PASSWORD"}
+              marginTop={"10%"}
+              onClick={handleChangePassword}
+            ></ConstButton>
+          </div>
         </div>
       </div>
     </div>

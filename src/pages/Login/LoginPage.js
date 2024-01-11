@@ -103,16 +103,7 @@ function LoginPage({ onClick }) {
     <div className="containerLogin">
       <div className="white-container">
         <div className="input-container">
-          <div
-            style={{
-              display: "flex",
-              flex: 1,
-              flexDirection: "column",
-              width: "70%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div className="input-cont-com">
             <div>
               <InputCss
                 title={"username"}
@@ -156,7 +147,7 @@ function LoginPage({ onClick }) {
                 style={{
                   backgroundColor: "#3e7c1f",
                   color: "white",
-                  width: "17rem",
+                  width: "40vh",
                   borderRadius: 20,
                   marginTop: 20,
                   border: "0.5px solid white",

@@ -6,13 +6,14 @@
   justify-content: center;
   align-items: center;
 }
-
+.image-css {
+  width: 45vh;
+}
 .white-container {
-  background: linear-gradient(to right, #5c9b3d 41.7%, white 0%);
   box-shadow: 1px 1px 10px 5px rgba(0, 0, 0, 0.384);
   border-radius: 50px;
-  width: 60%;
-  height: 70%;
+  width: 120vh;
+  height: 70vh;
   display: flex;
 }
 
@@ -24,7 +25,10 @@
   align-items: center;
   justify-content: center;
 }
-
+.whole-pass-cont {
+  display: flex;
+  flex-direction: column;
+}
 .input-container {
   width: 71%;
   display: flex;
@@ -37,58 +41,86 @@
 .input-css {
   outline: none;
   height: 25px;
-  width: 230px;
-  margin-top: 10px;
+  width: 35vh;
   font-size: 17px;
   padding: 10px;
   padding-left: 10px;
   padding-right: 40px;
   border-radius: 30px;
   border: 0;
+  z-index: 3;
+  font-family: "Times New Roman", Times, serif;
 }
-
-.title-css {
-  position: absolute;
-  font-size: 10px;
-  color: #108158;
-  margin-left: 12px;
+.input-pass-cont {
+  display: flex;
 }
-
 .visibility-container {
+  display: flex;
   position: absolute;
-  background-color: transparent;
-  margin-left: 240px;
-  margin-top: 12px;
-  width: 10px;
-}
 
+  z-index: 3;
+}
+.title-css {
+  font-size: 1.7vh;
+  color: #ffffff;
+  margin-left: 12px;
+  z-index: 4;
+  font-family: "Times New Roman", Times, serif;
+}
+.password-cont-input {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+}
+.input-cont-com {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 50vh;
+  align-items: center;
+  justify-content: center;
+  line-height: 1px;
+}
+@media (max-width: 1000px) {
+  .title-css {
+    font-size: 2vh;
+  }
+  .white-container {
+    box-shadow: none;
+  }
+  .input-cont-com {
+    margin-left: -3vh;
+  }
+}
 @media (max-width: 600px) {
   .containerLogin {
     background: linear-gradient(to top, #326917 80%, white 0%);
   }
   .white-container {
-    background: transparent;
-    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.384);
-    border-radius: 50px;
-    width: 100%;
-    height: 70%;
     display: flex;
     flex-direction: column;
-  }
-  .image-container {
-    position: absolute;
-    margin-top: -25%;
+    background: transparent;
+    box-shadow: none;
   }
   .image-css {
-    height: 110px;
-    width: 280px;
+    height: 100px;
+    width: 260px;
+    position: absolute;
+    top: 2vh;
+    background-color: transparent;
   }
   .input-container {
     width: 100%;
     display: flex;
-    margin-top: 30%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  .input-cont-com {
+    width: 100%;
+    margin-top: 10vh;
   }
 }

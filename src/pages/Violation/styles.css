@@ -2,7 +2,12 @@
   width: 100%;
   border-collapse: collapse;
 }
-
+.empty-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
 .title-size {
   font-size: 13px;
   line-height: 1;

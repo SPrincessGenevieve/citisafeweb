@@ -24,6 +24,7 @@ import * as XLSX from "xlsx";
 import SelectFilter from "./../../components/SelectFilter";
 import AtoZ from "./../../components/AtoZ";
 import SortDate from "../../components/SortDate";
+import empty from "./../../assets/search-bar.gif";
 
 const styles = (theme) => ({
   modal: {
@@ -689,209 +690,198 @@ function Violation({ navigation }) {
           ))}
 
           <div className="violation-table-container">
-            <div className="table-flex">
-              <table className="violation-table">
-                <thead>
-                  <tr>
-                    <th className="header-title">Tracking #</th>
-                    <th className="header-title">Name</th>
-                    <th className="header-title">Violation</th>
-                    <th className="header-title">Date</th>
-                    <th className="header-title">Offense</th>
-                    <th className="header-title">Apprehending Officer</th>
-                    <th className="header-title">Penalty</th>
-                    <th className="header-title">Status</th>
-                    {Role === "TREASURER" && (
-                      <>
-                        <th className="header-title">Action</th>
-                      </>
-                    )}
-                  </tr>
-                </thead>
-                {visibleData.map((item, index) => (
-                  <tbody>
-                    <tr
-                      className={` ${index % 2 === 0 ? "even-row" : "odd-row"}`}
-                    >
-                      <td className="content-title">
-                        <div className="container-ticket">
-                          <a
-                            className="ticket"
-                            href="#"
-                            onClick={(event) => {
-                              event.preventDefault();
-                              handleOpenModal(item.MFRTA_TCT_NO);
-                            }}
-                          >
-                            <p className="title-size">{item.MFRTA_TCT_NO}</p>
-                          </a>
-                        </div>
-                      </td>
-                      <td className="content-title">
-                        <p className="title-size">
-                          {item.driver_info.first_name}{" "}
-                          {item.driver_info.middle_initial}{" "}
-                          {item.driver_info.last_name}{" "}
-                        </p>
-                      </td>
-                      <td className="content-title">
-                        {item.violation_info.violations_info.map(
-                          (violation, index) => (
-                            <div key={index}>
-                              <p className="title-size">{violation}</p>
-                            </div>
-                          )
-                        )}
-                      </td>
-                      <td className="content-title">
-                        <p className="title-size">{item.date_issued}</p>
-                      </td>
-                      <td className="content-title">
-                        <p className="title-size">
-                          {item.driver_info.offenses_count}
-                        </p>
-                      </td>
-                      <td className="content-title">
-                        <p className="title-size">
-                          {item.user_ID.first_name} {item.user_ID.middle_name}{" "}
-                          {item.user_ID.last_name}{" "}
-                        </p>
-                      </td>
-                      <td className="content-title">
-                        <p className="title-size">{item.penalty_amount}</p>
-                      </td>
-                      <td className="content-title status">
-                        <div className="status-container">
-                          <p
-                            style={{
-                              flex: 1,
-                              fontWeight: 540,
-                              fontSize: 13,
-                              backgroundColor:
-                                item.ticket_status === "OVERDUE"
-                                  ? "#FFC5C5"
-                                  : item.ticket_status === "PAID"
-                                  ? "#E2F0D9"
-                                  : item.ticket_status === "PENDING"
-                                  ? "#BDD7EE"
-                                  : item.ticket_status === "DROPPED"
-                                  ? "#FFF2CC"
-                                  : "#FFC1F8",
-                              color:
-                                item.ticket_status === "OVERDUE"
-                                  ? "#C00000"
-                                  : item.ticket_status === "PAID"
-                                  ? "#70AD47"
-                                  : item.ticket_status === "PENDING"
-                                  ? "#0070C0"
-                                  : item.ticket_status === "DROPPED"
-                                  ? "#7F6000"
-                                  : "#C400AD",
-                              width: 50,
-                              padding: 5,
-                              textAlign: "center",
-                              borderRadius: 20,
-                            }}
-                          >
-                            {editingRows[item.MFRTA_TCT_NO] ? (
-                              <div>
-                                <StatusSelection
-                                  label={"Select Status"}
-                                  labelSelect={"Select Status"}
-                                  json={StatSelect}
-                                  width={150}
-                                  onStatusChange={handleStatusChange}
-                                ></StatusSelection>
-                              </div>
-                            ) : item.ticket_status === "Overdue" ? (
-                              `Overdue`
-                            ) : (
-                              <span>{item.ticket_status}</span>
-                            )}
-                          </p>
-                        </div>
-                      </td>
+            {visibleData.length === 0 ? (
+              <div className="empty-container">
+                <img
+                  src={empty}
+                  alt="No matching results"
+                  className="empty-image"
+                />
+              </div>
+            ) : (
+              <div className="table-flex">
+                <table className="violation-table">
+                  <thead>
+                    <tr>
+                      <th className="header-title">Tracking #</th>
+                      <th className="header-title">Name</th>
+                      <th className="header-title">Violation</th>
+                      <th className="header-title">Date</th>
+                      <th className="header-title">Offense</th>
+                      <th className="header-title">Apprehending Officer</th>
+                      <th className="header-title">Penalty</th>
+                      <th className="header-title">Status</th>
                       {Role === "TREASURER" && (
+                        <>
+                          <th className="header-title">Action</th>
+                        </>
+                      )}
+                    </tr>
+                  </thead>
+                  {visibleData.map((item, index) => (
+                    <tbody>
+                      <tr
+                        className={` ${
+                          index % 2 === 0 ? "even-row" : "odd-row"
+                        }`}
+                      >
+                        <td className="content-title">
+                          <div className="container-ticket">
+                            <a
+                              className="ticket"
+                              href="#"
+                              onClick={(event) => {
+                                event.preventDefault();
+                                handleOpenModal(item.MFRTA_TCT_NO);
+                              }}
+                            >
+                              <p className="title-size">{item.MFRTA_TCT_NO}</p>
+                            </a>
+                          </div>
+                        </td>
+                        <td className="content-title">
+                          <p className="title-size">
+                            {item.driver_info.first_name}{" "}
+                            {item.driver_info.middle_initial}{" "}
+                            {item.driver_info.last_name}{" "}
+                          </p>
+                        </td>
+                        <td className="content-title">
+                          {item.violation_info.violations_info.map(
+                            (violation, index) => (
+                              <div key={index}>
+                                <p className="title-size">{violation}</p>
+                              </div>
+                            )
+                          )}
+                        </td>
+                        <td className="content-title">
+                          <p className="title-size">{item.date_issued}</p>
+                        </td>
+                        <td className="content-title">
+                          <p className="title-size">
+                            {item.driver_info.offenses_count}
+                          </p>
+                        </td>
+                        <td className="content-title">
+                          <p className="title-size">
+                            {item.user_ID.first_name} {item.user_ID.middle_name}{" "}
+                            {item.user_ID.last_name}{" "}
+                          </p>
+                        </td>
+                        <td className="content-title">
+                          <p className="title-size">{item.penalty_amount}</p>
+                        </td>
                         <td className="content-title status">
-                          {editingRows[item.MFRTA_TCT_NO] ? (
-                            <div className="check-close">
-                              <Button
-                                variant="contained"
-                                style={{
-                                  backgroundColor: "transparent",
-                                  boxShadow: "none",
-                                  color: "black",
-                                  marginLeft: 0,
-                                }}
-                                onClick={() => {
-                                  const formData = {
-                                    MFRTA_TCT_NO: item.MFRTA_TCT_NO,
-                                    ticket_status: editTicketStatus,
-                                  };
-                                  console.log(formData);
+                          <div className="status-container">
+                            <p
+                              style={{
+                                flex: 1,
+                                fontWeight: 540,
+                                fontSize: 13,
+                                backgroundColor:
+                                  item.ticket_status === "OVERDUE"
+                                    ? "#FFC5C5"
+                                    : item.ticket_status === "PAID"
+                                    ? "#E2F0D9"
+                                    : item.ticket_status === "PENDING"
+                                    ? "#BDD7EE"
+                                    : item.ticket_status === "DROPPED"
+                                    ? "#FFF2CC"
+                                    : "#FFC1F8",
+                                color:
+                                  item.ticket_status === "OVERDUE"
+                                    ? "#C00000"
+                                    : item.ticket_status === "PAID"
+                                    ? "#70AD47"
+                                    : item.ticket_status === "PENDING"
+                                    ? "#0070C0"
+                                    : item.ticket_status === "DROPPED"
+                                    ? "#7F6000"
+                                    : "#C400AD",
+                                width: 50,
+                                padding: 5,
+                                textAlign: "center",
+                                borderRadius: 20,
+                              }}
+                            >
+                              {editingRows[item.MFRTA_TCT_NO] ? (
+                                <div>
+                                  <StatusSelection
+                                    label={"Select Status"}
+                                    labelSelect={"Select Status"}
+                                    json={StatSelect}
+                                    width={150}
+                                    onStatusChange={handleStatusChange}
+                                  ></StatusSelection>
+                                </div>
+                              ) : item.ticket_status === "Overdue" ? (
+                                `Overdue`
+                              ) : (
+                                <span>{item.ticket_status}</span>
+                              )}
+                            </p>
+                          </div>
+                        </td>
+                        {Role === "TREASURER" && (
+                          <td className="content-title status">
+                            {editingRows[item.MFRTA_TCT_NO] ? (
+                              <div className="check-close">
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 0,
+                                  }}
+                                  onClick={() => {
+                                    const formData = {
+                                      MFRTA_TCT_NO: item.MFRTA_TCT_NO,
+                                      ticket_status: editTicketStatus,
+                                    };
+                                    console.log(formData);
 
-                                  axios
-                                    .patch(
-                                      `ticket/register/${item.MFRTA_TCT_NO}/`,
-                                      formData,
-                                      {
-                                        headers: {
-                                          Authorization: `token ${Token}`,
-                                        },
-                                      }
-                                    )
-                                    .then((response) => {
-                                      console.log(response.data);
-                                      handleSave(item.MFRTA_TCT_NO);
-                                    })
-                                    .catch((error) => {
-                                      window.alert(
-                                        "Unsuccessfully Edit Penalty Status"
-                                      );
-                                      console.log(error);
-                                    });
-                                }}
-                              >
-                                <Check style={{ height: 25 }} />
-                              </Button>
-                              <Button
-                                variant="contained"
-                                style={{
-                                  backgroundColor: "transparent",
-                                  boxShadow: "none",
-                                  color: "black",
-                                }}
-                                onClick={() =>
-                                  handleCancelEdit(item.MFRTA_TCT_NO)
-                                }
-                              >
-                                <Close style={{ height: 25 }} />
-                              </Button>
-                            </div>
-                          ) : deletingRows[item.MFRTA_TCT_NO] ? (
-                            <>
-                              <Button
-                                variant="contained"
-                                style={{
-                                  backgroundColor: "transparent",
-                                  boxShadow: "none",
-                                  color: "black",
-                                  marginLeft: 10,
-                                }}
-                                onClick={() => handleCheck(item.MFRTA_TCT_NO)}
-                              >
-                                <Check style={{ height: 25 }} />
-                              </Button>
-                            </>
-                          ) : (
-                            <>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                }}
-                              >
+                                    axios
+                                      .patch(
+                                        `ticket/register/${item.MFRTA_TCT_NO}/`,
+                                        formData,
+                                        {
+                                          headers: {
+                                            Authorization: `token ${Token}`,
+                                          },
+                                        }
+                                      )
+                                      .then((response) => {
+                                        console.log(response.data);
+                                        handleSave(item.MFRTA_TCT_NO);
+                                      })
+                                      .catch((error) => {
+                                        window.alert(
+                                          "Unsuccessfully Edit Penalty Status"
+                                        );
+                                        console.log(error);
+                                      });
+                                  }}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={() =>
+                                    handleCancelEdit(item.MFRTA_TCT_NO)
+                                  }
+                                >
+                                  <Close style={{ height: 25 }} />
+                                </Button>
+                              </div>
+                            ) : deletingRows[item.MFRTA_TCT_NO] ? (
+                              <>
                                 <Button
                                   variant="contained"
                                   style={{
@@ -900,31 +890,56 @@ function Violation({ navigation }) {
                                     color: "black",
                                     marginLeft: 10,
                                   }}
-                                  onClick={() => handleEdit(item.MFRTA_TCT_NO)}
+                                  onClick={() => handleCheck(item.MFRTA_TCT_NO)}
                                 >
-                                  <Edit style={{ height: 25 }} />
+                                  <Check style={{ height: 25 }} />
                                 </Button>
-                              </div>
-                            </>
-                          )}
-                        </td>
-                      )}
-                    </tr>
-                  </tbody>
-                ))}
-              </table>
-              <div
-                style={{
-                  display: "flex",
-                  flex: 1,
-                  width: "100%",
-                  height: 50,
-                  backgroundColor: "white",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              ></div>
-            </div>
+                              </>
+                            ) : (
+                              <>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "black",
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() =>
+                                      handleEdit(item.MFRTA_TCT_NO)
+                                    }
+                                  >
+                                    <Edit style={{ height: 25 }} />
+                                  </Button>
+                                </div>
+                              </>
+                            )}
+                          </td>
+                        )}
+                      </tr>
+                    </tbody>
+                  ))}
+                </table>
+                <div
+                  style={{
+                    display: "flex",
+                    flex: 1,
+                    width: "100%",
+                    height: 50,
+                    backgroundColor: "white",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                ></div>
+              </div>
+            )}
           </div>
         </div>
       </div>

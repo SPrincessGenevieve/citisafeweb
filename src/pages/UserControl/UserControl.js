@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Navbar from "../../Navbar";
 import {
   Add,
-  CloseOutlined,
   Close,
   Check,
   VoiceOverOff,
@@ -12,12 +11,6 @@ import {
 } from "@mui/icons-material";
 import {
   Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Dialog,
   DialogActions,
   DialogContent,
@@ -31,14 +24,12 @@ import {
 import "./styles.css";
 import { useState } from "react";
 import users from "./users.json";
-import ConstButton from "../../components/ConstButton";
-import InputRound from "../../components/InputRound";
-import SelectRound from "../../components/SelectRound";
 import StatusSelection from "../../components/StatusSelection";
 import stats from "./../../JSON/is_active.json";
 import { useSelector } from "react-redux";
 import axios from "../../plugins/axios";
 import * as XLSX from "xlsx";
+import empty from "./../../assets/search-bar.gif";
 
 const cellStylesHeader = {
   cell: {
@@ -104,13 +95,17 @@ function UserControl(props) {
   const totalPages = Math.ceil(userData.length / rowsPerPage);
 
   const filteredUserControl = Array.isArray(userData)
-    ? userData.filter(
-        (user) =>
-          user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          user.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (user &&
-            user.last_name.toLowerCase().includes(searchQuery.toLowerCase()))
-      )
+    ? userData.filter((user) => {
+        const firstName = user?.first_name || "";
+        const lastName = user?.last_name || "";
+        const position = user?.position || "";
+
+        return (
+          firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          position.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      })
     : [];
 
   const visibleUserData = filteredUserControl.slice(startIndex, endIndex);
@@ -137,12 +132,17 @@ function UserControl(props) {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    const filtered = users.filter(
-      (item) =>
-        item.firstName.toLowerCase().includes(query.toLowerCase()) ||
-        item.lastName.toLowerCase().includes(query.toLowerCase()) ||
-        item.id.toString().includes(query)
-    );
+    const filtered = users.filter((item) => {
+      const firstName = item.firstName ? item.firstName.toLowerCase() : "";
+      const lastName = item.lastName ? item.lastName.toLowerCase() : "";
+      const id = item.id ? item.id.toString() : "";
+
+      return (
+        firstName.includes(query.toLowerCase()) ||
+        lastName.includes(query.toLowerCase()) ||
+        id.includes(query)
+      );
+    });
     setFilteredData(filtered);
     setCurrentPage(1);
   };
@@ -492,217 +492,229 @@ function UserControl(props) {
             </div>
 
             <div className="table-conatiner-user">
-              <div className="table-sub-user">
-                <table className="users-table">
-                  <thead>
-                    <tr>
-                      <th className="header-title user">ID</th>
-                      <th className="header-title user">First Name</th>
-                      <th className="header-title user">Middle Name</th>
-                      <th className="header-title user">Last Name</th>
-                      <th className="header-title user">Role</th>
-                      <th className="header-title user">Position</th>
-                      <th className="header-title user">Email</th>
-                      <th className="header-title user">Username</th>
-                      <th className="header-title user status">Status</th>
-                      <th className="header-title user">Action</th>
-                    </tr>
-                  </thead>
-                  {visibleUserData.map((user, index) => (
-                    <tbody>
-                      <tr
-                        className={` ${
-                          index % 2 === 0 ? "even-row" : "odd-row"
-                        }`}
-                      >
-                        <td className="content-title user">
-                          <p className="title-size user">{user.id}</p>
-                        </td>
-                        <td className="content-title user">
-                          <p className="title-size user">{user.first_name}</p>
-                        </td>
-                        <td className="content-title user">
-                          <p className="title-size user">{user.middle_name}</p>
-                        </td>
-                        <td className="content-title user">
-                          <p className="title-size user">{user.last_name}</p>
-                        </td>
-                        <td className="content-title user">
-                          <p className="title-size user">{user.role}</p>
-                        </td>
-                        <td className="content-title user">
-                          <p className="title-size user">{user.position}</p>
-                        </td>
-                        <td className="content-title user">
-                          <p className="title-size user">{user.email}</p>
-                        </td>
-                        <td className="content-title user">
-                          <p className="title-size user">{user.username}</p>
-                        </td>
-                        <td className="content-title user status">
-                          <div className="status-container user">
-                            <p
-                              style={{
-                                fontSize: 12,
-                                display: "flex",
-                                flex: 1,
-                                backgroundColor:
-                                  user.is_active === true
-                                    ? "#E2F0D9"
-                                    : user.is_active === false
-                                    ? "#FFD1D1"
-                                    : "#EBF9F1",
-                                color:
-                                  user.is_active === true
-                                    ? "#649F3F"
-                                    : user.is_active === false
-                                    ? "#D00000"
-                                    : "#1F9254",
-                                width: 70,
-                                height: 12,
-                                padding: 7,
-                                textAlign: "center",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                borderRadius: 20,
-                              }}
-                            >
-                              {editingRow === user.id ? (
-                                <div className="status-con-user">
-                                  <StatusSelection
-                                    label={"Select Status"}
-                                    labelSelect={"Select Status"}
-                                    json={stats}
-                                    width={150}
-                                    onStatusChange={handleStatusChange}
-                                  ></StatusSelection>
-                                </div>
-                              ) : user.is_active === true ? (
-                                `Active`
-                              ) : (
-                                <span>
-                                  {user.is_active ? "Active" : "Inactive"}
-                                </span>
-                              )}
-                            </p>
-                          </div>
-                        </td>
-                        <td className="content-title action">
-                          {editingRow === user.id ? (
-                            <>
-                              <Button
-                                variant="contained"
-                                style={{
-                                  backgroundColor: "transparent",
-                                  boxShadow: "none",
-                                  color: "black",
-                                  marginLeft: 10,
-                                }}
-                                onClick={() => {
-                                  const formData = {
-                                    id: user.id,
-                                    is_active: editIsActive,
-                                  };
-
-                                  axios
-                                    .patch(
-                                      `accounts/users/${user.id}/`,
-                                      formData,
-                                      {
-                                        headers: {
-                                          Authorization: `token ${Token}`,
-                                        },
-                                      }
-                                    )
-                                    .then((response) => {
-                                      handleSave(user.id);
-                                      window.location.reload();
-                                    })
-                                    .catch((error) => {
-                                      window.alert(
-                                        "Unsuccessfully Edit User Status"
-                                      );
-                                      console.log(error);
-                                    });
-                                }}
-                              >
-                                <Check style={{ height: 25 }} />
-                              </Button>
-                              <Button
-                                variant="contained"
-                                style={{
-                                  backgroundColor: "transparent",
-                                  boxShadow: "none",
-                                  color: "black",
-                                }}
-                                onClick={handleCancelEdit}
-                              >
-                                <Close style={{ height: 25 }} />
-                              </Button>
-                            </>
-                          ) : deletingRow === user.id ? (
-                            <>
-                              <Button
-                                variant="contained"
-                                style={{
-                                  backgroundColor: "transparent",
-                                  boxShadow: "none",
-                                  color: "black",
-                                  marginLeft: 10,
-                                }}
-                                onClick={() => handleCheck(user.id)}
-                              >
-                                <Check style={{ height: 25 }} />
-                              </Button>
-                              <Button
-                                variant="contained"
-                                style={{
-                                  backgroundColor: "transparent",
-                                  boxShadow: "none",
-                                  color: "black",
-                                }}
-                                onClick={handleCancelDelete}
-                              >
-                                <Close style={{ height: 25 }} />
-                              </Button>
-                            </>
-                          ) : (
-                            <>
-                              {user.is_active ? (
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "green",
-                                    marginLeft: 10,
-                                  }}
-                                  onClick={() => handleEdit(user.id)}
-                                >
-                                  <RecordVoiceOver style={{ height: 25 }} />
-                                </Button>
-                              ) : (
-                                <Button
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: "transparent",
-                                    boxShadow: "none",
-                                    color: "red",
-                                    marginLeft: 10,
-                                  }}
-                                  onClick={() => handleEdit(user.id)}
-                                >
-                                  <VoiceOverOff style={{ height: 25 }} />
-                                </Button>
-                              )}
-                            </>
-                          )}
-                        </td>
+              {visibleUserData.length === 0 ? (
+                <div className="empty-container">
+                  <img
+                    src={empty}
+                    alt="No matching results"
+                    className="empty-image"
+                  />
+                </div>
+              ) : (
+                <div className="table-sub-user">
+                  <table className="users-table">
+                    <thead>
+                      <tr>
+                        <th className="header-title user">ID</th>
+                        <th className="header-title user">First Name</th>
+                        <th className="header-title user">Middle Name</th>
+                        <th className="header-title user">Last Name</th>
+                        <th className="header-title user">Role</th>
+                        <th className="header-title user">Position</th>
+                        <th className="header-title user">Email</th>
+                        <th className="header-title user">Username</th>
+                        <th className="header-title user status">Status</th>
+                        <th className="header-title user">Action</th>
                       </tr>
-                    </tbody>
-                  ))}
-                </table>
-              </div>
+                    </thead>
+                    {visibleUserData.map((user, index) => (
+                      <tbody>
+                        <tr
+                          className={` ${
+                            index % 2 === 0 ? "even-row" : "odd-row"
+                          }`}
+                        >
+                          <td className="content-title user">
+                            <p className="title-size user">{user.id}</p>
+                          </td>
+                          <td className="content-title user">
+                            <p className="title-size user">{user.first_name}</p>
+                          </td>
+                          <td className="content-title user">
+                            <p className="title-size user">
+                              {user.middle_name}
+                            </p>
+                          </td>
+                          <td className="content-title user">
+                            <p className="title-size user">{user.last_name}</p>
+                          </td>
+                          <td className="content-title user">
+                            <p className="title-size user">{user.role}</p>
+                          </td>
+                          <td className="content-title user">
+                            <p className="title-size user">{user.position}</p>
+                          </td>
+                          <td className="content-title user">
+                            <p className="title-size user">{user.email}</p>
+                          </td>
+                          <td className="content-title user">
+                            <p className="title-size user">{user.username}</p>
+                          </td>
+                          <td className="content-title user status">
+                            <div className="status-container user">
+                              <p
+                                style={{
+                                  fontSize: 12,
+                                  display: "flex",
+                                  flex: 1,
+                                  backgroundColor:
+                                    user.is_active === true
+                                      ? "#E2F0D9"
+                                      : user.is_active === false
+                                      ? "#FFD1D1"
+                                      : "#EBF9F1",
+                                  color:
+                                    user.is_active === true
+                                      ? "#649F3F"
+                                      : user.is_active === false
+                                      ? "#D00000"
+                                      : "#1F9254",
+                                  width: 70,
+                                  height: 12,
+                                  padding: 7,
+                                  textAlign: "center",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  borderRadius: 20,
+                                }}
+                              >
+                                {editingRow === user.id ? (
+                                  <div className="status-con-user">
+                                    <StatusSelection
+                                      label={"Select Status"}
+                                      labelSelect={"Select Status"}
+                                      json={stats}
+                                      width={150}
+                                      onStatusChange={handleStatusChange}
+                                    ></StatusSelection>
+                                  </div>
+                                ) : user.is_active === true ? (
+                                  `Active`
+                                ) : (
+                                  <span>
+                                    {user.is_active ? "Active" : "Inactive"}
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="content-title action">
+                            {editingRow === user.id ? (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => {
+                                    const formData = {
+                                      id: user.id,
+                                      is_active: editIsActive,
+                                    };
+
+                                    axios
+                                      .patch(
+                                        `accounts/users/${user.id}/`,
+                                        formData,
+                                        {
+                                          headers: {
+                                            Authorization: `token ${Token}`,
+                                          },
+                                        }
+                                      )
+                                      .then((response) => {
+                                        handleSave(user.id);
+                                        window.location.reload();
+                                      })
+                                      .catch((error) => {
+                                        window.alert(
+                                          "Unsuccessfully Edit User Status"
+                                        );
+                                        console.log(error);
+                                      });
+                                  }}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={handleCancelEdit}
+                                >
+                                  <Close style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            ) : deletingRow === user.id ? (
+                              <>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                    marginLeft: 10,
+                                  }}
+                                  onClick={() => handleCheck(user.id)}
+                                >
+                                  <Check style={{ height: 25 }} />
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    boxShadow: "none",
+                                    color: "black",
+                                  }}
+                                  onClick={handleCancelDelete}
+                                >
+                                  <Close style={{ height: 25 }} />
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                {user.is_active ? (
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "green",
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => handleEdit(user.id)}
+                                  >
+                                    <RecordVoiceOver style={{ height: 25 }} />
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    variant="contained"
+                                    style={{
+                                      backgroundColor: "transparent",
+                                      boxShadow: "none",
+                                      color: "red",
+                                      marginLeft: 10,
+                                    }}
+                                    onClick={() => handleEdit(user.id)}
+                                  >
+                                    <VoiceOverOff style={{ height: 25 }} />
+                                  </Button>
+                                )}
+                              </>
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
+                  </table>
+                </div>
+              )}
             </div>
             <div className="pagination">
               <div className="label-page">
