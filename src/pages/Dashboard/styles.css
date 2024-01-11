@@ -208,8 +208,8 @@
     align-items: flex-start;
   }
   .chart-cont.C {
-    width: 10px;
-    height: 8px;
+    width: 70%;
+    height: 70%;
     display: flex;
   }
   .graph-cont.C {
