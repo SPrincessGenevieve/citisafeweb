@@ -7,7 +7,7 @@ import notif from "./../../assets/notif.gif";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const socket = io.connect(
-  "wss://etcmf.keannu1.duckdns.org/ws/ticketnotification/"
+  "wss://typically-comic-ape.ngrok-free.app/ws/ticketnotification/"
 ); // backend server
 
 function AlertPop({ onClickSendMessage, onClickClose, navigateTo }) {

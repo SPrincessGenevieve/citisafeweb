@@ -30,7 +30,7 @@ function App() {
 
   useEffect(() => {
     const socket = new WebSocket(
-      "wss://etcmf.keannu1.duckdns.org/ws/ticketnotification/"
+      "wss://typically-comic-ape.ngrok-free.app/ws/ticketnotification/"
     );
 
     socket.onmessage = (event) => {

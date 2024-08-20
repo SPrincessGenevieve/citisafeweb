@@ -1,6 +1,6 @@
 {
-  "homepage": "https://SPrincessGenevieve.github.io/citisafeweb",
-  "name": "citosafeweb",
+  "homepage": "",
+  "name": "citisafeweb",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -43,7 +43,7 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start --host",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
